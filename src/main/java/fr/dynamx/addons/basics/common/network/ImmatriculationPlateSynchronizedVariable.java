@@ -2,7 +2,7 @@ package fr.dynamx.addons.basics.common.network;
 
 import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
-import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
 import fr.dynamx.api.network.sync.PhysicsEntityNetHandler;
 import fr.dynamx.api.network.sync.SyncTarget;
 import fr.dynamx.api.network.sync.SynchronizedVariable;
@@ -10,33 +10,28 @@ import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.network.sync.MessagePhysicsEntitySync;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
-    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "sounds");
+public class ImmatriculationPlateSynchronizedVariable<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
+    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "plate");
 
-    private byte vars;
+    private String plate;
 
     @Override
     public SyncTarget getValueFrom(A entity, PhysicsEntityNetHandler<A> network, Side side, int syncTick) {
-        BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
-        byte vars = 0;
-        if (module.playKlaxon())
-            vars = (byte) (vars | 1);
-        if (module.isSirenOn())
-            vars = (byte) (vars | 2);
-        if (vars != this.vars) {
-            this.vars = vars;
-            return SyncTarget.spectatorForSide(side);
+        ImmatriculationPlateModule module = entity.getModuleByType(ImmatriculationPlateModule.class);
+        if (!module.getPlate().equals(plate)) {
+            plate = module.getPlate();
+            return SyncTarget.ALL_CLIENTS;
         }
         return SyncTarget.NONE;
     }
 
     @Override
     public void setValueTo(A entity, PhysicsEntityNetHandler<A> network, @Nullable MessagePhysicsEntitySync msg, Side side) {
-        BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
-        module.playKlaxon((vars & 1) == 1);
-        module.setSirenOn((vars & 2) == 2);
+        ImmatriculationPlateModule module = entity.getModuleByType(ImmatriculationPlateModule.class);
+        module.setPlate(plate);
     }
 
     @Override
@@ -46,22 +41,17 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
 
     @Override
     public void write(ByteBuf buf, boolean compress) {
-        buf.writeInt(vars);
+        ByteBufUtils.writeUTF8String(buf, plate);
     }
 
     @Override
     public void writeEntityValues(A entity, ByteBuf buf) {
-        BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
-        byte vars = 0;
-        if (module.playKlaxon())
-            vars = (byte) (vars | 1);
-        if (module.isSirenOn())
-            vars = (byte) (vars | 2);
-        buf.writeInt(vars);
+        ImmatriculationPlateModule module = entity.getModuleByType(ImmatriculationPlateModule.class);
+        ByteBufUtils.writeUTF8String(buf, module.getPlate());
     }
 
     @Override
     public void read(ByteBuf buf) {
-        vars = (byte) buf.readInt();
+        plate = ByteBufUtils.readUTF8String(buf);
     }
 }

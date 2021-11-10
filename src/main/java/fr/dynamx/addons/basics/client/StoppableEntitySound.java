@@ -5,8 +5,7 @@ import net.minecraft.client.audio.MovingSound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
-public class StoppableEntitySound extends MovingSound
-{
+public class StoppableEntitySound extends MovingSound {
     private final BaseVehicleEntity<?> entity;
 
     public StoppableEntitySound(SoundEvent soundIn, SoundCategory categoryIn, BaseVehicleEntity<?> entity) {
@@ -16,17 +15,15 @@ public class StoppableEntitySound extends MovingSound
     }
 
     @Override
-    public void update()
-    {
-        if(entity.isDead)
+    public void update() {
+        if (entity.isDead)
             stop();
         xPosF = (float) entity.posX;
         yPosF = (float) entity.posY;
         zPosF = (float) entity.posZ;
     }
 
-    public void stop()
-    {
+    public void stop() {
         donePlaying = true;
     }
 }

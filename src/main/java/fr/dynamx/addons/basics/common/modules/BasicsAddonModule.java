@@ -1,10 +1,11 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
+import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.addons.basics.common.network.SoundsSynchronizedVariable;
-import fr.dynamx.addons.basics.common.info.BasicsAddonInfos;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
@@ -15,11 +16,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener
-{
+public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private BasicsAddonController controller;
     private final BaseVehicleEntity<?> entity;
     private boolean locked;
@@ -31,13 +30,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
         this.infos = infos;
-        if(entity.world.isRemote && (hasSiren() || hasKlaxon()))
-            controller = new BasicsAddonController(entity, this, BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
+        if (entity.world.isRemote && (hasSiren() || hasKlaxon()))
+            controller = new BasicsAddonController(entity, this, fr.dynamx.addons.basics.BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
     }
 
     public boolean hasKlaxon() {
         return infos != null && infos.klaxonSound != null;
     }
+
     public boolean hasSiren() {
         return infos != null && infos.sirenSound != null;
     }
@@ -49,15 +49,13 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void updateEntity() {
-        if(playKlaxon)
-        {
+        if (playKlaxon) {
             //test playKlaxon = false;
-            if(entity.world.isRemote && hasKlaxon())
-            {
+            if (entity.world.isRemote && hasKlaxon()) {
                 entity.world.playSound(entity.posX, entity.posY, entity.posZ, BasicsAddon.soundMap.get(infos.klaxonSound), SoundCategory.PLAYERS, 1, 1, true);
             }
         }
-        if(controller != null)
+        if (controller != null)
             controller.updateSiren();
     }
 
@@ -98,7 +96,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
-        if(simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side))
+        if (simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side))
             variables.add(SoundsSynchronizedVariable.NAME);
     }
 }
