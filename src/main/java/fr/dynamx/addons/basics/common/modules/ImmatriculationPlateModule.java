@@ -6,6 +6,7 @@ import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.network.sync.SimulationHolder;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +14,15 @@ import java.util.List;
 public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>> {
 
     private List<ImmatriculationPlateInfos> info = new ArrayList<>();
-    private String plate = "TODO RANDOM";//TODO MAKE RANDOM PLATE
+    private String plate = "";
 
     public ImmatriculationPlateModule(ImmatriculationPlateInfos info) {
         this.info.add(info);
-
+        // Thanks to Kerlan
+        String firstNumber = RandomStringUtils.random(2, 97, 122, true, false);
+        String secondNumber = RandomStringUtils.randomNumeric(3);
+        String thirdNumber = RandomStringUtils.random(2, 97, 122, true, false);
+        this.plate = firstNumber.toUpperCase() + "-" + secondNumber + "-" + thirdNumber.toUpperCase();
     }
 
     public List<ImmatriculationPlateInfos> getInfo() {
