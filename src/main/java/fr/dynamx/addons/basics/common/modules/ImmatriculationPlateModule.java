@@ -18,6 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IDrawableModule<BaseVehicleEntity<?>> {
 
@@ -27,10 +28,24 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
     public ImmatriculationPlateModule(ImmatriculationPlateInfos info) {
         this.info.add(info);
         // Thanks to Kerlan
-        String firstNumber = RandomStringUtils.random(2, 97, 122, true, false);
+        /*String firstNumber = RandomStringUtils.random(2, 97, 122, true, false);
         String secondNumber = RandomStringUtils.randomNumeric(3);
-        String thirdNumber = RandomStringUtils.random(2, 97, 122, true, false);
-        this.plate = firstNumber.toUpperCase() + "-" + secondNumber + "-" + thirdNumber.toUpperCase();
+        String thirdNumber = RandomStringUtils.random(2, 97, 122, true, false);*/
+
+        String pattern = info.getImmatriculationPattern();
+        StringBuilder builder = new StringBuilder();
+        Random r = new Random();
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            if(c == '-') {
+                builder.append(c);
+            } else if(Character.isDigit(c)) {
+                builder.append(r.nextInt(10));
+            } else {
+                builder.append((char) (r.nextInt(26)+65));
+            }
+        }
+        this.plate = builder.toString();
     }
 
     public List<ImmatriculationPlateInfos> getInfo() {

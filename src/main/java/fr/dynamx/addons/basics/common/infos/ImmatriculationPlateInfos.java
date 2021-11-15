@@ -17,14 +17,17 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
 
     private final ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner;
 
-    @PackFileProperty(configNames = {"ImmatriculationPosition"}, type = DefinitionType.DynamXDefinitionTypes.VECTOR3F_INVERSED_Y, description = "common.position")
-    private Vector3f immatriculationPosition;
+    @PackFileProperty(configNames = "ImmatriculationPosition", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F_INVERSED_Y, description = "common.position")
+    protected Vector3f immatriculationPosition;
 
-    @PackFileProperty(configNames = {"ImmatriculationSize"}, type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.position")
-    private Vector3f immatriculationSize;
+    @PackFileProperty(configNames = "ImmatriculationSize", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.position")
+    protected Vector3f immatriculationSize; //FIXME BLACKNITE C'EST PAS UNE POSITION ça ("common.position")
 
-    @PackFileProperty(configNames = {"ImmatriculationRotation"}, type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
-    private Vector3f immatriculationRotation;
+    @PackFileProperty(configNames = "ImmatriculationRotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
+    protected Vector3f immatriculationRotation;
+
+    @PackFileProperty(configNames = "ImmatriculationPattern", required = false)
+    protected String immatriculationPattern = "aa-111-aa";
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -57,12 +60,16 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
         return immatriculationRotation;
     }
 
+    public String getImmatriculationPattern() {
+        return immatriculationPattern;
+    }
+
     @Override
     public void addModules(BaseVehicleEntity<?> entity, List<IPhysicsModule<?>> modules, Predicate<Class<? extends IPhysicsModule<?>>> containsModule) {
-        if (containsModule.test(ImmatriculationPlateModule.class)) {
+        if (containsModule.test(ImmatriculationPlateModule.class)) { //Module yet added
             ((ImmatriculationPlateModule) modules.stream().filter(iPhysicsModule -> iPhysicsModule.getClass() == ImmatriculationPlateModule.class).
                     findFirst().get()).addInformation(this);
-        } else {
+        } else { //Module not yet added
             modules.add(new ImmatriculationPlateModule(this));
         }
     }
