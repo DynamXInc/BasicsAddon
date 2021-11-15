@@ -7,8 +7,12 @@ import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.api.entities.IModuleContainer;
+import fr.dynamx.api.entities.modules.IEngineModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.modules.EngineModule;
+import fr.dynamx.common.entities.modules.VehicleLightsModule;
 import fr.dynamx.utils.maths.DynamXGeometry;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.Minecraft;
@@ -24,10 +28,20 @@ import java.util.List;
 
 public class BasicsAddonController implements IVehicleController {
     public static final ResourceLocation STYLE = new ResourceLocation(fr.dynamx.addons.basics.BasicsAddon.ID, "css/vehicle_hud_siren.css");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding klaxon = new KeyBinding("Klaxon", Keyboard.KEY_K, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding siren = new KeyBinding("Siren", Keyboard.KEY_I, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding headlights = new KeyBinding("HeadLights", Keyboard.KEY_U, "DynamX basics");
 
     private final BaseVehicleEntity<?> entity;
     private final BasicsAddonModule module;
     private final fr.dynamx.addons.basics.common.LightHolder lights;
+
+    @SideOnly(Side.CLIENT)
+    private StoppableEntitySound sirenSound;
+    private byte klaxonHullDown;
 
     public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module, LightHolder lights) {
         this.entity = entity;
@@ -37,11 +51,25 @@ public class BasicsAddonController implements IVehicleController {
 
     @SideOnly(Side.CLIENT)
     public void updateSiren() {
+       /* VehicleLightsModule module1 = entity.getModuleByType(VehicleLightsModule.class);
+        if(module1 != null) {
+            if (((EngineModule) ((IModuleContainer.IEngineContainer) entity).getEngine()).isReversing()) {
+                module1.setLightOn(1, true);
+            } else {
+                module1.setLightOn(1, false);
+            }
+        }*/
         if (module.isSirenOn() && module.hasSiren()) {
             if (sirenSound == null || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sirenSound)) {
                 sirenSound = new StoppableEntitySound(BasicsAddon.soundMap.get(module.getInfos().sirenSound), SoundCategory.PLAYERS, entity);
                 Minecraft.getMinecraft().getSoundHandler().playSound(sirenSound);
             }
+
+         /*   VehicleLightsModule module = entity.getModuleByType(VehicleLightsModule.class);
+            if(module != null) {
+                module.setLightOn(9, entity.ticksExisted%20 >= 10);
+            }*/
+
             if (lights != null) {
                 Vector3f pos = Vector3fPool.get(0.706687f, 3.28461f, 3.3705f);
                 pos = DynamXGeometry.rotateVectorByQuaternion(pos, entity.physicsRotation);
@@ -67,14 +95,6 @@ public class BasicsAddonController implements IVehicleController {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    private StoppableEntitySound sirenSound;
-    @SideOnly(Side.CLIENT)
-    public static final KeyBinding klaxon = new KeyBinding("Klaxon", Keyboard.KEY_K, "DynamX basics");
-    @SideOnly(Side.CLIENT)
-    public static final KeyBinding siren = new KeyBinding("Siren", Keyboard.KEY_I, "DynamX basics");
-    private byte klaxonHullDown;
-
     @Override
     @SideOnly(Side.CLIENT)
     public void update() {
@@ -89,6 +109,10 @@ public class BasicsAddonController implements IVehicleController {
         if (module.hasSiren()) {
             if (siren.isPressed())
                 module.setSirenOn(!module.isSirenOn());
+        }
+        if (module.hasHeadLights()) {
+            if (headlights.isPressed())
+                module.setHeadLightsOn(!module.isHeadLightsOn());
         }
     }
 

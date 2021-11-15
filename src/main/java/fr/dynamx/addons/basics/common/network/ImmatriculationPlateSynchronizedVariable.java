@@ -1,6 +1,5 @@
 package fr.dynamx.addons.basics.common.network;
 
-import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
 import fr.dynamx.api.network.sync.PhysicsEntityNetHandler;
@@ -12,6 +11,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
+
+import javax.annotation.Nullable;
 
 public class ImmatriculationPlateSynchronizedVariable<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
     public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "plate");

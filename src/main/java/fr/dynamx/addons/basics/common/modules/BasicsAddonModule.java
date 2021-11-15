@@ -1,6 +1,5 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
@@ -16,6 +15,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
@@ -26,6 +26,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     private final BasicsAddonInfos infos;
     private boolean sirenOn;
     private boolean playKlaxon;
+    private boolean headLightsOn;
 
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
@@ -42,6 +43,10 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         return infos != null && infos.sirenSound != null;
     }
 
+    public boolean hasHeadLights() {
+        return infos != null && infos.headLightsSource != 0;
+    }
+
     @Override
     public boolean listenEntityUpdates(Side side) {
         return side.isClient() && (hasKlaxon() || hasSiren());
@@ -55,8 +60,9 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
                 entity.world.playSound(entity.posX, entity.posY, entity.posZ, BasicsAddon.soundMap.get(infos.klaxonSound), SoundCategory.PLAYERS, 1, 1, true);
             }
         }
-        if (controller != null)
+        if (controller != null) {
             controller.updateSiren();
+        }
     }
 
     @Nullable
@@ -88,6 +94,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public boolean isHeadLightsOn() {
+        return headLightsOn;
+    }
+
+    public void setHeadLightsOn(boolean headLightsOn) {
+        this.headLightsOn = headLightsOn;
     }
 
     public BasicsAddonInfos getInfos() {

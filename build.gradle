@@ -37,10 +37,14 @@ repositories {
     maven {
         url 'http://maven.dynamx.fr/artifactory/DynamXRepo'
     }
+    maven {
+        url 'https://maven.dynamx.fr/artifactory/' + 'ACsGuisRepo'
+    }
 }
 
 dependencies {
-    deobfCompile "fr.dynamx:DynamX:3.2.0-1"
+    deobfCompile "fr.dynamx:DynamX:3.2.1-4"
+    compile "fr.aym.acsguis:ACsGuis:1.2.0-4"
 }
 
 

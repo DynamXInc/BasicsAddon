@@ -19,7 +19,15 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     @PackFileProperty(configNames = "SirenSound", required = false)
     public String sirenSound;
     @PackFileProperty(configNames = "SirenLightSource", required = false)
-    public int sirenLightSource = 9;
+    public int sirenLightSource = 0;
+    @PackFileProperty(configNames = "HeadLightsSource", required = false)
+    public int headLightsSource = 0;
+    @PackFileProperty(configNames = "BackLightsSource", required = false)
+    public int backLightsSource = 0;
+    @PackFileProperty(configNames = "BrakeLightsSource", required = false)
+    public int brakeLightsSource = 0;
+    @PackFileProperty(configNames = "ReverseLightsSource", required = false)
+    public int reverseLightsSource = 0;
 
     public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;

@@ -15,6 +15,8 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +36,17 @@ public class BasicsAddon {
         //FileDefinitionsRegistry.addFileDefinition("SirenSound", "sirenSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
         SynchronizedVariablesRegistry.addSyncVar(SoundsSynchronizedVariable.NAME, SoundsSynchronizedVariable::new);//, (s,e) -> e.getEntity() instanceof ModularVehicleEntity && (e.getSimulationHolder() == SimulationHolder.SERVER_SP ? s.isClient() : s.isServer() || e.getSimulationHolder().isMe(s)));
         SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
-        if (FMLCommonHandler.instance().getSide().isClient())
+        if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
+        }
         betterLightsLoaded = Loader.isModLoaded("better_lights");
     }
 
+    @SideOnly(Side.CLIENT)
     private static void setupClient() {
         ClientRegistry.registerKeyBinding(BasicsAddonController.klaxon);
         ClientRegistry.registerKeyBinding(BasicsAddonController.siren);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.headlights);
 
         ACsGuiApi.registerStyleSheetToPreload(BasicsAddonController.STYLE);
     }
