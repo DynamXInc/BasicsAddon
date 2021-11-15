@@ -5,7 +5,7 @@ import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
-import fr.dynamx.addons.basics.common.network.SoundsSynchronizedVariable;
+import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.api.contentpack.DynamXAddon;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
 import fr.dynamx.api.network.sync.SynchronizedVariablesRegistry;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod(modid = BasicsAddon.ID, version = "1.0.0", name = "DynamX Basics Addon")
+@Mod(modid = BasicsAddon.ID, version = "1.0.0", name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
 @DynamXAddon(modid = BasicsAddon.ID, name = "DynamX Basics", version = "1.0.0")
 public class BasicsAddon {
     public static final String ID = "dynamx_basics";
@@ -34,7 +34,7 @@ public class BasicsAddon {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos.class, false));
         //FileDefinitionsRegistry.addFileDefinition("KlaxonSound", "klaxonSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
         //FileDefinitionsRegistry.addFileDefinition("SirenSound", "sirenSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
-        SynchronizedVariablesRegistry.addSyncVar(SoundsSynchronizedVariable.NAME, SoundsSynchronizedVariable::new);//, (s,e) -> e.getEntity() instanceof ModularVehicleEntity && (e.getSimulationHolder() == SimulationHolder.SERVER_SP ? s.isClient() : s.isServer() || e.getSimulationHolder().isMe(s)));
+        SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);//, (s,e) -> e.getEntity() instanceof ModularVehicleEntity && (e.getSimulationHolder() == SimulationHolder.SERVER_SP ? s.isClient() : s.isServer() || e.getSimulationHolder().isMe(s)));
         SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
@@ -47,6 +47,9 @@ public class BasicsAddon {
         ClientRegistry.registerKeyBinding(BasicsAddonController.klaxon);
         ClientRegistry.registerKeyBinding(BasicsAddonController.siren);
         ClientRegistry.registerKeyBinding(BasicsAddonController.headlights);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.turnLeft);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.turnRight);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.warnings);
 
         ACsGuiApi.registerStyleSheetToPreload(BasicsAddonController.STYLE);
     }

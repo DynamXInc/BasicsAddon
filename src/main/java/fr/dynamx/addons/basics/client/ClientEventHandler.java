@@ -7,9 +7,12 @@ import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.common.entities.modules.EngineModule;
 import fr.dynamx.common.entities.modules.VehicleLightsModule;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(modid = BasicsAddon.ID, value = Side.CLIENT)
 public class ClientEventHandler {
@@ -19,12 +22,8 @@ public class ClientEventHandler {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
                 VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
-                if (lights != null) {
-                    if (module.isSirenOn()) {
-                        lights.setLightOn(module.getInfos().sirenLightSource, true);
-                    } else {
-                        lights.setLightOn(module.getInfos().sirenLightSource, false);
-                    }
+                if (lights != null && module.getInfos() != null) {
+                    lights.setLightOn(module.getInfos().sirenLightSource, module.isSirenOn());
 
                     if(module.hasHeadLights()) {
                         if(module.isHeadLightsOn()) {
@@ -34,6 +33,11 @@ public class ClientEventHandler {
                             lights.setLightOn(module.getInfos().headLightsSource, false);
                             lights.setLightOn(module.getInfos().backLightsSource, false);
                         }
+                    }
+
+                    if(module.hasTurnSignals()) {
+                        lights.setLightOn(module.getInfos().turnLeftLightSource, module.isTurnSignalLeftOn());
+                        lights.setLightOn(module.getInfos().turnRightLightSource, module.isTurnSignalRightOn());
                     }
 
                     EngineModule engine = event.getEntity().getModuleByType(EngineModule.class);

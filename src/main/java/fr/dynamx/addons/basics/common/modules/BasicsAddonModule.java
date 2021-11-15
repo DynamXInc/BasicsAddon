@@ -4,7 +4,7 @@ import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
-import fr.dynamx.addons.basics.common.network.SoundsSynchronizedVariable;
+import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
@@ -27,11 +27,13 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     private boolean sirenOn;
     private boolean playKlaxon;
     private boolean headLightsOn;
+    private boolean turnSignalLeftOn;
+    private boolean turnSignalRightOn;
 
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
         this.infos = infos;
-        if (entity.world.isRemote && (hasSiren() || hasKlaxon()))
+        if (entity.world.isRemote/* && (hasSiren() || hasKlaxon())*/)
             controller = new BasicsAddonController(entity, this, fr.dynamx.addons.basics.BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
     }
 
@@ -40,6 +42,10 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     }
 
     public boolean hasSiren() {
+        return infos != null && (infos.sirenSound != null || infos.sirenLightSource != 0);
+    }
+
+    public boolean hasSirenSound() {
         return infos != null && infos.sirenSound != null;
     }
 
@@ -49,7 +55,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public boolean listenEntityUpdates(Side side) {
-        return side.isClient() && (hasKlaxon() || hasSiren());
+        return side.isClient() && (hasKlaxon() || hasSirenSound());
     }
 
     @Override
@@ -104,6 +110,26 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         this.headLightsOn = headLightsOn;
     }
 
+    public boolean hasTurnSignals() {
+        return infos != null && infos.turnLeftLightSource != 0 && infos.turnRightLightSource != 0;
+    }
+
+    public boolean isTurnSignalLeftOn() {
+        return turnSignalLeftOn;
+    }
+
+    public void setTurnSignalLeftOn(boolean turnSignalLeftOn) {
+        this.turnSignalLeftOn = turnSignalLeftOn;
+    }
+
+    public boolean isTurnSignalRightOn() {
+        return turnSignalRightOn;
+    }
+
+    public void setTurnSignalRightOn(boolean turnSignalRightOn) {
+        this.turnSignalRightOn = turnSignalRightOn;
+    }
+
     public BasicsAddonInfos getInfos() {
         return infos;
     }
@@ -111,6 +137,6 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     @Override
     public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
         if (simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side))
-            variables.add(SoundsSynchronizedVariable.NAME);
+            variables.add(BasicsAddonSV.NAME);
     }
 }

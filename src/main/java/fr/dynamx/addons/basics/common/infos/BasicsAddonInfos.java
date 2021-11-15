@@ -28,6 +28,10 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     public int brakeLightsSource = 0;
     @PackFileProperty(configNames = "ReverseLightsSource", required = false)
     public int reverseLightsSource = 0;
+    @PackFileProperty(configNames = "TurnSignalLeftLightSource", required = false)
+    public int turnLeftLightSource = 0;
+    @PackFileProperty(configNames = "TurnSignalRightLightSource", required = false)
+    public int turnRightLightSource = 0;
 
     public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -51,8 +55,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
             RegistryNameSetter.setRegistryName(event, klaxonSound);
             BasicsAddon.soundMap.put(sirenSound, event);
         }
-        if (klaxonSound != null || sirenSound != null)
-            owner.addSubProperty(this);
+        owner.addSubProperty(this);
     }
 
     @Override

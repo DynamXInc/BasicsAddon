@@ -34,6 +34,12 @@ public class BasicsAddonController implements IVehicleController {
     public static final KeyBinding siren = new KeyBinding("Siren", Keyboard.KEY_I, "DynamX basics");
     @SideOnly(Side.CLIENT)
     public static final KeyBinding headlights = new KeyBinding("HeadLights", Keyboard.KEY_U, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding turnLeft = new KeyBinding("TurnLeft", Keyboard.KEY_LEFT, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding turnRight = new KeyBinding("TurnRight", Keyboard.KEY_RIGHT, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding warnings = new KeyBinding("Warnings", Keyboard.KEY_DOWN, "DynamX basics");
 
     private final BaseVehicleEntity<?> entity;
     private final BasicsAddonModule module;
@@ -59,7 +65,7 @@ public class BasicsAddonController implements IVehicleController {
                 module1.setLightOn(1, false);
             }
         }*/
-        if (module.isSirenOn() && module.hasSiren()) {
+        if (module.isSirenOn() && module.hasSirenSound()) {
             if (sirenSound == null || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sirenSound)) {
                 sirenSound = new StoppableEntitySound(BasicsAddon.soundMap.get(module.getInfos().sirenSound), SoundCategory.PLAYERS, entity);
                 Minecraft.getMinecraft().getSoundHandler().playSound(sirenSound);
@@ -95,6 +101,8 @@ public class BasicsAddonController implements IVehicleController {
         }
     }
 
+    private boolean warningsOn;
+
     @Override
     @SideOnly(Side.CLIENT)
     public void update() {
@@ -103,16 +111,42 @@ public class BasicsAddonController implements IVehicleController {
         if (module.hasKlaxon()) {
             module.playKlaxon(klaxon.isPressed() && klaxonHullDown == 0);
             //System.out.println("Klaxon : "+b+" "+playKlaxon+" "+klaxonHullDown);
-            if (module.playKlaxon())
+            if (module.playKlaxon()) {
                 klaxonHullDown = module.getInfos().klaxonCooldown;
+            }
         }
         if (module.hasSiren()) {
-            if (siren.isPressed())
+            if (siren.isPressed()) {
                 module.setSirenOn(!module.isSirenOn());
+            }
         }
         if (module.hasHeadLights()) {
-            if (headlights.isPressed())
+            if (headlights.isPressed()) {
                 module.setHeadLightsOn(!module.isHeadLightsOn());
+            }
+        }
+        if (module.hasTurnSignals()) {
+            if(turnLeft.isPressed()) {
+                if(!warningsOn) {
+                    module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
+                } else {
+                    warningsOn = false;
+                }
+                module.setTurnSignalRightOn(false);
+            }
+            else if(turnRight.isPressed()) {
+                module.setTurnSignalLeftOn(false);
+                if(!warningsOn) {
+                    module.setTurnSignalRightOn(!module.isTurnSignalRightOn());
+                } else {
+                    warningsOn = false;
+                }
+            }
+            else if(warnings.isPressed()) {
+                warningsOn = !warningsOn;
+                module.setTurnSignalLeftOn(warningsOn);
+                module.setTurnSignalRightOn(warningsOn);
+            }
         }
     }
 

@@ -13,8 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 
-public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
-    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "sounds");
+public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
+    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "module");
 
     private byte vars;
 
@@ -28,6 +28,10 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
             vars = (byte) (vars | 2);
         if (module.isHeadLightsOn())
             vars = (byte) (vars | 4);
+        if (module.isTurnSignalLeftOn())
+            vars = (byte) (vars | 8);
+        if (module.isTurnSignalRightOn())
+            vars = (byte) (vars | 16);
         if (vars != this.vars) {
             this.vars = vars;
             return SyncTarget.spectatorForSide(side);
@@ -41,6 +45,8 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
         module.playKlaxon((vars & 1) == 1);
         module.setSirenOn((vars & 2) == 2);
         module.setHeadLightsOn((vars & 4) == 4);
+        module.setTurnSignalLeftOn((vars & 8) == 8);
+        module.setTurnSignalRightOn((vars & 16) == 16);
     }
 
     @Override
@@ -63,6 +69,10 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
             vars = (byte) (vars | 2);
         if (module.isHeadLightsOn())
             vars = (byte) (vars | 4);
+        if (module.isTurnSignalLeftOn())
+            vars = (byte) (vars | 8);
+        if (module.isTurnSignalRightOn())
+            vars = (byte) (vars | 16);
         buf.writeInt(vars);
     }
 
