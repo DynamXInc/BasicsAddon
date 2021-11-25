@@ -7,18 +7,14 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-repositories {
-    maven {
-        url 'https://maven.dynamx.fr/artifactory/DynamXRepo'
-    }
-}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0"
-group = "com.yourname.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+version = "1.0.0-for-DynamX-3.1"
+group = "fr.dynamx.addons.basics" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "BasicsAddon"
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -28,7 +24,7 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2847"
     runDir = "run"
-
+    
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -38,9 +34,20 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+repositories {
+    maven {
+        url 'http://maven.dynamx.fr/artifactory/DynamXRepo'
+    }
+    maven {
+        url 'https://maven.dynamx.fr/artifactory/' + 'ACsGuisRepo'
+    }
+}
+
 dependencies {
     deobfCompile "fr.dynamx:DynamX:3.2.1-4"
+    compile "fr.aym.acsguis:ACsGuis:1.2.0-4"
 }
+
 
 processResources {
     // this will ensure that this task is redone when the versions change.

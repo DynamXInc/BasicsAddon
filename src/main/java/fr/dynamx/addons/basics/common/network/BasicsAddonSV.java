@@ -1,6 +1,5 @@
 package fr.dynamx.addons.basics.common.network;
 
-import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.network.sync.PhysicsEntityNetHandler;
@@ -12,8 +11,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
-    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "sounds");
+import javax.annotation.Nullable;
+
+public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements SynchronizedVariable<A> {
+    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "module");
 
     private byte vars;
 
@@ -25,6 +26,12 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
             vars = (byte) (vars | 1);
         if (module.isSirenOn())
             vars = (byte) (vars | 2);
+        if (module.isHeadLightsOn())
+            vars = (byte) (vars | 4);
+        if (module.isTurnSignalLeftOn())
+            vars = (byte) (vars | 8);
+        if (module.isTurnSignalRightOn())
+            vars = (byte) (vars | 16);
         if (vars != this.vars) {
             this.vars = vars;
             return SyncTarget.spectatorForSide(side);
@@ -37,6 +44,9 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
         BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
         module.playKlaxon((vars & 1) == 1);
         module.setSirenOn((vars & 2) == 2);
+        module.setHeadLightsOn((vars & 4) == 4);
+        module.setTurnSignalLeftOn((vars & 8) == 8);
+        module.setTurnSignalRightOn((vars & 16) == 16);
     }
 
     @Override
@@ -57,6 +67,12 @@ public class SoundsSynchronizedVariable<A extends BaseVehicleEntity<?>> implemen
             vars = (byte) (vars | 1);
         if (module.isSirenOn())
             vars = (byte) (vars | 2);
+        if (module.isHeadLightsOn())
+            vars = (byte) (vars | 4);
+        if (module.isTurnSignalLeftOn())
+            vars = (byte) (vars | 8);
+        if (module.isTurnSignalRightOn())
+            vars = (byte) (vars | 16);
         buf.writeInt(vars);
     }
 
