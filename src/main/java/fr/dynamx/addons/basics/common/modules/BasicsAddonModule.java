@@ -26,6 +26,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     private final BasicsAddonInfos infos;
     private boolean sirenOn;
     private boolean playKlaxon;
+    private int fuelLevel;
 
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
@@ -88,6 +89,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     public void setLocked(boolean locked) {
         this.locked = locked;
+    }
+
+    public int getFuelLevel() {
+        return fuelLevel;
+    }
+
+    public void setFuelLevel(int fuelLevel) {
+        this.fuelLevel = fuelLevel;
     }
 
     public BasicsAddonInfos getInfos() {

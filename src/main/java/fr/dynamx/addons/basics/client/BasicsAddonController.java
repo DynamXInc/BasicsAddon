@@ -23,16 +23,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class BasicsAddonController implements IVehicleController {
-    public static final ResourceLocation STYLE = new ResourceLocation(fr.dynamx.addons.basics.BasicsAddon.ID, "css/vehicle_hud_siren.css");
+    public static final ResourceLocation STYLE = new ResourceLocation(fr.dynamx.addons.basics.BasicsAddon.ID, "css/vehicle_hud.css");
 
     private final BaseVehicleEntity<?> entity;
     private final BasicsAddonModule module;
-    private final fr.dynamx.addons.basics.common.LightHolder lights;
+    //private final fr.dynamx.addons.basics.common.LightHolder lights;
 
     public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module, LightHolder lights) {
         this.entity = entity;
         this.module = module;
-        this.lights = lights;
+        //this.lights = lights;
     }
 
     @SideOnly(Side.CLIENT)
@@ -42,7 +42,7 @@ public class BasicsAddonController implements IVehicleController {
                 sirenSound = new StoppableEntitySound(BasicsAddon.soundMap.get(module.getInfos().sirenSound), SoundCategory.PLAYERS, entity);
                 Minecraft.getMinecraft().getSoundHandler().playSound(sirenSound);
             }
-            if (lights != null) {
+            /*if (lights != null) {
                 Vector3f pos = Vector3fPool.get(0.706687f, 3.28461f, 3.3705f);
                 pos = DynamXGeometry.rotateVectorByQuaternion(pos, entity.physicsRotation);
                 pos = pos.add(entity.physicsPosition);
@@ -58,12 +58,12 @@ public class BasicsAddonController implements IVehicleController {
                 rot = Vector3fPool.get((float) (16 * Math.cos(angle)), -4, (float) (16 * Math.sin(angle)));
                 rot = DynamXGeometry.rotateVectorByQuaternion(rot, entity.physicsRotation);
                 lights.update2(pos, rot);
-            }
+            }*/
         } else if (sirenSound != null) {
             sirenSound.stop();
             sirenSound = null;
-            if (lights != null)
-                lights.destroy();
+            //if (lights != null)
+            //    lights.destroy();
         }
     }
 
@@ -99,6 +99,9 @@ public class BasicsAddonController implements IVehicleController {
             cir.setCssId("siren_hud");
             cir.setCssClass("hud_item");
             cir.add(new UpdatableGuiLabel("Siren : %s", (s) -> String.format(s, module.isSirenOn() ? "On" : "Off")));
+
+            cir.add(new UpdatableGuiLabel("%s", (s) -> String.format(s, module.getFuelLevel() + "%")));
+
             return cir;
         }
         return null;
