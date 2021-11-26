@@ -13,9 +13,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.commons.lang3.RandomStringUtils;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -97,6 +95,10 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
                 GlStateManager.rotate(rotate, 0, 0, 1);
             GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
             RenderHelper.disableStandardItemLighting();
+            //GlStateManager.disableCull();
+            //GlStateManager.disableTexture2D();
+
+            //DynamXRenderUtils.drawBoundingBox(Vector3fPool.get(1, 1, 1), 1, 0, 0, 1);
             Minecraft.getMinecraft().fontRenderer.drawString(getPlate(), (float) (- Minecraft.getMinecraft().fontRenderer.getStringWidth(getPlate()) / 2), 0, 0xFFFFFF, false);
             RenderHelper.enableStandardItemLighting();
             GlStateManager.resetColor();
