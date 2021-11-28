@@ -111,8 +111,4 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             GlStateManager.popMatrix();
         }
     }
-
-    @SideOnly(Side.CLIENT)
-    public static void drawCenteredString(String text, int x, int y, int color) {
-    }
 }
