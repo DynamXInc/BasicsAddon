@@ -11,6 +11,7 @@ import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
+import java.awt.*;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -30,8 +31,11 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     @PackFileProperty(configNames = "ImmatriculationPattern", required = false)
     protected String immatriculationPattern = "aa-111-aa";
 
-    @PackFileProperty(configNames = "ImmatriculationPattern", type = DefinitionType.DynamXDefinitionTypes.STRING, required = false)
+    @PackFileProperty(configNames = "ImmatriculationFont", type = DefinitionType.DynamXDefinitionTypes.STRING, required = false)
     protected String font = BasicsAddon.ID + ":e";
+
+    @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.color", required = false)
+    protected Vector3f ImmatriculationColor = new Vector3f(Color.black.getRed(), Color.black.getGreen(), Color.black.getBlue());
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -66,6 +70,10 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
 
     public String getFont() {
         return font;
+    }
+
+    public Vector3f getImmatriculationColor() {
+        return ImmatriculationColor;
     }
 
     public String getImmatriculationPattern() {
