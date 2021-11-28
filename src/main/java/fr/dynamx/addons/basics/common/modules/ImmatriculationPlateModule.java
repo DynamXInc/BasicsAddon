@@ -1,6 +1,10 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import com.google.common.collect.Lists;
 import com.jme3.math.Vector3f;
+import fr.aym.acsguis.cssengine.font.CssFontHelper;
+import fr.aym.acsguis.cssengine.parsing.ACsGuisCssParser;
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
@@ -11,6 +15,7 @@ import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -95,11 +100,11 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
                 GlStateManager.rotate(rotate, 0, 0, 1);
             GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
             RenderHelper.disableStandardItemLighting();
-            //GlStateManager.disableCull();
-            //GlStateManager.disableTexture2D();
 
-            //DynamXRenderUtils.drawBoundingBox(Vector3fPool.get(1, 1, 1), 1, 0, 0, 1);
-            Minecraft.getMinecraft().fontRenderer.drawString(getPlate(), (float) (- Minecraft.getMinecraft().fontRenderer.getStringWidth(getPlate()) / 2), 0, 0xFFFFFF, false);
+            CssFontHelper.pushDrawing(new ResourceLocation(BasicsAddon.ID, "e"), Lists.newArrayList());
+            GlStateManager.scale(0.1,0.1,0.1);
+            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(),0xFFFFFF);
+            CssFontHelper.popDrawing();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.resetColor();
 

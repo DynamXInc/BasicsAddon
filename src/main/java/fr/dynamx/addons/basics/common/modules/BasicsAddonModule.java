@@ -1,5 +1,6 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
@@ -15,7 +16,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {

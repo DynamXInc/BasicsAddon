@@ -1,5 +1,6 @@
 package fr.dynamx.addons.basics.client;
 
+import fr.aym.acsguis.event.CssReloadEvent;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.entities.VehicleEntityProperties;
@@ -7,15 +8,13 @@ import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.common.entities.modules.EngineModule;
 import fr.dynamx.common.entities.modules.VehicleLightsModule;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.input.Keyboard;
 
 @Mod.EventBusSubscriber(modid = BasicsAddon.ID, value = Side.CLIENT)
 public class ClientEventHandler {
+
     @SubscribeEvent
     public static void renderLights(VehicleEntityEvent.RenderVehicleEntityEvent event) {
         if (event.phase == PhysicsEntityEvent.Phase.PRE && event.type == VehicleEntityEvent.RenderVehicleEntityEvent.Type.LIGHTS) {
