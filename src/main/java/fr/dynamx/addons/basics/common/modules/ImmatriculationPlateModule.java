@@ -101,7 +101,7 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
             RenderHelper.disableStandardItemLighting();
 
-            CssFontHelper.pushDrawing(new ResourceLocation(BasicsAddon.ID, "e"), Lists.newArrayList());
+            CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Lists.newArrayList());
             GlStateManager.scale(0.1,0.1,0.1);
             CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(),0xFFFFFF);
             CssFontHelper.popDrawing();

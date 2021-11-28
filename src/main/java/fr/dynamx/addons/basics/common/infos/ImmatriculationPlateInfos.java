@@ -1,6 +1,7 @@
 package fr.dynamx.addons.basics.common.infos;
 
 import com.jme3.math.Vector3f;
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoType;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
@@ -20,14 +21,17 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     @PackFileProperty(configNames = "ImmatriculationPosition", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F_INVERSED_Y, description = "common.position")
     protected Vector3f immatriculationPosition;
 
-    @PackFileProperty(configNames = "ImmatriculationSize", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.position")
-    protected Vector3f immatriculationSize; //FIXME BLACKNITE C'EST PAS UNE POSITION ça ("common.position")
+    @PackFileProperty(configNames = "ImmatriculationSize", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.size")
+    protected Vector3f immatriculationSize;
 
     @PackFileProperty(configNames = "ImmatriculationRotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f immatriculationRotation;
 
     @PackFileProperty(configNames = "ImmatriculationPattern", required = false)
     protected String immatriculationPattern = "aa-111-aa";
+
+    @PackFileProperty(configNames = "ImmatriculationPattern", type = DefinitionType.DynamXDefinitionTypes.STRING, required = false)
+    protected String font = BasicsAddon.ID + ":e";
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -58,6 +62,10 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
 
     public Vector3f getImmatriculationRotation() {
         return immatriculationRotation;
+    }
+
+    public String getFont() {
+        return font;
     }
 
     public String getImmatriculationPattern() {
