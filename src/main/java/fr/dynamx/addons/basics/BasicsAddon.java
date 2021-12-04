@@ -3,23 +3,35 @@ package fr.dynamx.addons.basics;
 import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
+import fr.dynamx.addons.basics.common.infos.BasicsItemInfo;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
+import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
+import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.contentpack.DynamXAddon;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
 import fr.dynamx.api.network.sync.SynchronizedVariablesRegistry;
 import fr.dynamx.common.contentpack.DynamXObjectLoaders;
-import net.minecraft.client.gui.FontRenderer;
+import fr.dynamx.common.contentpack.type.objects.ItemObject;
+import fr.dynamx.common.items.DynamXItem;
+import fr.dynamx.common.items.DynamXItemRegistry;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mod(modid = BasicsAddon.ID, version = "1.0.0", name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
@@ -29,18 +41,49 @@ public class BasicsAddon {
     public static boolean betterLightsLoaded;
     public static final Map<String, SoundEvent> soundMap = new HashMap<>();
 
+    public static DynamXItem<?> keysItem;
+    public static DynamXItem<?> jerrycanItem;
+
     @DynamXAddon.AddonEventSubscriber
     public static void initAddon() {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("BasicsAddon", BasicsAddonInfos.class));
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos.class, false));
-        //FileDefinitionsRegistry.addFileDefinition("KlaxonSound", "klaxonSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
-        //FileDefinitionsRegistry.addFileDefinition("SirenSound", "sirenSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
-        SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);//, (s,e) -> e.getEntity() instanceof ModularVehicleEntity && (e.getSimulationHolder() == SimulationHolder.SERVER_SP ? s.isClient() : s.isServer() || e.getSimulationHolder().isMe(s)));
+        DynamXObjectLoaders.ITEMS.addSubInfoType(new SubInfoTypeEntry("BasicsAddon", BasicsItemInfo.class));
+
+        SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
         SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }
         betterLightsLoaded = Loader.isModLoaded("better_lights");
+
+        registerKey();
+        registerJerrycan();
+    }
+
+    private static void registerKey() {
+        keysItem = new DynamXItem(ID, "car_keys", "disable_rendering") {
+            @Override
+            public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+                if(VehicleKeyUtils.hasLinkedVehicle(stack)) {
+                    tooltip.add(I18n.format("basadd.key.linked.to", stack.getTagCompound().getString("VehicleName")));
+                }
+            }
+        };
+        keysItem.setCreativeTab(DynamXItemRegistry.objectTab);
+        ItemObject<?> info = (ItemObject<?>) keysItem.getInfo();
+        BasicsItemInfo bas = new BasicsItemInfo(info);
+        bas.setKey(true);
+        info.addSubProperty(bas);
+    }
+
+    private static void registerJerrycan() {
+        jerrycanItem = new DynamXItem<>(ID, "fuel_jerrycan", "disable_rendering");
+        jerrycanItem.setCreativeTab(DynamXItemRegistry.objectTab);
+        ItemObject<?> info = (ItemObject<?>) jerrycanItem.getInfo();
+        BasicsItemInfo bas = new BasicsItemInfo(info);
+        bas.setFuelCapacity(40);
+        info.addSubProperty(bas);
     }
 
     @SideOnly(Side.CLIENT)
@@ -53,5 +96,10 @@ public class BasicsAddon {
         ClientRegistry.registerKeyBinding(BasicsAddonController.warnings);
 
         ACsGuiApi.registerStyleSheetToPreload(BasicsAddonController.STYLE);
+    }
+
+    @Mod.EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandBasicsSpawn());
     }
 }

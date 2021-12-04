@@ -1,9 +1,3 @@
-@font-face {
-  font-family: "dynamx_basics:e";
-  src: url("dynamx_basics:font/e.ttf");
-  font-size: 60px;
-}
-
 #siren_hud
 {
     top: 5px;

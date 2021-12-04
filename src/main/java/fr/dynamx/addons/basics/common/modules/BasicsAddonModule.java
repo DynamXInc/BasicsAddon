@@ -1,6 +1,5 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import com.sun.istack.internal.Nullable;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
@@ -11,16 +10,20 @@ import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private BasicsAddonController controller;
     private final BaseVehicleEntity<?> entity;
+
+    private boolean hasLinkedKey;
     private boolean locked;
 
     private final BasicsAddonInfos infos;
@@ -34,8 +37,9 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
         this.infos = infos;
-        if (entity.world.isRemote/* && (hasSiren() || hasKlaxon())*/)
+        if (entity.world.isRemote/* && (hasSiren() || hasKlaxon())*/) {
             controller = new BasicsAddonController(entity, this, fr.dynamx.addons.basics.BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
+        }
     }
 
     public boolean hasKlaxon() {
@@ -95,6 +99,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         this.sirenOn = sirenOn;
     }
 
+    public boolean hasLinkedKey() {
+        return hasLinkedKey;
+    }
+
+    public void setHasLinkedKey(boolean hasLinkedKey) {
+        this.hasLinkedKey = hasLinkedKey;
+    }
+
     public boolean isLocked() {
         return locked;
     }
@@ -145,7 +157,20 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
-        if (simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side))
+        if (simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side)) {
             variables.add(BasicsAddonSV.NAME);
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setBoolean("BasAdd.haskey", hasLinkedKey);
+        tag.setBoolean("BasAdd.locked", locked);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        hasLinkedKey = tag.getBoolean("BasAdd.haskey");
+        locked = tag.getBoolean("BasAdd.locked");
     }
 }
