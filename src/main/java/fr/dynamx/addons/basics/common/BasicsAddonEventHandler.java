@@ -2,11 +2,14 @@ package fr.dynamx.addons.basics.common;
 
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
+import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.common.contentpack.parts.PartDoor;
+import fr.dynamx.client.handlers.CarController;
 import fr.dynamx.common.contentpack.parts.PartSeat;
 import fr.dynamx.common.contentpack.parts.PartStorage;
 import fr.dynamx.common.entities.BaseVehicleEntity;
@@ -26,6 +29,11 @@ public class BasicsAddonEventHandler {
         BaseVehicleEntity<?> entity = event.getEntity();
         BasicsAddonInfos info = entity.getPackInfo().getSubPropertyByType(BasicsAddonInfos.class);
         event.getModuleList().add(new BasicsAddonModule(entity, info)); //don't care of null info, module is used by keys system anyway
+    }
+
+    @SubscribeEvent
+    public static void interactWithCar(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
+        System.out.println(event.controller);
     }
 
     @SubscribeEvent

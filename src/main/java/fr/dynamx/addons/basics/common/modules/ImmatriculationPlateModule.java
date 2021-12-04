@@ -16,10 +16,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -40,12 +43,14 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
         Random r = new Random();
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern.charAt(i);
-            if(c == '-') {
-                builder.append(c);
-            } else if(Character.isDigit(c)) {
+            if(Character.isDigit(c)) {
                 builder.append(r.nextInt(10));
-            } else {
+            } else if(c == 'a') {
                 builder.append((char) (r.nextInt(26)+65));
+            }
+            else
+            {
+                builder.append(c);
             }
         }
         this.plate = builder.toString();
@@ -101,9 +106,10 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
             RenderHelper.disableStandardItemLighting();
 
-            CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Lists.newArrayList());
-            GlStateManager.scale(0.1,0.1,0.1);
-            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(),0xFFFFFF);
+            CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
+            GlStateManager.scale(0.05,0.05,0.05);
+            Vector3f color = immatriculationPlateInfos.getImmatriculationColor();
+            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ( (int)color.x << 0 ) | ( (int)color.y << 8 ) | ( (int)color.z << 16 ));
             CssFontHelper.popDrawing();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.resetColor();
