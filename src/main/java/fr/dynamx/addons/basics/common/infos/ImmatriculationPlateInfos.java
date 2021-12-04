@@ -10,6 +10,7 @@ import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import net.minecraft.util.math.Vec3i;
 
 import java.awt.*;
 import java.util.List;
@@ -35,7 +36,7 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     protected String font = BasicsAddon.ID + ":e";
 
     @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.color", required = false)
-    protected Vector3f ImmatriculationColor = new Vector3f(Color.black.getRed(), Color.black.getGreen(), Color.black.getBlue());
+    protected Vector3f immatriculationColor = new Vector3f(Color.black.getRed(), Color.black.getGreen(), Color.black.getBlue());
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -73,7 +74,7 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     }
 
     public Vector3f getImmatriculationColor() {
-        return ImmatriculationColor;
+        return immatriculationColor;
     }
 
     public String getImmatriculationPattern() {

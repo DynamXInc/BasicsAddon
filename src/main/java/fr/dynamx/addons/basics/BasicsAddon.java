@@ -3,8 +3,10 @@ package fr.dynamx.addons.basics;
 import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
+import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
+import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
 import fr.dynamx.api.contentpack.DynamXAddon;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
@@ -33,10 +35,12 @@ public class BasicsAddon {
     public static void initAddon() {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("BasicsAddon", BasicsAddonInfos.class));
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos.class, false));
+        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("FuelTank", FuelTankInfos::new, false));
         //FileDefinitionsRegistry.addFileDefinition("KlaxonSound", "klaxonSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
         //FileDefinitionsRegistry.addFileDefinition("SirenSound", "sirenSound", DefinitionType.DynamXDefinitionTypes.STRING.type);
         SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);//, (s,e) -> e.getEntity() instanceof ModularVehicleEntity && (e.getSimulationHolder() == SimulationHolder.SERVER_SP ? s.isClient() : s.isServer() || e.getSimulationHolder().isMe(s)));
         SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
+        SynchronizedVariablesRegistry.addSyncVar(FuelSynchronizedVariable.NAME, FuelSynchronizedVariable::new);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }

@@ -16,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -106,9 +107,9 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             RenderHelper.disableStandardItemLighting();
 
             CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
-            GlStateManager.scale(0.1,0.1,0.1);
+            GlStateManager.scale(0.05,0.05,0.05);
             Vector3f color = immatriculationPlateInfos.getImmatriculationColor();
-            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), (int) (65536 * color.x + 256 * color.y + color.z));
+            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ( (int)color.x << 0 ) | ( (int)color.y << 8 ) | ( (int)color.z << 16 ));
             CssFontHelper.popDrawing();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.resetColor();

@@ -1,25 +1,21 @@
 package fr.dynamx.addons.basics.common;
 
-import com.google.common.collect.Lists;
-import fr.aym.acsguis.cssengine.font.CssFontHelper;
-import fr.aym.acsguis.cssengine.parsing.ACsGuisCssParser;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
+import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
+import fr.dynamx.client.handlers.CarController;
 import fr.dynamx.common.contentpack.parts.PartSeat;
 import fr.dynamx.common.contentpack.parts.PartStorage;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -32,6 +28,11 @@ public class EventHandler {
         BaseVehicleEntity<?> entity = event.getEntity();
         BasicsAddonInfos info = entity.getPackInfo().getSubPropertyByType(BasicsAddonInfos.class);
         event.getModuleList().add(new BasicsAddonModule(entity, info)); //don't care of null info, module is used by keys system anyway
+    }
+
+    @SubscribeEvent
+    public static void interactWithCar(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
+        System.out.println(event.controller);
     }
 
     @SubscribeEvent
