@@ -18,8 +18,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import scala.xml.dtd.impl.Base;
 
 @Mod.EventBusSubscriber(modid = BasicsAddon.ID)
 public class BasicsAddonEventHandler {
@@ -32,15 +34,37 @@ public class BasicsAddonEventHandler {
     }
 
     @SubscribeEvent
-    public static void interactWithCar(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
-        System.out.println(event.controller);
+    public static void rightClickInCar(PlayerInteractEvent.EntityInteract event) {
+        if (!event.getWorld().isRemote && event.getTarget() == event.getEntity().getRidingEntity() && event.getEntity().getRidingEntity() instanceof BaseVehicleEntity<?>) {
+            BaseVehicleEntity<?> entity = (BaseVehicleEntity<?>) event.getEntity().getRidingEntity();
+            BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
+            if (VehicleKeyUtils.isKeyItem(event.getItemStack())) {
+                if (VehicleKeyUtils.hasLinkedVehicle(event.getItemStack())) {
+                    ITextComponent msg;
+                    if (entity.getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getItemStack()))) {
+                        module.setLocked(!module.isLocked());
+                        if (module.isLocked()) {
+                            msg = new TextComponentTranslation("basadd.key.locked");
+                            msg.getStyle().setColor(TextFormatting.DARK_RED);
+                        } else {
+                            msg = new TextComponentTranslation("basadd.key.unlocked");
+                            msg.getStyle().setColor(TextFormatting.DARK_GREEN);
+                        }
+                    } else {
+                        msg = new TextComponentTranslation("basadd.key.invalid");
+                        msg.getStyle().setColor(TextFormatting.DARK_RED);
+                    }
+                    event.getEntity().sendMessage(msg);
+                    event.setCanceled(true);
+                }
+            }
+        }
     }
 
     @SubscribeEvent
     public static void interactWithCar(VehicleEntityEvent.VehicleInteractEntityEvent event) {
         if (event.part instanceof PartSeat || event.part instanceof PartStorage || event.part instanceof PartDoor) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
-            //TODO AJOUT CONFIG SUR LES ITEMS
             if (VehicleKeyUtils.isKeyItem(event.player.getHeldItemMainhand())) {
                 ITextComponent msg;
                 if (!VehicleKeyUtils.hasLinkedVehicle(event.player.getHeldItemMainhand())) {
