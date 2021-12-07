@@ -10,6 +10,7 @@ import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
 import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
+import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.contentpack.DynamXAddon;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
@@ -86,11 +87,18 @@ public class BasicsAddon {
     }
 
     private static void registerJerrycan() {
-        jerrycanItem = new DynamXItem<>(ID, "fuel_jerrycan", "disable_rendering");
+        jerrycanItem = new DynamXItem(ID, "fuel_jerrycan", "item/jerrycan"){
+            @Override
+            public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+                if(FuelJerrycanUtils.isFuel(stack)) {
+                    tooltip.add(I18n.format("basadd.fuel.jerrycan",  FuelJerrycanUtils.getFuel(stack)));
+                }
+            }
+        };
         jerrycanItem.setCreativeTab(DynamXItemRegistry.objectTab);
         ItemObject<?> info = (ItemObject<?>) jerrycanItem.getInfo();
         BasicsItemInfo bas = new BasicsItemInfo(info);
-        bas.setFuelCapacity(40);
+        bas.setFuelCapacity(60);
         info.addSubProperty(bas);
     }
 

@@ -5,5 +5,6 @@ basadd.key.locked=Véhicule verouillé !
 basadd.key.unlocked=Véhicule verrouillé !
 basadd.key.invalid=Clé invalide !
 basadd.key.linked.to=Clé de %s
+basadd.fuel.jerrycan=Essence dans le bidon : %s
 
 item.dynx.dynamx_basics.fuel_jerrycan.name=Jerrycan d'essence
