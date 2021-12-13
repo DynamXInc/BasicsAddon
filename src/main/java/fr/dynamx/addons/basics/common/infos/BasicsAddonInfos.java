@@ -12,9 +12,9 @@ import net.minecraft.util.SoundEvent;
 public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder> {
     private final ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner;
 
-    @PackFileProperty(configNames = "KlaxonSound", required = false)
+    @PackFileProperty(configNames = {"HornSound", "KlaxonSound"}, required = false)
     public String klaxonSound;
-    @PackFileProperty(configNames = "KlaxonCooldown", required = false)
+    @PackFileProperty(configNames = {"HornCooldown", "KlaxonCooldown"}, required = false)
     public byte klaxonCooldown = 20;
     @PackFileProperty(configNames = "SirenSound", required = false)
     public String sirenSound;
@@ -40,16 +40,16 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     @Override
     public void appendTo(ModularVehicleInfoBuilder owner) {
         if (klaxonSound != null) {
-            if (!klaxonSound.contains(":"))
-                klaxonSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + klaxonSound;
+           // if (!klaxonSound.contains(":"))
+              //  klaxonSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + klaxonSound;
             ResourceLocation r = new ResourceLocation(klaxonSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, klaxonSound);
             fr.dynamx.addons.basics.BasicsAddon.soundMap.put(klaxonSound, event);
         }
         if (sirenSound != null) {
-            if (!sirenSound.contains(":"))
-                sirenSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + sirenSound;
+            //if (!sirenSound.contains(":"))
+            //    sirenSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + sirenSound;
             ResourceLocation r = new ResourceLocation(sirenSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, klaxonSound);
