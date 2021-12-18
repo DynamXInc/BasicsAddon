@@ -3,15 +3,14 @@ package fr.dynamx.addons.basics.client;
 import fr.aym.acsguis.component.GuiComponent;
 import fr.aym.acsguis.component.panel.GuiPanel;
 import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
+import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import net.minecraft.client.Minecraft;
+import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -39,12 +38,13 @@ public class BasicsAddonController implements IVehicleController {
     //private final fr.dynamx.addons.basics.common.LightHolder lights;
 
     @SideOnly(Side.CLIENT)
-    private StoppableEntitySound sirenSound;
+    private SirenSound sirenSound;
     private byte klaxonHullDown;
 
     public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module, LightHolder lights) {
         this.entity = entity;
         this.module = module;
+        this.sirenSound = new SirenSound(entity, module);
         //this.lights = lights;
     }
 
@@ -59,10 +59,10 @@ public class BasicsAddonController implements IVehicleController {
             }
         }*/
         if (module.isSirenOn() && module.hasSirenSound()) {
-            if (sirenSound == null || !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sirenSound)) {
-                sirenSound = new StoppableEntitySound(BasicsAddon.soundMap.get(module.getInfos().sirenSound), SoundCategory.PLAYERS, entity);
-                Minecraft.getMinecraft().getSoundHandler().playSound(sirenSound);
+            if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound)) {
+                ClientProxy.SOUND_HANDLER.playLoopingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), sirenSound);
             }
+
             /*if (lights != null) {
 
          /*   VehicleLightsModule module = entity.getModuleByType(VehicleLightsModule.class);
@@ -87,12 +87,12 @@ public class BasicsAddonController implements IVehicleController {
                 rot = DynamXGeometry.rotateVectorByQuaternion(rot, entity.physicsRotation);
                 lights.update2(pos, rot);
             }*/
-        } else if (sirenSound != null) {
+        } /*else if (sirenSound != null) {
             sirenSound.stop();
             sirenSound = null;
             //if (lights != null)
             //    lights.destroy();
-        }
+        }*/
     }
 
     private boolean warningsOn;
@@ -120,23 +120,21 @@ public class BasicsAddonController implements IVehicleController {
             }
         }
         if (module.hasTurnSignals()) {
-            if(turnLeft.isPressed()) {
-                if(!warningsOn) {
+            if (turnLeft.isPressed()) {
+                if (!warningsOn) {
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
                 } else {
                     warningsOn = false;
                 }
                 module.setTurnSignalRightOn(false);
-            }
-            else if(turnRight.isPressed()) {
+            } else if (turnRight.isPressed()) {
                 module.setTurnSignalLeftOn(false);
-                if(!warningsOn) {
+                if (!warningsOn) {
                     module.setTurnSignalRightOn(!module.isTurnSignalRightOn());
                 } else {
                     warningsOn = false;
                 }
-            }
-            else if(warnings.isPressed()) {
+            } else if (warnings.isPressed()) {
                 warningsOn = !warningsOn;
                 module.setTurnSignalLeftOn(warningsOn);
                 module.setTurnSignalRightOn(warningsOn);
