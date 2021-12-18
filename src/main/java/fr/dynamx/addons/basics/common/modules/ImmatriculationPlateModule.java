@@ -1,10 +1,7 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import com.google.common.collect.Lists;
 import com.jme3.math.Vector3f;
 import fr.aym.acsguis.cssengine.font.CssFontHelper;
-import fr.aym.acsguis.cssengine.parsing.ACsGuisCssParser;
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
@@ -12,15 +9,14 @@ import fr.dynamx.api.network.sync.SimulationHolder;
 import fr.dynamx.client.renders.RenderPhysicsEntity;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,13 +39,11 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
         Random r = new Random();
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern.charAt(i);
-            if(Character.isDigit(c)) {
+            if (c == '%') {
                 builder.append(r.nextInt(10));
-            } else if(c == 'a') {
-                builder.append((char) (r.nextInt(26)+65));
-            }
-            else
-            {
+            } else if (c == '@') {
+                builder.append((char) (r.nextInt(26) + 65));
+            } else {
                 builder.append(c);
             }
         }
@@ -76,6 +70,18 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
     public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List variables) {
         if (side.isServer()) {
             variables.add(ImmatriculationPlateSynchronizedVariable.NAME);
+        }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setString("bas_immat_plate", plate);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        if (tag.hasKey("bas_immat_plate", Constants.NBT.TAG_STRING)) {
+            plate = tag.getString("bas_immat_plate");
         }
     }
 
@@ -107,9 +113,9 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             RenderHelper.disableStandardItemLighting();
 
             CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
-            GlStateManager.scale(0.05,0.05,0.05);
+            GlStateManager.scale(0.05, 0.05, 0.05);
             Vector3f color = immatriculationPlateInfos.getImmatriculationColor();
-            CssFontHelper.draw((float) (- CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ( (int)color.x << 0 ) | ( (int)color.y << 8 ) | ( (int)color.z << 16 ));
+            CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ((int) color.x << 0) | ((int) color.y << 8) | ((int) color.z << 16));
             CssFontHelper.popDrawing();
             RenderHelper.enableStandardItemLighting();
             GlStateManager.resetColor();

@@ -22,7 +22,7 @@ public class ClientEventHandler {
             if (module != null) {
                 VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
                 if (lights != null && module.getInfos() != null) {
-                    lights.setLightOn(module.getInfos().sirenLightSource, module.isSirenOn());
+                    lights.setLightOn(module.getInfos().sirenLightSource, module.isBeaconsOn() || module.isSirenOn());
 
                     if(module.hasHeadLights()) {
                         if(module.isHeadLightsOn()) {

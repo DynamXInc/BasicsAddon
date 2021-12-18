@@ -28,6 +28,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     private final BasicsAddonInfos infos;
     private boolean sirenOn;
+    private boolean beaconsOn;
     private boolean playKlaxon;
     private int fuelLevel;
     private boolean headLightsOn;
@@ -97,6 +98,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     public void setSirenOn(boolean sirenOn) {
         this.sirenOn = sirenOn;
+    }
+
+    public boolean isBeaconsOn() {
+        return beaconsOn;
+    }
+
+    public void setBeaconsOn(boolean beaconsOn) {
+        this.beaconsOn = beaconsOn;
     }
 
     public boolean hasLinkedKey() {

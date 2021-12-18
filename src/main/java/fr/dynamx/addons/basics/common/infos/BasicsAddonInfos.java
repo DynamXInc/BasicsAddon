@@ -40,19 +40,21 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     @Override
     public void appendTo(ModularVehicleInfoBuilder owner) {
         if (klaxonSound != null) {
-            if (!klaxonSound.contains(":"))
+            if (!klaxonSound.contains(":")) {
                 klaxonSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + klaxonSound;
+            }
             ResourceLocation r = new ResourceLocation(klaxonSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, klaxonSound);
             fr.dynamx.addons.basics.BasicsAddon.soundMap.put(klaxonSound, event);
         }
         if (sirenSound != null) {
-            if (!sirenSound.contains(":"))
+            if (!sirenSound.contains(":")) {
                 sirenSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + sirenSound;
+            }
             ResourceLocation r = new ResourceLocation(sirenSound);
             SoundEvent event = new SoundEvent(r);
-            RegistryNameSetter.setRegistryName(event, klaxonSound);
+            RegistryNameSetter.setRegistryName(event, sirenSound);
             BasicsAddon.soundMap.put(sirenSound, event);
         }
         owner.addSubProperty(this);

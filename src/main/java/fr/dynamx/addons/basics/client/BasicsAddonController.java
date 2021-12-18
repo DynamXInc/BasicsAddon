@@ -1,6 +1,7 @@
 package fr.dynamx.addons.basics.client;
 
 import fr.aym.acsguis.component.GuiComponent;
+import fr.aym.acsguis.component.layout.GridLayout;
 import fr.aym.acsguis.component.panel.GuiPanel;
 import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
 import fr.dynamx.addons.basics.BasicsAddon;
@@ -22,9 +23,11 @@ import java.util.List;
 public class BasicsAddonController implements IVehicleController {
     public static final ResourceLocation STYLE = new ResourceLocation(fr.dynamx.addons.basics.BasicsAddon.ID, "css/vehicle_hud.css");
     @SideOnly(Side.CLIENT)
-    public static final KeyBinding klaxon = new KeyBinding("Klaxon", Keyboard.KEY_K, "DynamX basics");
+    public static final KeyBinding hornKey = new KeyBinding("Horn", Keyboard.KEY_K, "DynamX basics");
     @SideOnly(Side.CLIENT)
-    public static final KeyBinding siren = new KeyBinding("Siren", Keyboard.KEY_I, "DynamX basics");
+    public static final KeyBinding beaconKey = new KeyBinding("Beacons", Keyboard.KEY_I, "DynamX basics");
+    @SideOnly(Side.CLIENT)
+    public static final KeyBinding sirenKey = new KeyBinding("Siren", Keyboard.KEY_O, "DynamX basics");
     @SideOnly(Side.CLIENT)
     public static final KeyBinding headlights = new KeyBinding("HeadLights", Keyboard.KEY_U, "DynamX basics");
     @SideOnly(Side.CLIENT)
@@ -41,11 +44,24 @@ public class BasicsAddonController implements IVehicleController {
     @SideOnly(Side.CLIENT)
     private StoppableEntitySound sirenSound;
     private byte klaxonHullDown;
+    private boolean warningsOn;
 
     public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module, LightHolder lights) {
         this.entity = entity;
         this.module = module;
         //this.lights = lights;
+
+        unpress(hornKey);
+        unpress(beaconKey);
+        unpress(sirenKey);
+        unpress(headlights);
+        unpress(turnLeft);
+        unpress(turnRight);
+        unpress(warnings);
+    }
+
+    private void unpress(KeyBinding key) {
+        while (key.isPressed()) {}
     }
 
     @SideOnly(Side.CLIENT)
@@ -95,23 +111,24 @@ public class BasicsAddonController implements IVehicleController {
         }
     }
 
-    private boolean warningsOn;
-
     @Override
     @SideOnly(Side.CLIENT)
     public void update() {
         if (klaxonHullDown > 0)
             klaxonHullDown--;
         if (module.hasKlaxon()) {
-            module.playKlaxon(klaxon.isPressed() && klaxonHullDown == 0);
+            module.playKlaxon(hornKey.isPressed() && klaxonHullDown == 0);
             //System.out.println("Klaxon : "+b+" "+playKlaxon+" "+klaxonHullDown);
             if (module.playKlaxon()) {
                 klaxonHullDown = module.getInfos().klaxonCooldown;
             }
         }
         if (module.hasSiren()) {
-            if (siren.isPressed()) {
+            if (module.hasSirenSound() && sirenKey.isPressed()) {
                 module.setSirenOn(!module.isSirenOn());
+            }
+            if (beaconKey.isPressed()) {
+                module.setBeaconsOn(!module.isBeaconsOn());
             }
         }
         if (module.hasHeadLights()) {
@@ -120,23 +137,21 @@ public class BasicsAddonController implements IVehicleController {
             }
         }
         if (module.hasTurnSignals()) {
-            if(turnLeft.isPressed()) {
-                if(!warningsOn) {
+            if (turnLeft.isPressed()) {
+                if (!warningsOn) {
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
                 } else {
                     warningsOn = false;
                 }
                 module.setTurnSignalRightOn(false);
-            }
-            else if(turnRight.isPressed()) {
+            } else if (turnRight.isPressed()) {
                 module.setTurnSignalLeftOn(false);
-                if(!warningsOn) {
+                if (!warningsOn) {
                     module.setTurnSignalRightOn(!module.isTurnSignalRightOn());
                 } else {
                     warningsOn = false;
                 }
-            }
-            else if(warnings.isPressed()) {
+            } else if (warnings.isPressed()) {
                 warningsOn = !warningsOn;
                 module.setTurnSignalLeftOn(warningsOn);
                 module.setTurnSignalRightOn(warningsOn);
@@ -149,8 +164,9 @@ public class BasicsAddonController implements IVehicleController {
         if (module.hasSiren()) {
             GuiPanel cir = new GuiPanel();
             cir.setCssId("siren_hud");
-            cir.setCssClass("hud_item");
-            cir.add(new UpdatableGuiLabel("Siren : %s", (s) -> String.format(s, module.isSirenOn() ? "On" : "Off")));
+            cir.setLayout(new GridLayout(-1, 15, 0, GridLayout.GridDirection.HORIZONTAL, 1));
+            //cir.setCssClass("hud_item");
+            cir.add(new UpdatableGuiLabel("%s %s %s", (s) -> String.format(s, module.isHeadLightsOn() ? "Hd" : "", module.isBeaconsOn() ? "Be" : "", module.isSirenOn() ? "Si" : "")));
 
             cir.add(new UpdatableGuiLabel("%s", (s) -> String.format(s, module.getFuelLevel() + "%")));
 

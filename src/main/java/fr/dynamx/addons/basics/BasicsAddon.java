@@ -16,15 +16,11 @@ import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
 import fr.dynamx.api.network.sync.SynchronizedVariablesRegistry;
 import fr.dynamx.common.contentpack.DynamXObjectLoaders;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
-import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
 import fr.dynamx.common.items.DynamXItemRegistry;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -96,8 +92,8 @@ public class BasicsAddon {
 
     @SideOnly(Side.CLIENT)
     private static void setupClient() {
-        ClientRegistry.registerKeyBinding(BasicsAddonController.klaxon);
-        ClientRegistry.registerKeyBinding(BasicsAddonController.siren);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.hornKey);
+        ClientRegistry.registerKeyBinding(BasicsAddonController.sirenKey);
         ClientRegistry.registerKeyBinding(BasicsAddonController.headlights);
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnLeft);
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnRight);

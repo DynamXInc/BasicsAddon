@@ -20,18 +20,7 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
 
     @Override
     public SyncTarget getValueFrom(A entity, PhysicsEntityNetHandler<A> network, Side side, int syncTick) {
-        BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
-        byte vars = 0;
-        if (module.playKlaxon())
-            vars = (byte) (vars | 1);
-        if (module.isSirenOn())
-            vars = (byte) (vars | 2);
-        if (module.isHeadLightsOn())
-            vars = (byte) (vars | 4);
-        if (module.isTurnSignalLeftOn())
-            vars = (byte) (vars | 8);
-        if (module.isTurnSignalRightOn())
-            vars = (byte) (vars | 16);
+        byte vars = encodeState(entity);
         if (vars != this.vars) {
             this.vars = vars;
             return SyncTarget.spectatorForSide(side);
@@ -47,6 +36,7 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
         module.setHeadLightsOn((vars & 4) == 4);
         module.setTurnSignalLeftOn((vars & 8) == 8);
         module.setTurnSignalRightOn((vars & 16) == 16);
+        module.setBeaconsOn((vars & 32) == 32);
     }
 
     @Override
@@ -61,6 +51,11 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
 
     @Override
     public void writeEntityValues(A entity, ByteBuf buf) {
+        byte vars = encodeState(entity);
+        buf.writeInt(vars);
+    }
+
+    private byte encodeState(A entity) {
         BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
         byte vars = 0;
         if (module.playKlaxon())
@@ -73,7 +68,9 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
             vars = (byte) (vars | 8);
         if (module.isTurnSignalRightOn())
             vars = (byte) (vars | 16);
-        buf.writeInt(vars);
+        if (module.isBeaconsOn())
+            vars = (byte) (vars | 32);
+        return vars;
     }
 
     @Override
