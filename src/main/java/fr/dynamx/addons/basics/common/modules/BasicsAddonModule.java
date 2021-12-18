@@ -1,18 +1,20 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
+import fr.dynamx.addons.basics.client.SirenSound;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
+import fr.dynamx.api.audio.IDynamXSound;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
+import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
+import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -69,7 +71,8 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         if (playKlaxon) {
             //test playKlaxon = false;
             if (entity.world.isRemote && hasKlaxon()) {
-                entity.world.playSound(entity.posX, entity.posY, entity.posZ, BasicsAddon.soundMap.get(infos.klaxonSound), SoundCategory.PLAYERS, 1, 1, true);
+                ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, 1, 1);
+                //entity.world.playSound(entity.posX, entity.posY, entity.posZ, BasicsAddon.soundMap.get(infos.klaxonSound), SoundCategory.PLAYERS, 1, 1, true);
             }
         }
         if (controller != null) {
