@@ -6,8 +6,10 @@ import fr.aym.acsguis.component.panel.GuiPanel;
 import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.client.ClientProxy;
+import fr.dynamx.client.handlers.hud.CarController;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.settings.KeyBinding;
@@ -58,10 +60,13 @@ public class BasicsAddonController implements IVehicleController {
         unpress(turnLeft);
         unpress(turnRight);
         unpress(warnings);
+
+        CarController.setHudIcons(new BasicsAddonHudIcons(module, entity));
     }
 
     private void unpress(KeyBinding key) {
-        while (key.isPressed()) {}
+        while (key.isPressed()) {
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -166,9 +171,7 @@ public class BasicsAddonController implements IVehicleController {
             cir.setCssId("siren_hud");
             cir.setLayout(new GridLayout(-1, 15, 0, GridLayout.GridDirection.HORIZONTAL, 1));
             //cir.setCssClass("hud_item");
-            cir.add(new UpdatableGuiLabel("%s %s %s", (s) -> String.format(s, module.isHeadLightsOn() ? "Hd" : "", module.isBeaconsOn() ? "Be" : "", module.isSirenOn() ? "Si" : "")));
-
-            cir.add(new UpdatableGuiLabel("%s", (s) -> String.format(s, module.getFuelLevel() + "%")));
+            cir.add(new UpdatableGuiLabel("%s %s", (s) -> String.format(s, module.isBeaconsOn() ? "Be" : "", module.isSirenOn() ? "Si" : "")));
 
             return cir;
         }
@@ -177,8 +180,8 @@ public class BasicsAddonController implements IVehicleController {
 
     @Override
     public List<ResourceLocation> getHudCssStyles() {
-        if (module.hasSiren())
+        //if (module.hasSiren()) //icons now
             return Collections.singletonList(STYLE);
-        return null;
+        //return null;
     }
 }

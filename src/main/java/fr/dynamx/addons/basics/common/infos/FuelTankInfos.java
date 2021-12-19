@@ -23,7 +23,6 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     @PackFileProperty(configNames = "FuelConsumption", type = DefinitionType.DynamXDefinitionTypes.FLOAT, defaultValue = "1")
     protected float fuelConsumption;
 
-
     public FuelTankInfos(ModularVehicleInfoBuilder owner, String partName) {
         super(owner, partName, 0.5f, 0.5f);
     }
@@ -75,8 +74,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     @Override
     public void addModules(BaseVehicleEntity<?> entity, List<IPhysicsModule<?>> modules, Predicate<Class<? extends IPhysicsModule<?>>> containsModule) {
         if (containsModule.test(FuelTankModule.class)) { //Module yet added
-            ((FuelTankModule) modules.stream().filter(iPhysicsModule -> iPhysicsModule.getClass() == FuelTankModule.class).
-                    findFirst().get()).setInfo(this);
+            throw new IllegalStateException("More than one fuel tank infos ("+getFullName()+") added to "+entity.getPackInfo().getFullName()+" "+entity);
         } else { //Module not yet added
             modules.add(new FuelTankModule(entity,this));
         }

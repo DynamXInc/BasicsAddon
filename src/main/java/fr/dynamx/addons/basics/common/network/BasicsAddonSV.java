@@ -37,6 +37,7 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
         module.setTurnSignalLeftOn((vars & 8) == 8);
         module.setTurnSignalRightOn((vars & 16) == 16);
         module.setBeaconsOn((vars & 32) == 32);
+        module.setLocked((vars & 64) == 64);
     }
 
     @Override
@@ -70,6 +71,8 @@ public class BasicsAddonSV<A extends BaseVehicleEntity<?>> implements Synchroniz
             vars = (byte) (vars | 16);
         if (module.isBeaconsOn())
             vars = (byte) (vars | 32);
+        if (module.isLocked())
+            vars = (byte) (vars | 64);
         return vars;
     }
 

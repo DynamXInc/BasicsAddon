@@ -2,26 +2,20 @@ package fr.dynamx.addons.basics.common;
 
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
-import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
-import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.common.contentpack.parts.PartDoor;
-import fr.dynamx.client.handlers.CarController;
 import fr.dynamx.common.contentpack.parts.PartSeat;
 import fr.dynamx.common.contentpack.parts.PartStorage;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import scala.xml.dtd.impl.Base;
 
 @Mod.EventBusSubscriber(modid = BasicsAddon.ID)
 public class BasicsAddonEventHandler {
@@ -35,26 +29,19 @@ public class BasicsAddonEventHandler {
 
     @SubscribeEvent
     public static void rightClickInCar(PlayerInteractEvent.EntityInteract event) {
-        if (!event.getWorld().isRemote && event.getTarget() == event.getEntity().getRidingEntity() && event.getEntity().getRidingEntity() instanceof BaseVehicleEntity<?>) {
+        //If on client, because the riding client holds the sync
+        if (event.getWorld().isRemote && event.getTarget() == event.getEntity().getRidingEntity() && event.getEntity().getRidingEntity() instanceof BaseVehicleEntity<?>) {
             BaseVehicleEntity<?> entity = (BaseVehicleEntity<?>) event.getEntity().getRidingEntity();
             BasicsAddonModule module = entity.getModuleByType(BasicsAddonModule.class);
-            if (VehicleKeyUtils.isKeyItem(event.getItemStack())) {
+            if (VehicleKeyUtils.isKeyItem(event.getItemStack()) && entity.getControllingPassenger() == event.getEntity()) {
                 if (VehicleKeyUtils.hasLinkedVehicle(event.getItemStack())) {
-                    ITextComponent msg;
                     if (entity.getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getItemStack()))) {
                         module.setLocked(!module.isLocked());
-                        if (module.isLocked()) {
-                            msg = new TextComponentTranslation("basadd.key.locked");
-                            msg.getStyle().setColor(TextFormatting.DARK_RED);
-                        } else {
-                            msg = new TextComponentTranslation("basadd.key.unlocked");
-                            msg.getStyle().setColor(TextFormatting.DARK_GREEN);
-                        }
                     } else {
-                        msg = new TextComponentTranslation("basadd.key.invalid");
+                        ITextComponent msg = new TextComponentTranslation("basadd.key.invalid");
                         msg.getStyle().setColor(TextFormatting.DARK_RED);
+                        event.getEntity().sendMessage(msg);
                     }
-                    event.getEntity().sendMessage(msg);
                     event.setCanceled(true);
                 }
             }
@@ -68,7 +55,7 @@ public class BasicsAddonEventHandler {
             if (VehicleKeyUtils.isKeyItem(event.player.getHeldItemMainhand())) {
                 ITextComponent msg;
                 if (!VehicleKeyUtils.hasLinkedVehicle(event.player.getHeldItemMainhand())) {
-                    if(!module.hasLinkedKey()) {
+                    if (!module.hasLinkedKey()) {
                         VehicleKeyUtils.setLinkedVehicle(event.player.getHeldItemMainhand(), event.getEntity());
                         msg = new TextComponentTranslation("basadd.key.associed", event.getEntity().getPackInfo().getName());
                         msg.getStyle().setColor(TextFormatting.DARK_BLUE);
