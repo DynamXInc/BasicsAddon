@@ -6,10 +6,15 @@
 
 #siren_hud
 {
-    top: 5px;
+    top: 20px;
     left: 5px;
-    height: 20px;
+    height: 200px;
 }
+
+#siren_hud>label
+ {
+    top: auto;
+ }
 
 #fuel_level {
     width: 100%;
@@ -21,4 +26,44 @@
     text-align: center;
 
     background-image: url("dynamx_basics:textures/fuel_empty.png");
+}
+
+.hud_icon {
+    width: 10px;
+    height: 10px;
+}
+#icon_0 {
+    left: 28px;
+    top: 18px;
+    background-image: url("dynamx_basics:textures/light.png");
+}
+#icon_1 {
+    left: 41px;
+    top: 18px;
+    background-image: url("dynamx_basics:textures/limitor.png");
+}
+#icon_2 {
+    left: 52px;
+    top: 18px;
+    background-image: auto;
+}
+#icon_3 {
+    left: 24px;
+    top: 64px;
+    background-image: url("dynamx_basics:textures/fuelt.png");
+}
+#icon_4 {
+    left: 36px;
+    top: 64px;
+    background-image: url("dynamx_basics:textures/turnleft.png");
+}
+#icon_5 {
+    left: 46px;
+    top: 64px;
+    background-image: url("dynamx_basics:textures/turnright.png");
+}
+#icon_6 {
+    left: 57px;
+    top: 64px;
+    background-image: url("dynamx_basics:textures/fuelt.png");
 }

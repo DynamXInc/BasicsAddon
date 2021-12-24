@@ -52,7 +52,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
             //    sirenSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + sirenSound;
             ResourceLocation r = new ResourceLocation(sirenSound);
             SoundEvent event = new SoundEvent(r);
-            RegistryNameSetter.setRegistryName(event, klaxonSound);
+            RegistryNameSetter.setRegistryName(event, sirenSound);
             BasicsAddon.soundMap.put(sirenSound, event);
         }
         owner.addSubProperty(this);
