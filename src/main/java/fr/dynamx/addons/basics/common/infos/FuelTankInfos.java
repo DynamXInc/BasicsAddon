@@ -37,11 +37,6 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     }
 
     @Override
-    public void appendTo(ModularVehicleInfoBuilder owner) {
-        super.appendTo(owner);
-    }
-
-    @Override
     public boolean interact(BaseVehicleEntity<?> entity, EntityPlayer with) {
         if(FuelJerrycanUtils.isJerrycanItem(with.getHeldItemMainhand()))
         {
@@ -64,12 +59,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
 
     @Override
     public String getName() {
-        return "FuelTank of BlackNite";
-    }
-
-    @Override
-    public String getPackName() {
-        return "FuelTank";
+        return "FuelTank of " + getOwner().getName();
     }
 
     @Override

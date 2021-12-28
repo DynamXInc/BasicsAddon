@@ -21,14 +21,15 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
     private final BaseVehicleEntity<?> entity;
     private final FuelTankInfos info;
     private FuelTankController controller;
-    private float fuel = 100;
+    private float fuel;
 
     public FuelTankModule(BaseVehicleEntity<?> entity, FuelTankInfos info) {
         this.info = info;
         this.entity = entity;
         if (entity.world.isRemote) {
-            controller = new FuelTankController(entity, this);
+            controller = new FuelTankController(this);
         }
+        this.fuel = info.getTankSize(); //TODO REMOVE
     }
 
     public float getFuel() {
