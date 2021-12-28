@@ -6,6 +6,7 @@ import fr.dynamx.api.contentpack.object.part.InteractivePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
+import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.entities.BaseVehicleEntity;
@@ -72,11 +73,11 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     }
 
     @Override
-    public void addModules(BaseVehicleEntity<?> entity, List<IPhysicsModule<?>> modules, Predicate<Class<? extends IPhysicsModule<?>>> containsModule) {
-        if (containsModule.test(FuelTankModule.class)) { //Module yet added
+    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
+        if (moduleListBuilder.hasModuleOfClass(FuelTankModule.class)) { //Module yet added
             throw new IllegalStateException("More than one fuel tank infos ("+getFullName()+") added to "+entity.getPackInfo().getFullName()+" "+entity);
         } else { //Module not yet added
-            modules.add(new FuelTankModule(entity,this));
+            moduleListBuilder.add(new FuelTankModule(entity,this));
         }
     }
 }

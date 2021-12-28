@@ -1,11 +1,11 @@
 package fr.dynamx.addons.basics.client;
 
-import fr.aym.acsguis.event.CssReloadEvent;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
+import fr.dynamx.client.handlers.hud.CarController;
 import fr.dynamx.common.entities.modules.EngineModule;
 import fr.dynamx.common.entities.modules.VehicleLightsModule;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +16,13 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientEventHandler {
 
     @SubscribeEvent
+    public static void createHud(VehicleEntityEvent.CreateVehicleHudEvent event) {
+        if (event.getEntity().getModuleByType(BasicsAddonModule.class) != null) {
+            CarController.setHudIcons(new BasicsAddonHudIcons(event.getEntity().getModuleByType(BasicsAddonModule.class), event.getEntity()));
+        }
+    }
+
+    @SubscribeEvent
     public static void renderLights(VehicleEntityEvent.RenderVehicleEntityEvent event) {
         if (event.phase == PhysicsEntityEvent.Phase.PRE && event.type == VehicleEntityEvent.RenderVehicleEntityEvent.Type.LIGHTS) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
@@ -24,8 +31,8 @@ public class ClientEventHandler {
                 if (lights != null && module.getInfos() != null) {
                     lights.setLightOn(module.getInfos().sirenLightSource, module.isBeaconsOn() || module.isSirenOn());
 
-                    if(module.hasHeadLights()) {
-                        if(module.isHeadLightsOn()) {
+                    if (module.hasHeadLights()) {
+                        if (module.isHeadLightsOn()) {
                             lights.setLightOn(module.getInfos().headLightsSource, true);
                             lights.setLightOn(module.getInfos().backLightsSource, true);
                         } else {
@@ -34,14 +41,14 @@ public class ClientEventHandler {
                         }
                     }
 
-                    if(module.hasTurnSignals()) {
+                    if (module.hasTurnSignals()) {
                         lights.setLightOn(module.getInfos().turnLeftLightSource, module.isTurnSignalLeftOn());
                         lights.setLightOn(module.getInfos().turnRightLightSource, module.isTurnSignalRightOn());
                     }
 
                     EngineModule engine = event.getEntity().getModuleByType(EngineModule.class);
-                    if(engine != null) {
-                        if(engine.isReversing()) {
+                    if (engine != null) {
+                        if (engine.isReversing()) {
                             if (engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR) == -1) {
                                 lights.setLightOn(module.getInfos().reverseLightsSource, true);
                                 lights.setLightOn(module.getInfos().brakeLightsSource, false);
@@ -49,7 +56,7 @@ public class ClientEventHandler {
                                 lights.setLightOn(module.getInfos().reverseLightsSource, false);
                                 lights.setLightOn(module.getInfos().brakeLightsSource, true);
                             }
-                        } else if(engine.isAccelerating()) {
+                        } else if (engine.isAccelerating()) {
                             if (engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR) == -1) {
                                 lights.setLightOn(module.getInfos().brakeLightsSource, true);
                                 lights.setLightOn(module.getInfos().reverseLightsSource, false);

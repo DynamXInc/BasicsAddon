@@ -8,6 +8,7 @@ import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
+import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import net.minecraft.util.math.Vec3i;
@@ -82,12 +83,11 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     }
 
     @Override
-    public void addModules(BaseVehicleEntity<?> entity, List<IPhysicsModule<?>> modules, Predicate<Class<? extends IPhysicsModule<?>>> containsModule) {
-        if (containsModule.test(ImmatriculationPlateModule.class)) { //Module yet added
-            ((ImmatriculationPlateModule) modules.stream().filter(iPhysicsModule -> iPhysicsModule.getClass() == ImmatriculationPlateModule.class).
-                    findFirst().get()).addInformation(this);
+    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
+        if (moduleListBuilder.hasModuleOfClass(ImmatriculationPlateModule.class)) { //Module yet added
+            moduleListBuilder.getByClass(ImmatriculationPlateModule.class).addInformation(this);
         } else { //Module not yet added
-            modules.add(new ImmatriculationPlateModule(this));
+            moduleListBuilder.add(new ImmatriculationPlateModule(this));
         }
     }
 }

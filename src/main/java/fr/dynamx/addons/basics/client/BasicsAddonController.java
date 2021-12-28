@@ -28,7 +28,7 @@ public class BasicsAddonController implements IVehicleController {
     @SideOnly(Side.CLIENT)
     public static final KeyBinding beaconKey = new KeyBinding("Beacons", Keyboard.KEY_I, "DynamX basics");
     @SideOnly(Side.CLIENT)
-    public static final KeyBinding sirenKey = new KeyBinding("Siren", Keyboard.KEY_O, "DynamX basics");
+    public static final KeyBinding sirenKey = new KeyBinding("Siren", Keyboard.KEY_J, "DynamX basics");
     @SideOnly(Side.CLIENT)
     public static final KeyBinding headlights = new KeyBinding("HeadLights", Keyboard.KEY_U, "DynamX basics");
     @SideOnly(Side.CLIENT)
@@ -60,8 +60,6 @@ public class BasicsAddonController implements IVehicleController {
         unpress(turnLeft);
         unpress(turnRight);
         unpress(warnings);
-
-        CarController.setHudIcons(new BasicsAddonHudIcons(module, entity));
     }
 
     private void unpress(KeyBinding key) {
@@ -129,7 +127,7 @@ public class BasicsAddonController implements IVehicleController {
             }
         }
         if (module.hasSiren()) {
-            if (module.hasSirenSound() && sirenKey.isPressed()) {
+            if (sirenKey.isPressed()) {
                 module.setSirenOn(!module.isSirenOn());
             }
             if (beaconKey.isPressed()) {
