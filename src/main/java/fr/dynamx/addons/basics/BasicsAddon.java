@@ -100,8 +100,6 @@ public class BasicsAddon {
 
     @SideOnly(Side.CLIENT)
     private static void setupClient() {
-        ClientRegistry.registerKeyBinding(BasicsAddonController.hornKey);
-        ClientRegistry.registerKeyBinding(BasicsAddonController.sirenKey);
         ClientRegistry.registerKeyBinding(BasicsAddonController.headlights);
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnLeft);
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnRight);

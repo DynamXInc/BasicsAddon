@@ -36,7 +36,7 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
     }
 
     public void setFuel(float fuel) {
-        this.fuel = fuel;
+        this.fuel = Math.max(Math.min(fuel, info.getTankSize()), 0);
     }
 
     public FuelTankInfos getInfo() {
