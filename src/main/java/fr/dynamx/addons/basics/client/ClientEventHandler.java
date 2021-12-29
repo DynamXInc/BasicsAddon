@@ -2,6 +2,7 @@ package fr.dynamx.addons.basics.client;
 
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
@@ -70,6 +71,16 @@ public class ClientEventHandler {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void updateVehiclecontroller(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
+        if(event.controller instanceof CarController) {
+            FuelTankModule module = event.getEntity().getModuleByType(FuelTankModule.class);
+            if(module != null && module.getFuel() == 0) {
+                ((CarController) event.controller).isEngineStarted = false;
             }
         }
     }

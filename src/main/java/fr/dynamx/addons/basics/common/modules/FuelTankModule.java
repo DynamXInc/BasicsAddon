@@ -4,6 +4,7 @@ import fr.dynamx.addons.basics.client.FuelTankController;
 import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
 import fr.dynamx.api.entities.VehicleEntityProperties;
+import fr.dynamx.api.entities.modules.IEngineModule;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
@@ -60,19 +61,16 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
 
     @Override
     public void updateEntity() {
-        IEntityUpdateListener.super.updateEntity();
-        if (entity instanceof CarEntity) {
+        if (entity instanceof CarEntity && fuel > 0) {
             CarEntity<?> carEntity = (CarEntity<?>) entity;
-            FuelTankModule module = (FuelTankModule) carEntity.getModuleByType(FuelTankModule.class);
-            if (module != null) {
-                EngineModule engine = (EngineModule) carEntity.getEngine();
-                if (engine != null) {
-                    if (!engine.isReversing()) {
-                        float RPM = engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
-                        module.setFuel((float) (module.getFuel() - (RPM * (module.getInfo().getFuelConsumption() / 2000) * ((engine.isAccelerating() ? 1.1 : 1)))));
-                    } else {
-                        module.setFuel(module.getFuel() - 0.01f);
-                    }
+            IEngineModule<?> engine = carEntity.getEngine();
+            if (engine instanceof EngineModule) {
+                if (!((EngineModule) engine).isReversing()) {
+                    float RPM = ((EngineModule) engine).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
+                    setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() / 2000) *
+                            ((((EngineModule) engine).isAccelerating() ? 1.1 : 1)))));
+                } else {
+                    setFuel(getFuel() - 0.01f);
                 }
             }
         }

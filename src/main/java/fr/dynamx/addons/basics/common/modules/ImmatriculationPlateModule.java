@@ -110,14 +110,14 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
             if (rotate != 0)
                 GlStateManager.rotate(rotate, 0, 0, 1);
             GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
-            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableLighting();
 
             CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
             GlStateManager.scale(0.05, 0.05, 0.05);
             Vector3f color = immatriculationPlateInfos.getImmatriculationColor();
             CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ((int) color.x << 0) | ((int) color.y << 8) | ((int) color.z << 16));
             CssFontHelper.popDrawing();
-            RenderHelper.enableStandardItemLighting();
+            GlStateManager.enableLighting();
             GlStateManager.resetColor();
 
             GlStateManager.popMatrix();

@@ -1,18 +1,17 @@
 package fr.dynamx.addons.basics.common.infos;
 
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.api.contentpack.object.part.InteractivePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
+import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -38,11 +37,6 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     }
 
     @Override
-    public void appendTo(ModularVehicleInfoBuilder owner) {
-        super.appendTo(owner);
-    }
-
-    @Override
     public boolean interact(BaseVehicleEntity<?> entity, EntityPlayer with) {
         if(FuelJerrycanUtils.isJerrycanItem(with.getHeldItemMainhand()))
         {
@@ -65,25 +59,15 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
 
     @Override
     public String getName() {
-        return "FuelTank of BlackNite";
+        return "FuelTank of " + getOwner().getName();
     }
 
     @Override
-    public String getPackName() {
-        return "FuelTank";
-    }
-
-    @Override
-    public ResourceLocation getHudCursorTexture() {
-        return new ResourceLocation(BasicsAddon.ID, "textures/fuel.png");
-    }
-
-    @Override
-    public void addModules(BaseVehicleEntity<?> entity, List<IPhysicsModule<?>> modules, Predicate<Class<? extends IPhysicsModule<?>>> containsModule) {
-        if (containsModule.test(FuelTankModule.class)) { //Module yet added
+    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
+        if (moduleListBuilder.hasModuleOfClass(FuelTankModule.class)) { //Module yet added
             throw new IllegalStateException("More than one fuel tank infos ("+getFullName()+") added to "+entity.getPackInfo().getFullName()+" "+entity);
         } else { //Module not yet added
-            modules.add(new FuelTankModule(entity,this));
+            moduleListBuilder.add(new FuelTankModule(entity,this));
         }
     }
 }
