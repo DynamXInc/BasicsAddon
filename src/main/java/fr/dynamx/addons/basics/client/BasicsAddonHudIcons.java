@@ -45,7 +45,7 @@ public class BasicsAddonHudIcons implements HudIcons {
                 return module.isHeadLightsOn();
             case 1:
                 //TODO CLEAN
-                return ((EngineModule) ((IModuleContainer.IEngineContainer) entity).getEngine()).speedLimit != Integer.MAX_VALUE;
+                return ((EngineModule) ((IModuleContainer.IEngineContainer) entity).getEngine()).getSpeedLimit() != Integer.MAX_VALUE;
             case 3:
                 //TODO THIS ICON
                 return false;

@@ -50,13 +50,13 @@ public class BasicsAddonEventHandler {
 
     @SubscribeEvent
     public static void interactWithCar(VehicleEntityEvent.VehicleInteractEntityEvent event) {
-        if (event.part instanceof PartSeat || event.part instanceof PartStorage || event.part instanceof PartDoor) {
+        if (event.getPart() instanceof PartSeat || event.getPart() instanceof PartStorage || event.getPart() instanceof PartDoor) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
-            if (VehicleKeyUtils.isKeyItem(event.player.getHeldItemMainhand())) {
+            if (VehicleKeyUtils.isKeyItem(event.getPlayer().getHeldItemMainhand())) {
                 ITextComponent msg;
-                if (!VehicleKeyUtils.hasLinkedVehicle(event.player.getHeldItemMainhand())) {
+                if (!VehicleKeyUtils.hasLinkedVehicle(event.getPlayer().getHeldItemMainhand())) {
                     if (!module.hasLinkedKey()) {
-                        VehicleKeyUtils.setLinkedVehicle(event.player.getHeldItemMainhand(), event.getEntity());
+                        VehicleKeyUtils.setLinkedVehicle(event.getPlayer().getHeldItemMainhand(), event.getEntity());
                         msg = new TextComponentTranslation("basadd.key.associed", event.getEntity().getPackInfo().getName());
                         msg.getStyle().setColor(TextFormatting.DARK_BLUE);
                         module.setHasLinkedKey(true);
@@ -64,7 +64,7 @@ public class BasicsAddonEventHandler {
                         msg = new TextComponentTranslation("basadd.key.assoc.error");
                         msg.getStyle().setColor(TextFormatting.DARK_RED);
                     }
-                } else if (event.getEntity().getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.player.getHeldItemMainhand()))) {
+                } else if (event.getEntity().getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getPlayer().getHeldItemMainhand()))) {
                     module.setLocked(!module.isLocked());
                     if (module.isLocked()) {
                         msg = new TextComponentTranslation("basadd.key.locked");
@@ -78,7 +78,7 @@ public class BasicsAddonEventHandler {
                     msg.getStyle().setColor(TextFormatting.DARK_RED);
                 }
                 //if(msg != null)
-                event.player.sendMessage(msg);
+                event.getPlayer().sendMessage(msg);
                 event.setCanceled(true);
             } else if (module.isLocked()) {
                 event.setCanceled(true);

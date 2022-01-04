@@ -5,7 +5,13 @@ import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.client.handlers.hud.CircleCounterPanel;
 import fr.dynamx.common.contentpack.type.vehicle.EngineInfo;
 import fr.dynamx.utils.DynamXConstants;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class FuelLevelPanel extends CircleCounterPanel {
     private final FuelTankController tankController;

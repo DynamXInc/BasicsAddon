@@ -21,6 +21,8 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+//sourceSets { main { output.resourcesDir = output.classesDir } }
+
 minecraft {
     version = "1.12.2-14.23.5.2847"
     runDir = "run"
@@ -44,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "fr.dynamx:DynamX:3.2.2-e"
+    deobfCompile "fr.dynamx:DynamX:3.3.0-2"
     compile "fr.aym.acsguis:ACsGuis:1.2.0-4"
 }
 

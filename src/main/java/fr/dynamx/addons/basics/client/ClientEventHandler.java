@@ -25,7 +25,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void renderLights(VehicleEntityEvent.RenderVehicleEntityEvent event) {
-        if (event.phase == PhysicsEntityEvent.Phase.PRE && event.type == VehicleEntityEvent.RenderVehicleEntityEvent.Type.LIGHTS) {
+        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.RenderVehicleEntityEvent.Type.LIGHTS) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
                 VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
@@ -77,10 +77,10 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void updateVehiclecontroller(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
-        if(event.controller instanceof CarController) {
+        if (event.getController() instanceof CarController) {
             FuelTankModule module = event.getEntity().getModuleByType(FuelTankModule.class);
-            if(module != null && module.getFuel() == 0) {
-                ((CarController) event.controller).isEngineStarted = false;
+            if (module != null && module.getFuel() == 0) {
+                ((CarController) event.getController()).setEngineStarted(false);
             }
         }
     }
