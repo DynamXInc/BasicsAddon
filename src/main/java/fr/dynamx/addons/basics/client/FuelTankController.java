@@ -38,7 +38,8 @@ public class FuelTankController implements IVehicleController {
             float maxRpm = module.getInfo().getTankSize();
             float scale = 90f / 300;
             GuiPanel speed = new FuelLevelPanel(this, scale, maxRpm);
-            speed.setCssId("speed_pane");
+            speed.setCssClass("speed_pane");
+            speed.setCssId("fuel_gauge");
 
             //speed.add(new UpdatableGuiLabel("%s", s -> String.format(s, module.getFuel())).setCssId("engine_fuel"));
 

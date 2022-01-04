@@ -65,13 +65,10 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
             CarEntity<?> carEntity = (CarEntity<?>) entity;
             IEngineModule<?> engine = carEntity.getEngine();
             if (engine instanceof EngineModule) {
-                if (!((EngineModule) engine).isReversing()) {
-                    float RPM = ((EngineModule) engine).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
-                    setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() / 2000) *
-                            ((((EngineModule) engine).isAccelerating() ? 1.1 : 1)))));
-                } else {
-                    setFuel(getFuel() - 0.01f);
-                }
+                //Rpm is capped between 0 and 1
+                float RPM = ((EngineModule) engine).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS);
+                setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() / 120) *
+                        ((((EngineModule) engine).isAccelerating() ? 1.1 : 0.9)))));
             }
         }
     }

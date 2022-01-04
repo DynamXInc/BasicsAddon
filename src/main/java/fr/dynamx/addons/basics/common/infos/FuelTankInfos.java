@@ -21,6 +21,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     @PackFileProperty(configNames = "TankSize", type = DefinitionType.DynamXDefinitionTypes.FLOAT, defaultValue = "100")
     protected float tankSize;
 
+    //Fuel consumption per second at max rpm
     @PackFileProperty(configNames = "FuelConsumption", type = DefinitionType.DynamXDefinitionTypes.FLOAT, defaultValue = "1")
     protected float fuelConsumption;
 

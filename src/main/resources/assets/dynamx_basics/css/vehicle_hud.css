@@ -19,6 +19,14 @@
 
 /* BasicsAddonController */
 
+/**
+Because .speed_pane has a texture
+ */
+#fuel_gauge
+{
+    background-image: none;
+}
+
 #siren_hud
 {
     top: 20px;
