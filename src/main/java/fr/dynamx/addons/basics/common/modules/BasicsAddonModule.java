@@ -1,11 +1,9 @@
 package fr.dynamx.addons.basics.common.modules;
 
 import fr.dynamx.addons.basics.client.BasicsAddonController;
-import fr.dynamx.addons.basics.client.SirenSound;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
-import fr.dynamx.api.audio.IDynamXSound;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
@@ -15,6 +13,7 @@ import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -131,6 +130,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     }
 
     public void setHeadLightsOn(boolean headLightsOn) {
+        System.out.println("Settings headlights "+headLightsOn+" "+isBeaconsOn()+" "+isHeadLightsOn()+" "+isSirenOn()+" "+isTurnSignalLeftOn()+" "+isTurnSignalRightOn());
         this.headLightsOn = headLightsOn;
     }
 
@@ -167,13 +167,35 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        tag.setBoolean("BasAdd.haskey", hasLinkedKey);
-        tag.setBoolean("BasAdd.locked", locked);
+        byte vars = 0;
+        if (isSirenOn())
+            vars = (byte) (vars | 2);
+        if (isHeadLightsOn())
+            vars = (byte) (vars | 4);
+        if (isTurnSignalLeftOn())
+            vars = (byte) (vars | 8);
+        if (isTurnSignalRightOn())
+            vars = (byte) (vars | 16);
+        if (isBeaconsOn())
+            vars = (byte) (vars | 32);
+        if (isLocked())
+            vars = (byte) (vars | 64);
+        tag.setByte("BasAddon.vals", vars);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        hasLinkedKey = tag.getBoolean("BasAdd.haskey");
-        locked = tag.getBoolean("BasAdd.locked");
+        if(tag.hasKey("BasAddon.vals", Constants.NBT.TAG_BYTE)) {
+            byte vars = tag.getByte("BasAddon.vals");
+            setSirenOn((vars & 2) == 2);
+            setHeadLightsOn((vars & 4) == 4);
+            setTurnSignalLeftOn((vars & 8) == 8);
+            setTurnSignalRightOn((vars & 16) == 16);
+            setBeaconsOn((vars & 32) == 32);
+            setLocked((vars & 64) == 64);
+        } else {
+            hasLinkedKey = tag.getBoolean("BasAdd.haskey");
+            locked = tag.getBoolean("BasAdd.locked");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package fr.dynamx.addons.basics.common.infos;
 
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.api.contentpack.object.part.InteractivePart;
@@ -12,11 +13,14 @@ import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, ModularVehicleInfoBuilder> {
+public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, ModularVehicleInfoBuilder>
+{
+    private static final ResourceLocation FUEL_CROSS_HAIRS_ICON = new ResourceLocation(BasicsAddon.ID, "textures/fuel.png");
 
     @PackFileProperty(configNames = "TankSize", type = DefinitionType.DynamXDefinitionTypes.FLOAT, defaultValue = "100")
     protected float tankSize;
@@ -70,5 +74,10 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
         } else { //Module not yet added
             moduleListBuilder.add(new FuelTankModule(entity,this));
         }
+    }
+
+    @Override
+    public ResourceLocation getHudCursorTexture() {
+        return FUEL_CROSS_HAIRS_ICON;
     }
 }
