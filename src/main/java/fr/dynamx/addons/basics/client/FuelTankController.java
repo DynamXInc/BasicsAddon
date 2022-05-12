@@ -35,9 +35,9 @@ public class FuelTankController implements IVehicleController {
     public GuiComponent<?> createHud() {
         if (module != null) {
             GuiPanel panel = new GuiPanel();
-            float maxRpm = module.getInfo().getTankSize();
+            float maxFuel = module.getInfo().getTankSize();
             float scale = 90f / 300;
-            GuiPanel speed = new FuelLevelPanel(this, scale, maxRpm);
+            GuiPanel speed = new FuelLevelPanel(this, scale, maxFuel);
             speed.setCssClass("speed_pane");
             speed.setCssId("fuel_gauge");
 

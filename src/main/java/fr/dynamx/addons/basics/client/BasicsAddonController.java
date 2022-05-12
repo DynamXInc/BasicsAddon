@@ -164,22 +164,11 @@ public class BasicsAddonController implements IVehicleController {
 
     @Override
     public GuiComponent<?> createHud() {
-        if (module.hasSiren()) {
-            GuiPanel cir = new GuiPanel();
-            cir.setCssId("siren_hud");
-            cir.setLayout(new GridLayout(-1, 15, 0, GridLayout.GridDirection.HORIZONTAL, 1));
-            //cir.setCssClass("hud_item");
-            cir.add(new UpdatableGuiLabel("%s %s", (s) -> String.format(s, module.isBeaconsOn() ? "Be" : "", module.isSirenOn() ? "Si" : "")));
-
-            return cir;
-        }
         return null;
     }
 
     @Override
     public List<ResourceLocation> getHudCssStyles() {
-        //if (module.hasSiren()) //icons now
-            return Collections.singletonList(STYLE);
-        //return null;
+        return Collections.EMPTY_LIST;
     }
 }
