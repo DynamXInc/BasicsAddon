@@ -114,8 +114,8 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
 
             CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
             GlStateManager.scale(0.05, 0.05, 0.05);
-            Vector3f color = immatriculationPlateInfos.getImmatriculationColor();
-            CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), ((int) color.x << 0) | ((int) color.y << 8) | ((int) color.z << 16));
+            int[] color = immatriculationPlateInfos.getImmatriculationColor();
+            CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), (color[0] << 16) | (color[1] << 8) | color[2]);
             CssFontHelper.popDrawing();
             GlStateManager.enableLighting();
             GlStateManager.resetColor();

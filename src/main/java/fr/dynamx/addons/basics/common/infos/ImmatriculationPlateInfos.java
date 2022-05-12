@@ -36,8 +36,8 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     @PackFileProperty(configNames = "ImmatriculationFont", type = DefinitionType.DynamXDefinitionTypes.STRING, required = false)
     protected String font = BasicsAddon.ID + ":e";
 
-    @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.color", required = false)
-    protected Vector3f immatriculationColor = new Vector3f(Color.black.getRed(), Color.black.getGreen(), Color.black.getBlue());
+    @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.INT_ARRAY, description = "common.color", required = false)
+    protected int[] immatriculationColor = new int[] {255, 0, 0};
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
@@ -74,7 +74,7 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
         return font;
     }
 
-    public Vector3f getImmatriculationColor() {
+    public int[] getImmatriculationColor() {
         return immatriculationColor;
     }
 
