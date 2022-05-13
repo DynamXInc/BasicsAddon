@@ -37,7 +37,7 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
     protected String font = BasicsAddon.ID + ":e";
 
     @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.INT_ARRAY, description = "common.color", required = false)
-    protected int[] immatriculationColor = new int[] {255, 0, 0};
+    protected int[] immatriculationColor = new int[] {10, 10, 10};
 
     public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
         this.owner = owner;
