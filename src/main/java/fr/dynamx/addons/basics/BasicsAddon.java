@@ -86,7 +86,7 @@ public class BasicsAddon {
         jerrycanItem = new DynamXItem(ID, "fuel_jerrycan", "item/jerrycan.obj"){
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-                if(FuelJerrycanUtils.isFuel(stack)) {
+                if(FuelJerrycanUtils.hasFuel(stack)) {
                     tooltip.add(I18n.format("basadd.fuel.jerrycan",  FuelJerrycanUtils.getFuel(stack)));
                 }
             }

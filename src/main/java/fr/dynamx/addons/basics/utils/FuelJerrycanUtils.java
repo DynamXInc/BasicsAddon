@@ -16,17 +16,17 @@ public class FuelJerrycanUtils {
                 ((ItemObject<?>) ((DynamXItem<?>) stack.getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class).isFuelContainer();
     }
 
-    public static boolean isFuel(ItemStack key) {
-        return key.hasTagCompound() && key.getTagCompound().hasKey("fuel", Constants.NBT.TAG_INT);
+    public static boolean hasFuel(ItemStack key) {
+        return key.hasTagCompound() && key.getTagCompound().hasKey("fuel", Constants.NBT.TAG_FLOAT);
     }
 
-    public static void setFuel(ItemStack key, int fuel) {
+    public static void setFuel(ItemStack key, float fuel) {
         if (!key.hasTagCompound())
             key.setTagCompound(new NBTTagCompound());
-        key.getTagCompound().setInteger("fuel", fuel);
+        key.getTagCompound().setFloat("fuel", fuel);
     }
 
-    public static int getFuel(ItemStack key) {
-        return key.getTagCompound().getInteger("fuel");
+    public static float getFuel(ItemStack key) {
+        return key.getTagCompound().getFloat("fuel");
     }
 }
