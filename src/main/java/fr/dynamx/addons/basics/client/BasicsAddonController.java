@@ -26,9 +26,9 @@ public class BasicsAddonController implements IVehicleController {
     @SideOnly(Side.CLIENT)
     public static final KeyBinding hornKey = new KeyBinding("Horn", Keyboard.KEY_K, "DynamX basics");
     @SideOnly(Side.CLIENT)
-    public static final KeyBinding beaconKey = new KeyBinding("Beacons", Keyboard.KEY_I, "DynamX basics");
+    public static final KeyBinding beaconKey = new KeyBinding("Beacons", Keyboard.KEY_P, "DynamX basics");
     @SideOnly(Side.CLIENT)
-    public static final KeyBinding sirenKey = new KeyBinding("Siren", Keyboard.KEY_J, "DynamX basics");
+    public static final KeyBinding sirenKey = new KeyBinding("Siren", Keyboard.KEY_I, "DynamX basics");
     @SideOnly(Side.CLIENT)
     public static final KeyBinding headlights = new KeyBinding("HeadLights", Keyboard.KEY_U, "DynamX basics");
     @SideOnly(Side.CLIENT)
