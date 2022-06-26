@@ -38,7 +38,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
         this.infos = infos;
-        if (entity.world.isRemote/* && (hasSiren() || hasKlaxon())*/) {
+        if (entity.world.isRemote) {
             controller = new BasicsAddonController(entity, this, fr.dynamx.addons.basics.BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
         }
     }
@@ -66,16 +66,10 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void updateEntity() {
-        if (playKlaxon) {
-            //test playKlaxon = false;
-            if (entity.world.isRemote && hasKlaxon()) {
-                ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, 1, 1);
-                //entity.world.playSound(entity.posX, entity.posY, entity.posZ, BasicsAddon.soundMap.get(infos.klaxonSound), SoundCategory.PLAYERS, 1, 1, true);
-            }
-        }
-        if (controller != null) {
+        if (playKlaxon && entity.world.isRemote && hasKlaxon())
+            ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, 1, 1);
+        if (controller != null)
             controller.updateSiren();
-        }
     }
 
     @Nullable
@@ -130,7 +124,6 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     }
 
     public void setHeadLightsOn(boolean headLightsOn) {
-        System.out.println("Settings headlights "+headLightsOn+" "+isBeaconsOn()+" "+isHeadLightsOn()+" "+isSirenOn()+" "+isTurnSignalLeftOn()+" "+isTurnSignalRightOn());
         this.headLightsOn = headLightsOn;
     }
 
@@ -160,9 +153,8 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
-        if (simulationHolder == SimulationHolder.SERVER_SP ? side.isClient() : side.isServer() || simulationHolder.isMe(side)) {
+        if (simulationHolder.ownsControls(side))
             variables.add(BasicsAddonSV.NAME);
-        }
     }
 
     @Override
@@ -193,7 +185,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             setTurnSignalRightOn((vars & 16) == 16);
             setBeaconsOn((vars & 32) == 32);
             setLocked((vars & 64) == 64);
-        } else {
+        } else { //backward compatibility
             hasLinkedKey = tag.getBoolean("BasAdd.haskey");
             locked = tag.getBoolean("BasAdd.locked");
         }

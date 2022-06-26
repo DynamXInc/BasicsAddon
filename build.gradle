@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "fr.dynamx:DynamX:3.3.0-3"
+    deobfCompile "fr.dynamx:DynamX:3.3.1-rd11-opt"
     compile "fr.aym.acsguis:ACsGuis:1.2.0-4"
 }
 

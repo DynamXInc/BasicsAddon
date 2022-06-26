@@ -78,9 +78,8 @@ public class BasicsAddonController implements IVehicleController {
             }
         }*/
         if (module.isSirenOn() && module.hasSirenSound()) {
-            if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound)) {
-                ClientProxy.SOUND_HANDLER.playLoopingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), sirenSound);
-            }
+            if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound))
+                ClientProxy.SOUND_HANDLER.playStreamingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), sirenSound);
 
             /*if (lights != null) {
 
@@ -121,39 +120,32 @@ public class BasicsAddonController implements IVehicleController {
             klaxonHullDown--;
         if (module.hasKlaxon()) {
             module.playKlaxon(hornKey.isPressed() && klaxonHullDown == 0);
-            //System.out.println("Klaxon : "+b+" "+playKlaxon+" "+klaxonHullDown);
-            if (module.playKlaxon()) {
+            if (module.playKlaxon())
                 klaxonHullDown = module.getInfos().klaxonCooldown;
-            }
         }
         if (module.hasSiren()) {
-            if (sirenKey.isPressed()) {
+            if (sirenKey.isPressed())
                 module.setSirenOn(!module.isSirenOn());
-            }
-            if (beaconKey.isPressed()) {
+            if (beaconKey.isPressed())
                 module.setBeaconsOn(!module.isBeaconsOn());
-            }
         }
         if (module.hasHeadLights()) {
-            if (headlights.isPressed()) {
+            if (headlights.isPressed())
                 module.setHeadLightsOn(!module.isHeadLightsOn());
-            }
         }
         if (module.hasTurnSignals()) {
             if (turnLeft.isPressed()) {
-                if (!warningsOn) {
+                if (!warningsOn)
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
-                } else {
+                else
                     warningsOn = false;
-                }
                 module.setTurnSignalRightOn(false);
             } else if (turnRight.isPressed()) {
                 module.setTurnSignalLeftOn(false);
-                if (!warningsOn) {
+                if (!warningsOn)
                     module.setTurnSignalRightOn(!module.isTurnSignalRightOn());
-                } else {
+                else
                     warningsOn = false;
-                }
             } else if (warnings.isPressed()) {
                 warningsOn = !warningsOn;
                 module.setTurnSignalLeftOn(warningsOn);
