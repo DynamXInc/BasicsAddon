@@ -4,6 +4,7 @@ import com.jme3.math.Vector3f;
 import fr.aym.acsguis.cssengine.font.CssFontHelper;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
+import fr.dynamx.addons.basics.utils.TextUtils;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.network.sync.SimulationHolder;
 import fr.dynamx.client.renders.RenderPhysicsEntity;
@@ -89,38 +90,13 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
     @SideOnly(Side.CLIENT)
     public void drawParts(RenderPhysicsEntity<?> render, float partialTicks, BaseVehicleEntity<?> entity) {
         for (ImmatriculationPlateInfos immatriculationPlateInfos : getInfo()) {
-
-            Vector3f platePos = immatriculationPlateInfos.getImmatriculationPosition();
-            Vector3f plateSize = immatriculationPlateInfos.getImmatriculationSize();
-            Vector3f plateRotation = immatriculationPlateInfos.getImmatriculationRotation();
-
-            GlStateManager.pushMatrix();
-
-            GlStateManager.color(1, 1, 1, 1);
-            GlStateManager.translate(platePos.x, platePos.y, platePos.z);
-            GlStateManager.rotate(180, 1, 0, 0);
-            GlStateManager.rotate(180, 0, 1, 0);
-            float rotate = plateRotation.x;
-            if (rotate != 0)
-                GlStateManager.rotate(rotate, 1, 0, 0);
-            rotate = plateRotation.y;
-            if (rotate != 0)
-                GlStateManager.rotate(rotate, 0, 1, 0);
-            rotate = plateRotation.z;
-            if (rotate != 0)
-                GlStateManager.rotate(rotate, 0, 0, 1);
-            GlStateManager.scale(plateSize.x / 40, plateSize.y / 40, plateSize.z / 40);
-            GlStateManager.disableLighting();
-
-            CssFontHelper.pushDrawing(new ResourceLocation(immatriculationPlateInfos.getFont()), Collections.emptyList());
-            GlStateManager.scale(0.05, 0.05, 0.05);
-            int[] color = immatriculationPlateInfos.getImmatriculationColor();
-            CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(getPlate()) / 2), 0, getPlate(), (color[0] << 16) | (color[1] << 8) | color[2]);
-            CssFontHelper.popDrawing();
-            GlStateManager.enableLighting();
-            GlStateManager.resetColor();
-
-            GlStateManager.popMatrix();
+            TextUtils.drawText(
+                    immatriculationPlateInfos.getImmatriculationPosition(),
+                    immatriculationPlateInfos.getImmatriculationSize(),
+                    immatriculationPlateInfos.getImmatriculationRotation(),
+                    getPlate(),
+                    immatriculationPlateInfos.getImmatriculationColor(),
+                    immatriculationPlateInfos.getFont());
         }
     }
 }
