@@ -10,7 +10,7 @@ Now to use modules ingame you have to add the code blocks.
 Here are some examples:
 
 #### Licenseplate
-```json
+```
 ImmatriculationPlate_back{
   ImmatriculationPosition: 0 0 0
   ImmatriculationSize: 0 0 0
@@ -21,7 +21,7 @@ ImmatriculationPlate_back{
 ```
 
 #### Speed-Display
-```json
+```
 SpeedDisplay{
   Position: 0 0 0
   Size: 1 1 1
