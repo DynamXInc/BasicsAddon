@@ -2,10 +2,7 @@ package fr.dynamx.addons.basics;
 
 import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
-import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
-import fr.dynamx.addons.basics.common.infos.BasicsItemInfo;
-import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
-import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
+import fr.dynamx.addons.basics.common.infos.*;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
@@ -52,6 +49,7 @@ public class BasicsAddon {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("BasicsAddon", BasicsAddonInfos.class));
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos.class, false));
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("FuelTank", FuelTankInfos::new, false));
+        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("SpeedDisplay", SpeedDisplayInfos.class, false));
         DynamXObjectLoaders.ITEMS.addSubInfoType(new SubInfoTypeEntry("BasicsAddon", BasicsItemInfo.class));
 
         SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
