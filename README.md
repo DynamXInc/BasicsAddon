@@ -18,11 +18,11 @@ Here are some examples:
 #### Licenseplate
 ```
 ImmatriculationPlate_back{
-  ImmatriculationPosition: 0 0 0
-  ImmatriculationSize: 0 0 0
-  ImmatriculationRotation: 0 0 0
-  ImmatriculationPattern: @@ @@ %%%%
-  ImmatriculationColor: 0 0 0
+  Position: 0 0 0
+  Size: 0 0 0
+  Rotation: 0 0 0
+  Pattern: @@ @@ %%%%
+  Color: 0 0 0
 }
 ```
 

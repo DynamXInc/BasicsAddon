@@ -3,44 +3,28 @@ package fr.dynamx.addons.basics.common.infos;
 import com.jme3.math.Vector3f;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
-import fr.dynamx.api.contentpack.object.subinfo.ISubInfoType;
-import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
+import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
-import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import net.minecraft.util.math.Vec3i;
 
-import java.awt.*;
-import java.util.List;
-import java.util.function.Predicate;
+public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilder> {
+    @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
+    protected Vector3f rotation;
 
-public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInfoBuilder> {
+    @PackFileProperty(configNames = "Pattern", required = false)
+    protected String pattern = "aa-111-aa";
 
-    private final ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner;
-
-    @PackFileProperty(configNames = "ImmatriculationPosition", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F_INVERSED_Y, description = "common.position")
-    protected Vector3f immatriculationPosition;
-
-    @PackFileProperty(configNames = "ImmatriculationSize", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.size")
-    protected Vector3f immatriculationSize;
-
-    @PackFileProperty(configNames = "ImmatriculationRotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
-    protected Vector3f immatriculationRotation;
-
-    @PackFileProperty(configNames = "ImmatriculationPattern", required = false)
-    protected String immatriculationPattern = "aa-111-aa";
-
-    @PackFileProperty(configNames = "ImmatriculationFont", type = DefinitionType.DynamXDefinitionTypes.STRING, required = false)
+    @PackFileProperty(configNames = "Font", required = false)
     protected String font = BasicsAddon.ID + ":e";
 
-    @PackFileProperty(configNames = "ImmatriculationColor", type = DefinitionType.DynamXDefinitionTypes.INT_ARRAY, description = "common.color", required = false)
-    protected int[] immatriculationColor = new int[] {10, 10, 10};
+    @PackFileProperty(configNames = "Color", description = "common.color", required = false)
+    protected int[] color = new int[] {10, 10, 10};
 
-    public ImmatriculationPlateInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
-        this.owner = owner;
+    public ImmatriculationPlateInfos(ModularVehicleInfoBuilder owner, String partName) {
+        super(owner, partName);
     }
 
     @Override
@@ -48,38 +32,20 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
         owner.addSubProperty(this);
     }
 
-    @Override
-    public String getName() {
-        return owner.getPackName() + " of " + owner.getName();
-    }
-
-    @Override
-    public String getPackName() {
-        return owner.getPackName();
-    }
-
-    public Vector3f getImmatriculationPosition() {
-        return immatriculationPosition;
-    }
-
-    public Vector3f getImmatriculationSize() {
-        return immatriculationSize;
-    }
-
-    public Vector3f getImmatriculationRotation() {
-        return immatriculationRotation;
+    public Vector3f getRotation() {
+        return rotation;
     }
 
     public String getFont() {
         return font;
     }
 
-    public int[] getImmatriculationColor() {
-        return immatriculationColor;
+    public int[] getColor() {
+        return color;
     }
 
-    public String getImmatriculationPattern() {
-        return immatriculationPattern;
+    public String getPattern() {
+        return pattern;
     }
 
     @Override
@@ -89,5 +55,10 @@ public class ImmatriculationPlateInfos implements ISubInfoType<ModularVehicleInf
         } else { //Module not yet added
             moduleListBuilder.add(new ImmatriculationPlateModule(this));
         }
+    }
+
+    @Override
+    public String getName() {
+        return "PartShape named " + getPartName() + " in " + getOwner().getName();
     }
 }

@@ -1,7 +1,5 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import com.jme3.math.Vector3f;
-import fr.aym.acsguis.cssengine.font.CssFontHelper;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
 import fr.dynamx.addons.basics.utils.TextUtils;
@@ -10,16 +8,12 @@ import fr.dynamx.api.network.sync.SimulationHolder;
 import fr.dynamx.client.renders.RenderPhysicsEntity;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -35,7 +29,7 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
         String secondNumber = RandomStringUtils.randomNumeric(3);
         String thirdNumber = RandomStringUtils.random(2, 97, 122, true, false);*/
 
-        String pattern = info.getImmatriculationPattern();
+        String pattern = info.getPattern();
         StringBuilder builder = new StringBuilder();
         Random r = new Random();
         for (int i = 0; i < pattern.length(); i++) {
@@ -91,11 +85,11 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
     public void drawParts(RenderPhysicsEntity<?> render, float partialTicks, BaseVehicleEntity<?> entity) {
         for (ImmatriculationPlateInfos immatriculationPlateInfos : getInfo()) {
             TextUtils.drawText(
-                    immatriculationPlateInfos.getImmatriculationPosition(),
-                    immatriculationPlateInfos.getImmatriculationSize(),
-                    immatriculationPlateInfos.getImmatriculationRotation(),
+                    immatriculationPlateInfos.getPosition(),
+                    immatriculationPlateInfos.getScale(),
+                    immatriculationPlateInfos.getRotation(),
                     getPlate(),
-                    immatriculationPlateInfos.getImmatriculationColor(),
+                    immatriculationPlateInfos.getColor(),
                     immatriculationPlateInfos.getFont());
         }
     }

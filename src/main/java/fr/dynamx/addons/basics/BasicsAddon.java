@@ -47,9 +47,9 @@ public class BasicsAddon {
     @DynamXAddon.AddonEventSubscriber
     public static void initAddon() {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("BasicsAddon", BasicsAddonInfos.class));
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos.class, false));
+        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos::new, false));
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("FuelTank", FuelTankInfos::new, false));
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("SpeedDisplay", SpeedDisplayInfos.class, false));
+        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("SpeedDisplay", SpeedDisplayInfos::new, false));
         DynamXObjectLoaders.ITEMS.addSubInfoType(new SubInfoTypeEntry("BasicsAddon", BasicsItemInfo.class));
 
         SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);

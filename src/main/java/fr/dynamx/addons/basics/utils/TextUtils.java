@@ -11,8 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import java.util.Collections;
 
 public class TextUtils {
-
-    public static void drawText(Vector3f pos, Vector3f size, Vector3f rotation, String text, int[] color, String font) {
+    public static void drawText(Vector3f pos, Vector3f scale, Vector3f rotation, String text, int[] color, String font) {
         GlStateManager.pushMatrix();
         GlStateManager.color(1, 1, 1, 1);
         GlStateManager.translate(pos.x, pos.y, pos.z);
@@ -27,7 +26,7 @@ public class TextUtils {
         rotate = rotation.z;
         if (rotate != 0)
             GlStateManager.rotate(rotate, 0, 0, 1);
-        GlStateManager.scale(size.x / 40, size.y / 40, size.z / 40);
+        GlStateManager.scale(scale.x / 40, scale.y / 40, scale.z / 40);
         GlStateManager.disableLighting();
 
         CssFontHelper.pushDrawing(new ResourceLocation(font), Collections.emptyList());

@@ -39,7 +39,7 @@ public class SpeedDisplayModule implements IPhysicsModule<AbstractEntityPhysicsH
     public void drawParts(RenderPhysicsEntity<?> render, float partialTicks, BaseVehicleEntity<?> entity) {
         String speed = "" + VehicleUtils.getSpeed(entity);
         for (SpeedDisplayInfos info : getInfo()) {
-            TextUtils.drawText(info.getPosition(), info.getSize(), info.getRotation(), speed, info.getColor(), info.getFont());
+            TextUtils.drawText(info.getPosition(), info.getScale(), info.getRotation(), speed, info.getColor(), info.getFont());
         }
     }
 }
