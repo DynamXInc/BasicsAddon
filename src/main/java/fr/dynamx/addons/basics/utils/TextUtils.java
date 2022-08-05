@@ -2,16 +2,17 @@ package fr.dynamx.addons.basics.utils;
 
 import com.jme3.math.Vector3f;
 import fr.aym.acsguis.cssengine.font.CssFontHelper;
-import fr.dynamx.api.entities.VehicleEntityProperties;
-import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.EngineModule;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 
 public class TextUtils {
-    public static void drawText(Vector3f pos, Vector3f scale, Vector3f rotation, String text, int[] color, String font) {
+    public static void drawText(Vector3f pos, Vector3f scale, Vector3f rotation, String text, int[] color, String font){
+        drawText(pos, scale, rotation, text, color, font, 0.0F);
+    }
+
+    public static void drawText(Vector3f pos, Vector3f scale, Vector3f rotation, String text, int[] color, String font, float spacing) {
         GlStateManager.pushMatrix();
         GlStateManager.color(1, 1, 1, 1);
         GlStateManager.translate(pos.x, pos.y, pos.z);
@@ -31,7 +32,12 @@ public class TextUtils {
 
         CssFontHelper.pushDrawing(new ResourceLocation(font), Collections.emptyList());
         GlStateManager.scale(0.05, 0.05, 0.05);
-        CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(text) / 2), 0, text, (color[0] << 16) | (color[1] << 8) | color[2]);
+        String[] lines = text.split("\\\\n");
+        for (String line : lines) {
+            String line2 = line.replace("\\n", "");
+            CssFontHelper.draw((float) (-CssFontHelper.getBoundFont().getWidth(line2) / 2), 0, line2, (color[0] << 16) | (color[1] << 8) | color[2]);
+            GlStateManager.translate(0, (spacing + 1) * 100, 0);
+        }
         CssFontHelper.popDrawing();
         GlStateManager.enableLighting();
         GlStateManager.resetColor();
