@@ -2,10 +2,12 @@ package fr.dynamx.addons.basics;
 
 import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
+import fr.dynamx.addons.basics.client.InteractionKeyController;
 import fr.dynamx.addons.basics.common.infos.*;
 import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
 import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
+import fr.dynamx.addons.basics.common.network.InteractionKeySV;
 import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
@@ -55,6 +57,7 @@ public class BasicsAddon {
         SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
         SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
         SynchronizedVariablesRegistry.addSyncVar(FuelSynchronizedVariable.NAME, FuelSynchronizedVariable::new);
+        SynchronizedVariablesRegistry.addSyncVar(InteractionKeySV.NAME, InteractionKeySV::new);
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }
@@ -105,6 +108,7 @@ public class BasicsAddon {
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnLeft);
         ClientRegistry.registerKeyBinding(BasicsAddonController.turnRight);
         ClientRegistry.registerKeyBinding(BasicsAddonController.warnings);
+        ClientRegistry.registerKeyBinding(InteractionKeyController.interaction);
 
         ACsGuiApi.registerStyleSheetToPreload(BasicsAddonController.STYLE);
     }

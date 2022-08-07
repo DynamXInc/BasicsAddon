@@ -3,6 +3,7 @@ package fr.dynamx.addons.basics.common;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.InteractionKeyModule;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
@@ -25,6 +26,7 @@ public class BasicsAddonEventHandler {
         BaseVehicleEntity<?> entity = event.getEntity();
         BasicsAddonInfos info = entity.getPackInfo().getSubPropertyByType(BasicsAddonInfos.class);
         event.getModuleList().add(new BasicsAddonModule(entity, info)); //don't care of null info, module is used by keys system anyway
+        event.getModuleList().add(new InteractionKeyModule(entity));
     }
 
     @SubscribeEvent
