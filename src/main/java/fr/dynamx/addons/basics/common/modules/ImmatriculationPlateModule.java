@@ -91,7 +91,7 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
                     getPlate(),
                     immatriculationPlateInfos.getColor(),
                     immatriculationPlateInfos.getFont(),
-                    immatriculationPlateInfos.getSpacing());
+                    immatriculationPlateInfos.getLineSpacing());
         }
     }
 }

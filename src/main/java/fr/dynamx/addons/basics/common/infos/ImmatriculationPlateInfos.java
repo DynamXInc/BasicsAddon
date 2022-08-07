@@ -23,8 +23,8 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilde
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
     protected int[] color = new int[] {10, 10, 10};
 
-    @PackFileProperty(configNames = "Spacing", required = false)
-    protected float spacing = 0.0F;
+    @PackFileProperty(configNames = "LineSpacing", required = false)
+    protected float lineSpacing = 0.0F;
 
     public ImmatriculationPlateInfos(ModularVehicleInfoBuilder owner, String partName) {
         super(owner, partName);
@@ -51,8 +51,8 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilde
         return pattern;
     }
 
-    public float getSpacing() {
-        return spacing;
+    public float getLineSpacing() {
+        return lineSpacing;
     }
 
     @Override
