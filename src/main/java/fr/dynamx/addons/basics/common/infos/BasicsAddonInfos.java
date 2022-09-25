@@ -1,13 +1,18 @@
 package fr.dynamx.addons.basics.common.infos;
 
 import fr.dynamx.addons.basics.BasicsAddon;
+import fr.dynamx.api.contentpack.object.INamedObject;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoType;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
-import fr.dynamx.common.contentpack.loader.ModularVehicleInfoBuilder;
+import fr.dynamx.api.entities.modules.ModuleListBuilder;
+import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfoBuilder;
+import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.RegistryNameSetter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+
+import javax.annotation.Nullable;
 
 public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder> {
     private final ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner;
@@ -45,7 +50,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
             ResourceLocation r = new ResourceLocation(klaxonSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, klaxonSound);
-            fr.dynamx.addons.basics.BasicsAddon.soundMap.put(klaxonSound, event);
+            BasicsAddon.soundMap.put(klaxonSound, event);
         }
         if (sirenSound != null) {
             //if (!sirenSound.contains(":"))
@@ -56,6 +61,22 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
             BasicsAddon.soundMap.put(sirenSound, event);
         }
         owner.addSubProperty(this);
+    }
+
+    @Nullable
+    @Override
+    public ModularVehicleInfoBuilder getOwner() {
+        return null;
+    }
+
+    @Override
+    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder modules) {
+        ISubInfoType.super.addModules(entity, modules);
+    }
+
+    @Override
+    public INamedObject getRootOwner() {
+        return ISubInfoType.super.getRootOwner();
     }
 
     @Override

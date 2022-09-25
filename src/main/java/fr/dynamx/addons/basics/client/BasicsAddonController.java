@@ -1,15 +1,11 @@
 package fr.dynamx.addons.basics.client;
 
+
 import fr.aym.acsguis.component.GuiComponent;
-import fr.aym.acsguis.component.layout.GridLayout;
-import fr.aym.acsguis.component.panel.GuiPanel;
-import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
-import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.client.ClientProxy;
-import fr.dynamx.client.handlers.hud.CarController;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.settings.KeyBinding;

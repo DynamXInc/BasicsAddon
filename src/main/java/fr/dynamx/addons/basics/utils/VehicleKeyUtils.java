@@ -5,7 +5,6 @@ import fr.dynamx.addons.basics.common.infos.BasicsItemInfo;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;

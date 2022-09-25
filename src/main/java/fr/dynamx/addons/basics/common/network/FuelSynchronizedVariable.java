@@ -9,7 +9,6 @@ import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.network.sync.MessagePhysicsEntitySync;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;

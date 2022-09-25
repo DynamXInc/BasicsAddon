@@ -7,8 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 
-import java.util.UUID;
-
 public class FuelJerrycanUtils {
 
     public static boolean isJerrycanItem(ItemStack stack) {

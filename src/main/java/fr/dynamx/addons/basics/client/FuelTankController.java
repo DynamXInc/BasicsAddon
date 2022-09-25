@@ -2,16 +2,9 @@ package fr.dynamx.addons.basics.client;
 
 import fr.aym.acsguis.component.GuiComponent;
 import fr.aym.acsguis.component.panel.GuiPanel;
-import fr.aym.acsguis.component.textarea.UpdatableGuiLabel;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.FuelTankModule;
-import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.entities.modules.IVehicleController;
-import fr.dynamx.client.handlers.hud.SpeedometerPanel;
-import fr.dynamx.common.contentpack.type.vehicle.EngineInfo;
-import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.utils.debug.ClientDebugSystem;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
