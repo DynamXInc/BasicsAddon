@@ -15,7 +15,7 @@ import net.minecraft.util.SoundEvent;
 import javax.annotation.Nullable;
 
 public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder> {
-    private final ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner;
+    private final ModularVehicleInfoBuilder owner;
 
     @PackFileProperty(configNames = {"HornSound", "KlaxonSound"}, required = false)
     public String klaxonSound;
@@ -39,7 +39,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     public int turnRightLightSource = 0;
 
     public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
-        this.owner = owner;
+        this.owner = (ModularVehicleInfoBuilder) owner;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     @Nullable
     @Override
     public ModularVehicleInfoBuilder getOwner() {
-        return null;
+        return owner;
     }
 
     @Override
@@ -74,10 +74,6 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
         ISubInfoType.super.addModules(entity, modules);
     }
 
-    @Override
-    public INamedObject getRootOwner() {
-        return ISubInfoType.super.getRootOwner();
-    }
 
     @Override
     public String getName() {
