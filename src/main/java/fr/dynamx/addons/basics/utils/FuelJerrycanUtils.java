@@ -21,7 +21,7 @@ public class FuelJerrycanUtils {
     public static void setFuel(ItemStack key, float fuel) {
         if (!key.hasTagCompound())
             key.setTagCompound(new NBTTagCompound());
-        key.getTagCompound().setFloat("fuel", fuel);
+        key.getTagCompound().setFloat("fuel", Math.max(fuel, 0));
     }
 
     public static float getFuel(ItemStack key) {
