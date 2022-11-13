@@ -19,7 +19,7 @@ Here are some examples:
 ```
 ImmatriculationPlate_back{
   Position: 0 0 0
-  Size: 0 0 0
+  Scale: 0 0 0
   Rotation: 0 0 0
   Pattern: @@ \n @@ %%%%
   LineSpacing: 0
@@ -31,7 +31,7 @@ ImmatriculationPlate_back{
 ```
 SpeedDisplay{
   Position: 0 0 0
-  Size: 1 1 1
+  Scale: 1 1 1
   Rotation: 0 0 0
   Color: 0 0 0
 }
