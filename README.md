@@ -22,7 +22,7 @@ ImmatriculationPlate_back{
   Size: 0 0 0
   Rotation: 0 0 0
   Pattern: @@ \n @@ %%%%
-  Spacing: 0
+  LineSpacing: 0
   Color: 0 0 0
 }
 ```
