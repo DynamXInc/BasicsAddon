@@ -1,7 +1,9 @@
 ![DynamX](https://dynamx.fr/img/head-logo.png)
-# DynamXInc - BasicsAddon 
+
+# DynamXInc - BasicsAddon
 
 This addon adds new features to DynamX :
+
 - Klaxon and siren
 - Fuel tank
 - Immatriculation plates
@@ -16,6 +18,7 @@ To use modules ingame you have to add specific code blocks.
 Here are some examples:
 
 #### Licenseplate
+
 ```
 ImmatriculationPlate_back{
   Position: 0 0 0
@@ -28,6 +31,7 @@ ImmatriculationPlate_back{
 ```
 
 #### Speed-Display
+
 ```
 SpeedDisplay{
   Position: 0 0 0
@@ -37,7 +41,19 @@ SpeedDisplay{
 }
 ```
 
+#### Fuel-Tank
+
+```
+FuelTank{
+  Position: 0 0 0
+  Scale: 1 1 1
+  TankSize: 80
+  FuelConsumption: 1
+}
+```
+
 ## Links
+
 DynamX website: https://dynamx.fr  
 Addon download: https://dynamx.fr/packs
 DynamX wiki: https://dynamx.fr/wiki/
