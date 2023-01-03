@@ -65,48 +65,13 @@ public class BasicsAddonController implements IVehicleController {
 
     @SideOnly(Side.CLIENT)
     public void updateSiren() {
-       /* VehicleLightsModule module1 = entity.getModuleByType(VehicleLightsModule.class);
-        if(module1 != null) {
-            if (((EngineModule) ((IModuleContainer.IEngineContainer) entity).getEngine()).isReversing()) {
-                module1.setLightOn(1, true);
-            } else {
-                module1.setLightOn(1, false);
-            }
-        }*/
+
         if (module.isSirenOn() && module.hasSirenSound()) {
-            if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound))
+            if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound)) {
                 ClientProxy.SOUND_HANDLER.playStreamingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), sirenSound);
-
-            /*if (lights != null) {
-
-         /*   VehicleLightsModule module = entity.getModuleByType(VehicleLightsModule.class);
-            if(module != null) {
-                module.setLightOn(9, entity.ticksExisted%20 >= 10);
-            }*/
-
-           /* if (lights != null) {
-                Vector3f pos = Vector3fPool.get(0.706687f, 3.28461f, 3.3705f);
-                pos = DynamXGeometry.rotateVectorByQuaternion(pos, entity.physicsRotation);
-                pos = pos.add(entity.physicsPosition);
-                double angle = entity.ticksExisted % 15 * Math.PI * 2 / 15;
-                Vector3f rot = Vector3fPool.get((float) (16 * Math.cos(angle)), -4, (float) (16 * Math.sin(angle)));
-                rot = DynamXGeometry.rotateVectorByQuaternion(rot, entity.physicsRotation);
-                lights.update1(pos, rot);
-
-                pos = Vector3fPool.get(-0.706687f, 3.28461f, 3.3705f);
-                pos = DynamXGeometry.rotateVectorByQuaternion(pos, entity.physicsRotation);
-                pos = pos.add(entity.physicsPosition);
-                angle = entity.ticksExisted % 15 * Math.PI * 2 / 15;
-                rot = Vector3fPool.get((float) (16 * Math.cos(angle)), -4, (float) (16 * Math.sin(angle)));
-                rot = DynamXGeometry.rotateVectorByQuaternion(rot, entity.physicsRotation);
-                lights.update2(pos, rot);
-            }*/
-        } /*else if (sirenSound != null) {
-            sirenSound.stop();
-            sirenSound = null;
-            //if (lights != null)
-            //    lights.destroy();
-        }*/
+                ClientProxy.SOUND_HANDLER.setSoundDistance(sirenSound, 100);
+            }
+        }
     }
 
     @Override
@@ -116,8 +81,9 @@ public class BasicsAddonController implements IVehicleController {
             klaxonHullDown--;
         if (module.hasKlaxon()) {
             module.playKlaxon(hornKey.isPressed() && klaxonHullDown == 0);
-            if (module.playKlaxon())
+            if (module.playKlaxon()) {
                 klaxonHullDown = module.getInfos().klaxonCooldown;
+            }
         }
         if (module.hasSiren()) {
             if (sirenKey.isPressed())
@@ -131,6 +97,7 @@ public class BasicsAddonController implements IVehicleController {
         }
         if (module.hasTurnSignals()) {
             if (turnLeft.isPressed()) {
+                System.out.println(module.isTurnSignalLeftOn() +" wtf "+module.isTurnSignalRightOn());
                 if (!warningsOn)
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
                 else
