@@ -17,15 +17,15 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ClientEventHandler {
 
     @SubscribeEvent
-    public static void createHud(VehicleEntityEvent.CreateVehicleHudEvent event) {
+    public static void createHud(VehicleEntityEvent.CreateHud event) {
         if (event.getEntity().getModuleByType(BasicsAddonModule.class) != null) {
             CarController.setHudIcons(new BasicsAddonHudIcons(event.getEntity().getModuleByType(BasicsAddonModule.class), event.getEntity()));
         }
     }
 
     @SubscribeEvent
-    public static void renderLights(VehicleEntityEvent.RenderVehicleEntityEvent event) {
-        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.RenderVehicleEntityEvent.Type.LIGHTS) {
+    public static void renderLights(VehicleEntityEvent.Render event) {
+        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
                 VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
@@ -76,7 +76,7 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void updateVehiclecontroller(VehicleEntityEvent.VehicleControllerUpdateEvent event) {
+    public static void updateVehiclecontroller(VehicleEntityEvent.ControllerUpdate event) {
         if (event.getController() instanceof CarController) {
             FuelTankModule module = event.getEntity().getModuleByType(FuelTankModule.class);
             if (module != null && module.getFuel() == 0) {

@@ -4,23 +4,26 @@ import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.client.InteractionKeyController;
 import fr.dynamx.addons.basics.common.infos.*;
-import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
-import fr.dynamx.addons.basics.common.network.FuelSynchronizedVariable;
-import fr.dynamx.addons.basics.common.network.ImmatriculationPlateSynchronizedVariable;
-import fr.dynamx.addons.basics.common.network.InteractionKeySV;
+import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.addons.basics.common.modules.FuelTankModule;
+import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
+import fr.dynamx.addons.basics.common.modules.InteractionKeyModule;
 import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.contentpack.DynamXAddon;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
-import fr.dynamx.api.network.sync.SynchronizedVariablesRegistry;
+import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariableFactory;
+import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariableRegistry;
 import fr.dynamx.common.contentpack.DynamXObjectLoaders;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.items.DynamXItem;
 import fr.dynamx.common.items.DynamXItemRegistry;
+import fr.dynamx.utils.DynamXConstants;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -54,10 +57,15 @@ public class BasicsAddon {
         DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("SpeedDisplay", SpeedDisplayInfos::new, false));
         DynamXObjectLoaders.ITEMS.addSubInfoType(new SubInfoTypeEntry("BasicsAddon", BasicsItemInfo.class));
 
-        SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
-        SynchronizedVariablesRegistry.addSyncVar(ImmatriculationPlateSynchronizedVariable.NAME, ImmatriculationPlateSynchronizedVariable::new);
-        SynchronizedVariablesRegistry.addSyncVar(FuelSynchronizedVariable.NAME, FuelSynchronizedVariable::new);
-        SynchronizedVariablesRegistry.addSyncVar(InteractionKeySV.NAME, InteractionKeySV::new);
+        //SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
+
+        SynchronizedEntityVariableRegistry.addSyncVar(FuelTankModule.NAME, SynchronizedEntityVariableFactory.floatSerializer);
+        SynchronizedEntityVariableRegistry.addSyncVar(InteractionKeyModule.NAME, SynchronizedEntityVariableFactory.booleanSerializer);
+        SynchronizedEntityVariableRegistry.addSyncVar(BasicsAddonModule.NAME, SynchronizedEntityVariableFactory.intSerializer);
+        SynchronizedEntityVariableRegistry.addSyncVar(ImmatriculationPlateModule.NAME, SynchronizedEntityVariableFactory.stringSerializer);
+
+
+
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }
@@ -68,7 +76,7 @@ public class BasicsAddon {
     }
 
     private static void registerKey() {
-        keysItem = new DynamXItem(ID, "car_keys", "disable_rendering") {
+        keysItem = new DynamXItem(ID, "car_keys", new ResourceLocation(DynamXConstants.ID, "disable_rendering")) {
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
                 if(VehicleKeyUtils.hasLinkedVehicle(stack)) {
@@ -84,7 +92,7 @@ public class BasicsAddon {
     }
 
     private static void registerJerrycan() {
-        jerrycanItem = new DynamXItem(ID, "fuel_jerrycan", "item/jerrycan.obj"){
+        jerrycanItem = new DynamXItem(ID, "fuel_jerrycan",  new ResourceLocation(DynamXConstants.ID, "item/jerrycan.obj")){
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
                 if(FuelJerrycanUtils.hasFuel(stack)) {

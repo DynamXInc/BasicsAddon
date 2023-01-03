@@ -7,14 +7,13 @@ import fr.dynamx.api.contentpack.object.part.InteractivePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
-import fr.dynamx.common.contentpack.type.objects.ItemObject;
-import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfoBuilder;
+import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, ModularVehicleInfoBuilder>
+public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, ModularVehicleInfo>
 {
     private static final ResourceLocation FUEL_CROSS_HAIRS_ICON = new ResourceLocation(BasicsAddon.ID, "textures/fuel.png");
 
@@ -25,7 +24,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     @PackFileProperty(configNames = "FuelConsumption", type = DefinitionType.DynamXDefinitionTypes.FLOAT, defaultValue = "1")
     protected float fuelConsumption;
 
-    public FuelTankInfos(ModularVehicleInfoBuilder owner, String partName) {
+    public FuelTankInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName, 0.5f, 0.5f);
     }
 
@@ -41,7 +40,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     public boolean interact(BaseVehicleEntity<?> entity, EntityPlayer with) {
         if(FuelJerrycanUtils.isJerrycanItem(with.getHeldItemMainhand()))
         {
-            BasicsItemInfo jerrycan = ((ItemObject<?>) ((DynamXItem<?>) with.getHeldItemMainhand().getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class);
+            BasicsItemInfo jerrycan = ((ModularVehicleInfo) ((DynamXItem<?>) with.getHeldItemMainhand().getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class);
             if (!FuelJerrycanUtils.hasFuel(with.getHeldItemMainhand())) {
                 FuelJerrycanUtils.setFuel(with.getHeldItemMainhand(), jerrycan.getFuelCapacity());
             } else {

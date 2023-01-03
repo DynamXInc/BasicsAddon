@@ -7,10 +7,10 @@ import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
-import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfoBuilder;
+import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
-public class SpeedDisplayInfos extends BasePart<ModularVehicleInfoBuilder> {
+public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation;
 
@@ -20,12 +20,12 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfoBuilder> {
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
     protected int[] color = new int[] {10, 10, 10};
 
-    public SpeedDisplayInfos(ModularVehicleInfoBuilder owner, String partName) {
+    public SpeedDisplayInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName);
     }
 
     @Override
-    public void appendTo(ModularVehicleInfoBuilder owner) {
+    public void appendTo(ModularVehicleInfo owner) {
         owner.addSubProperty(this);
     }
 

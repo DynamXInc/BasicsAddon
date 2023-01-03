@@ -7,12 +7,12 @@ import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
-import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfoBuilder;
+import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
-public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilder> {
+public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
-    protected Vector3f rotation;
+    protected Vector3f rotation= new Vector3f();
 
     @PackFileProperty(configNames = "Pattern", required = false)
     protected String pattern = "aa-111-aa";
@@ -26,12 +26,12 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilde
     @PackFileProperty(configNames = "LineSpacing", required = false)
     protected float lineSpacing = 0.0F;
 
-    public ImmatriculationPlateInfos(ModularVehicleInfoBuilder owner, String partName) {
+    public ImmatriculationPlateInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName);
     }
 
     @Override
-    public void appendTo(ModularVehicleInfoBuilder owner) {
+    public void appendTo(ModularVehicleInfo owner) {
         owner.addSubProperty(this);
     }
 
@@ -60,7 +60,7 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfoBuilde
         if (moduleListBuilder.hasModuleOfClass(ImmatriculationPlateModule.class)) { //Module yet added
             moduleListBuilder.getByClass(ImmatriculationPlateModule.class).addInformation(this);
         } else { //Module not yet added
-            moduleListBuilder.add(new ImmatriculationPlateModule(this));
+            moduleListBuilder.add(new ImmatriculationPlateModule(entity,this));
         }
     }
 

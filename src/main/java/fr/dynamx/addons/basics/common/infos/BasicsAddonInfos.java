@@ -1,12 +1,11 @@
 package fr.dynamx.addons.basics.common.infos;
 
 import fr.dynamx.addons.basics.BasicsAddon;
-import fr.dynamx.api.contentpack.object.INamedObject;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoType;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
-import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfoBuilder;
+import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.RegistryNameSetter;
 import net.minecraft.util.ResourceLocation;
@@ -14,8 +13,8 @@ import net.minecraft.util.SoundEvent;
 
 import javax.annotation.Nullable;
 
-public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder> {
-    private final ModularVehicleInfoBuilder owner;
+public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
+    private final ModularVehicleInfo owner;
 
     @PackFileProperty(configNames = {"HornSound", "KlaxonSound"}, required = false)
     public String klaxonSound;
@@ -38,12 +37,12 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
     @PackFileProperty(configNames = "TurnSignalRightLightSource", required = false)
     public int turnRightLightSource = 0;
 
-    public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfoBuilder> owner) {
-        this.owner = (ModularVehicleInfoBuilder) owner;
+    public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfo> owner) {
+        this.owner = (ModularVehicleInfo) owner;
     }
 
     @Override
-    public void appendTo(ModularVehicleInfoBuilder owner) {
+    public void appendTo(ModularVehicleInfo owner) {
         if (klaxonSound != null) {
            // if (!klaxonSound.contains(":"))
               //  klaxonSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + klaxonSound;
@@ -65,7 +64,7 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfoBuilder>
 
     @Nullable
     @Override
-    public ModularVehicleInfoBuilder getOwner() {
+    public ModularVehicleInfo getOwner() {
         return owner;
     }
 

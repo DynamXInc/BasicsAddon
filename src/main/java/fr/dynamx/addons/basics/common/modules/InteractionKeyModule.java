@@ -1,10 +1,12 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.InteractionKeyController;
-import fr.dynamx.addons.basics.common.network.InteractionKeySV;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
+import fr.dynamx.api.network.sync.v3.SynchronizationRules;
+import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariable;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,12 +15,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class InteractionKeyModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private final BaseVehicleEntity<?> entity;
     private InteractionKeyController controller;
-    private boolean activate;
+    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "activate");
+    private final SynchronizedEntityVariable<Boolean> activate= new SynchronizedEntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, null, false, "activate");
 
     public InteractionKeyModule(BaseVehicleEntity<?> entity) {
         this.entity = entity;
@@ -28,11 +30,11 @@ public class InteractionKeyModule implements IPhysicsModule<AbstractEntityPhysic
     }
 
     public boolean isActivateOn() {
-        return activate;
+        return activate.get();
     }
 
     public void setActivate(boolean activate) {
-        this.activate = activate;
+        this.activate.set(activate);
     }
 
     @Nullable
@@ -43,19 +45,18 @@ public class InteractionKeyModule implements IPhysicsModule<AbstractEntityPhysic
     }
 
     @Override
-    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
-        if (simulationHolder.ownsControls(side))
-            variables.add(InteractionKeySV.NAME);
+    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder) {
+        entity.getSynchronizer().registerVariable(NAME,activate);
     }
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        tag.setBoolean("bas_interactionkey", activate);
+        tag.setBoolean("bas_interactionkey", isActivateOn());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
-        activate = tag.getBoolean("bas_interactionkey");
+        setActivate(tag.getBoolean("bas_interactionkey"));
     }
 
 }

@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class BasicsAddonEventHandler {
     @SubscribeEvent
     //Note : don't add parameter to BaseVehicleEntity : this would break the event on the fml side
-    public static void initVehicleModules(PhysicsEntityEvent.CreateEntityModulesEvent<BaseVehicleEntity> event) {
+    public static void initVehicleModules(PhysicsEntityEvent.CreateModules<BaseVehicleEntity> event) {
         BaseVehicleEntity<?> entity = event.getEntity();
         BasicsAddonInfos info = entity.getPackInfo().getSubPropertyByType(BasicsAddonInfos.class);
         event.getModuleList().add(new BasicsAddonModule(entity, info)); //don't care of null info, module is used by keys system anyway
@@ -51,7 +51,7 @@ public class BasicsAddonEventHandler {
     }
 
     @SubscribeEvent
-    public static void interactWithCar(VehicleEntityEvent.VehicleInteractEntityEvent event) {
+    public static void interactWithCar(VehicleEntityEvent.PlayerInteract event) {
         if (event.getPart() instanceof PartSeat || event.getPart() instanceof PartStorage || event.getPart() instanceof PartDoor) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (VehicleKeyUtils.isKeyItem(event.getPlayer().getHeldItemMainhand())) {

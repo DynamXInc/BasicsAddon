@@ -10,8 +10,8 @@ import net.minecraftforge.common.util.Constants;
 public class FuelJerrycanUtils {
 
     public static boolean isJerrycanItem(ItemStack stack) {
-        return stack.getItem() instanceof DynamXItem && ((DynamXItem<?>) stack.getItem()).getInfo() instanceof ItemObject && ((ItemObject<?>) ((DynamXItem<?>) stack.getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class) != null &&
-                ((ItemObject<?>) ((DynamXItem<?>) stack.getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class).isFuelContainer();
+        return stack.getItem() instanceof DynamXItem && ((DynamXItem<?>) stack.getItem()).getInfo() instanceof ItemObject && ( ((DynamXItem<?>) stack.getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class) != null &&
+                ( ((DynamXItem<?>) stack.getItem()).getInfo()).getSubPropertyByType(BasicsItemInfo.class).isFuelContainer();
     }
 
     public static boolean hasFuel(ItemStack key) {

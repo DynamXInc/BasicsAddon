@@ -5,18 +5,18 @@ import fr.dynamx.api.contentpack.object.subinfo.SubInfoType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 
-public class BasicsItemInfo extends SubInfoType<ItemObject<?>> {
+public class BasicsItemInfo<T extends ItemObject<T>> extends SubInfoType<T> {
     @PackFileProperty(configNames = "IsVehicleKey", required = false, defaultValue = "false")
     protected boolean isKey;
     @PackFileProperty(configNames = "FuelCapacity", required = false, defaultValue = "0")
     protected int fuelCapacity;
 
-    public BasicsItemInfo(ISubInfoTypeOwner<ItemObject<?>> owner) {
+    public BasicsItemInfo(ISubInfoTypeOwner<T> owner) {
         super(owner);
     }
 
     @Override
-    public void appendTo(ItemObject<?> owner) {
+    public void appendTo(T owner) {
         owner.addSubProperty(this);
     }
 

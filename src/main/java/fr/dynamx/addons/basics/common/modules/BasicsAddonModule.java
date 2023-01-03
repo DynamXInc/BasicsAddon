@@ -1,14 +1,17 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
-import fr.dynamx.addons.basics.common.network.BasicsAddonSV;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.api.network.sync.SimulationHolder;
+import fr.dynamx.api.network.sync.v3.SynchronizationRules;
+import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariable;
 import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.network.sync.v3.DynamXSynchronizedVariables;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,22 +21,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private BasicsAddonController controller;
     private final BaseVehicleEntity<?> entity;
-
-    private boolean hasLinkedKey;
-    private boolean locked;
-
     private final BasicsAddonInfos infos;
-    private boolean sirenOn;
-    private boolean beaconsOn;
-    private boolean playKlaxon;
-    private boolean headLightsOn;
-    private boolean turnSignalLeftOn;
-    private boolean turnSignalRightOn;
+
+    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "state");
+    private final SynchronizedEntityVariable<Integer> state = new SynchronizedEntityVariable<>(SynchronizationRules.CONTROLS_TO_SPECTATORS, null, 0, "state");
+
+
 
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
@@ -66,7 +63,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     @Override
     public void updateEntity() {
-        if (playKlaxon && entity.world.isRemote && hasKlaxon())
+        if (playKlaxon() && entity.world.isRemote && hasKlaxon())
             ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, 1, 1);
         if (controller != null)
             controller.updateSiren();
@@ -80,51 +77,75 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     }
 
     public boolean playKlaxon() {
-        return playKlaxon;
+        return (this.state.get()&1)==1;
     }
 
     public void playKlaxon(boolean playKlaxon) {
-        this.playKlaxon = playKlaxon;
+        if (playKlaxon)
+            this.state.set(this.state.get()|1);
+        else
+            this.state.set(this.state.get()&~1);
+
     }
 
     public boolean isSirenOn() {
-        return sirenOn;
+        return (this.state.get()&2)==2;
     }
 
     public void setSirenOn(boolean sirenOn) {
-        this.sirenOn = sirenOn;
+        if (sirenOn){
+            this.state.set(this.state.get()|2);
+        }else{
+            this.state.set(this.state.get()&~2);
+        }
     }
 
     public boolean isBeaconsOn() {
-        return beaconsOn;
+        return (this.state.get()&4)==4;
     }
 
     public void setBeaconsOn(boolean beaconsOn) {
-        this.beaconsOn = beaconsOn;
+        if (beaconsOn){
+            this.state.set(this.state.get()|4);
+        }else{
+            this.state.set(this.state.get()&~4);
+        }
     }
 
     public boolean hasLinkedKey() {
-        return hasLinkedKey;
+        return (this.state.get()&8)==8;
     }
 
     public void setHasLinkedKey(boolean hasLinkedKey) {
-        this.hasLinkedKey = hasLinkedKey;
+        if (hasLinkedKey){
+            this.state.set(this.state.get()|8);
+        }else{
+            this.state.set(this.state.get()&~8);
+        }
     }
 
     public boolean isLocked() {
-        return locked;
+        return (this.state.get()&16)==16;
     }
 
     public void setLocked(boolean locked) {
-        this.locked = locked;
+        if (locked){
+            this.state.set(this.state.get()|16);
+        }else{
+            this.state.set(this.state.get()&~16);
+        }
     }
 
     public boolean isHeadLightsOn() {
-        return headLightsOn;
+        return (this.state.get()&32)==32;
     }
 
     public void setHeadLightsOn(boolean headLightsOn) {
-        this.headLightsOn = headLightsOn;
+        if (headLightsOn){
+            this.state.set(this.state.get()|32);
+        }else{
+            this.state.set(this.state.get()&~32);
+        }
     }
 
     public boolean hasTurnSignals() {
@@ -132,29 +153,44 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     }
 
     public boolean isTurnSignalLeftOn() {
-        return turnSignalLeftOn;
+        return (this.state.get()&64)==64;
     }
 
     public void setTurnSignalLeftOn(boolean turnSignalLeftOn) {
-        this.turnSignalLeftOn = turnSignalLeftOn;
+        System.out.println("setTurnSignalLeftOn "+turnSignalLeftOn);
+        System.out.println(isTurnSignalRightOn());
+        System.out.println(isTurnSignalLeftOn());
+        if (turnSignalLeftOn){
+            this.state.set(this.state.get()|64);
+        }else{
+            this.state.set(this.state.get()&~64);
+        }
     }
 
     public boolean isTurnSignalRightOn() {
-        return turnSignalRightOn;
+        return (this.state.get()&128)==128;
     }
 
     public void setTurnSignalRightOn(boolean turnSignalRightOn) {
-        this.turnSignalRightOn = turnSignalRightOn;
+        System.out.println("setTurnSignalRightOn "+turnSignalRightOn);
+        System.out.println(isTurnSignalRightOn());
+        System.out.println(isTurnSignalLeftOn());
+        if (turnSignalRightOn){
+            this.state.set(this.state.get()|128);
+        }else{
+            this.state.set(this.state.get()&~128);
+        }
     }
 
     public BasicsAddonInfos getInfos() {
         return infos;
     }
 
+
+
     @Override
-    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder, List<ResourceLocation> variables) {
-        if (simulationHolder.ownsControls(side))
-            variables.add(BasicsAddonSV.NAME);
+    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder) {
+        this.entity.getSynchronizer().registerVariable(DynamXSynchronizedVariables.CONTROLS, this.state);
     }
 
     @Override
@@ -172,6 +208,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             vars = (byte) (vars | 32);
         if (isLocked())
             vars = (byte) (vars | 64);
+
         tag.setByte("BasAddon.vals", vars);
     }
 
@@ -186,8 +223,8 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             setBeaconsOn((vars & 32) == 32);
             setLocked((vars & 64) == 64);
         } else { //backward compatibility
-            hasLinkedKey = tag.getBoolean("BasAdd.haskey");
-            locked = tag.getBoolean("BasAdd.locked");
+            setHasLinkedKey(tag.getBoolean("BasAdd.haskey"));
+            setLocked(tag.getBoolean("BasAdd.locked"));
         }
     }
 }
