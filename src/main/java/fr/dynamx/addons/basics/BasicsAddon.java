@@ -3,19 +3,11 @@ package fr.dynamx.addons.basics;
 import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.client.InteractionKeyController;
-import fr.dynamx.addons.basics.common.infos.*;
-import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
-import fr.dynamx.addons.basics.common.modules.FuelTankModule;
-import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
-import fr.dynamx.addons.basics.common.modules.InteractionKeyModule;
+import fr.dynamx.addons.basics.common.infos.BasicsItemInfo;
 import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.contentpack.DynamXAddon;
-import fr.dynamx.api.contentpack.registry.SubInfoTypeEntry;
-import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariableFactory;
-import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariableRegistry;
-import fr.dynamx.common.contentpack.DynamXObjectLoaders;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 import fr.dynamx.common.items.DynamXItem;
 import fr.dynamx.common.items.DynamXItemRegistry;
@@ -51,21 +43,6 @@ public class BasicsAddon {
 
     @DynamXAddon.AddonEventSubscriber
     public static void initAddon() {
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("BasicsAddon", BasicsAddonInfos.class));
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("ImmatriculationPlate", ImmatriculationPlateInfos::new, false));
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("FuelTank", FuelTankInfos::new, false));
-        DynamXObjectLoaders.WHEELED_VEHICLES.addSubInfoType(new SubInfoTypeEntry<>("SpeedDisplay", SpeedDisplayInfos::new, false));
-        DynamXObjectLoaders.ITEMS.addSubInfoType(new SubInfoTypeEntry("BasicsAddon", BasicsItemInfo.class));
-
-        //SynchronizedVariablesRegistry.addSyncVar(BasicsAddonSV.NAME, BasicsAddonSV::new);
-
-        SynchronizedEntityVariableRegistry.addSyncVar(FuelTankModule.NAME, SynchronizedEntityVariableFactory.floatSerializer);
-        SynchronizedEntityVariableRegistry.addSyncVar(InteractionKeyModule.NAME, SynchronizedEntityVariableFactory.booleanSerializer);
-        SynchronizedEntityVariableRegistry.addSyncVar(BasicsAddonModule.NAME, SynchronizedEntityVariableFactory.intSerializer);
-        SynchronizedEntityVariableRegistry.addSyncVar(ImmatriculationPlateModule.NAME, SynchronizedEntityVariableFactory.stringSerializer);
-
-
-
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }
@@ -79,7 +56,7 @@ public class BasicsAddon {
         keysItem = new DynamXItem(ID, "car_keys", new ResourceLocation(DynamXConstants.ID, "disable_rendering")) {
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-                if(VehicleKeyUtils.hasLinkedVehicle(stack)) {
+                if (VehicleKeyUtils.hasLinkedVehicle(stack)) {
                     tooltip.add(I18n.format("basadd.key.linked.to", stack.getTagCompound().getString("VehicleName")));
                 }
             }
@@ -92,11 +69,11 @@ public class BasicsAddon {
     }
 
     private static void registerJerrycan() {
-        jerrycanItem = new DynamXItem(ID, "fuel_jerrycan",  new ResourceLocation(DynamXConstants.ID, "item/jerrycan.obj")){
+        jerrycanItem = new DynamXItem(ID, "fuel_jerrycan", new ResourceLocation(DynamXConstants.ID, "item/jerrycan.obj")) {
             @Override
             public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-                if(FuelJerrycanUtils.hasFuel(stack)) {
-                    tooltip.add(I18n.format("basadd.fuel.jerrycan",  FuelJerrycanUtils.getFuel(stack)));
+                if (FuelJerrycanUtils.hasFuel(stack)) {
+                    tooltip.add(I18n.format("basadd.fuel.jerrycan", FuelJerrycanUtils.getFuel(stack)));
                 }
             }
         };

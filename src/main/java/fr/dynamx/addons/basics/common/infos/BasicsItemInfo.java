@@ -3,8 +3,14 @@ package fr.dynamx.addons.basics.common.infos;
 import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
 import fr.dynamx.api.contentpack.object.subinfo.SubInfoType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
+import fr.dynamx.api.contentpack.registry.RegisteredSubInfoType;
+import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
 
+@RegisteredSubInfoType(
+        name = "basicsitem",
+        registries = {SubInfoTypeRegistries.ITEMS}
+)
 public class BasicsItemInfo<T extends ItemObject<T>> extends SubInfoType<T> {
     @PackFileProperty(configNames = "IsVehicleKey", required = false, defaultValue = "false")
     protected boolean isKey;
@@ -22,7 +28,7 @@ public class BasicsItemInfo<T extends ItemObject<T>> extends SubInfoType<T> {
 
     @Override
     public String getName() {
-        return "BasicsItemInfos of "+getOwner().getFullName();
+        return "BasicsItemInfos of " + getOwner().getFullName();
     }
 
     public boolean isKey() {

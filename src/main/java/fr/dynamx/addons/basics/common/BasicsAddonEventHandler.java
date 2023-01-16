@@ -57,14 +57,14 @@ public class BasicsAddonEventHandler {
             if (VehicleKeyUtils.isKeyItem(event.getPlayer().getHeldItemMainhand())) {
                 ITextComponent msg;
                 if (!VehicleKeyUtils.hasLinkedVehicle(event.getPlayer().getHeldItemMainhand())) {
-                    if (!module.hasLinkedKey()) {
+                    if (module.hasLinkedKey()) {
+                        msg = new TextComponentTranslation("basadd.key.assoc.error");
+                        msg.getStyle().setColor(TextFormatting.DARK_RED);
+                    } else {
                         VehicleKeyUtils.setLinkedVehicle(event.getPlayer().getHeldItemMainhand(), event.getEntity());
                         msg = new TextComponentTranslation("basadd.key.associed", event.getEntity().getPackInfo().getName());
                         msg.getStyle().setColor(TextFormatting.DARK_BLUE);
                         module.setHasLinkedKey(true);
-                    } else {
-                        msg = new TextComponentTranslation("basadd.key.assoc.error");
-                        msg.getStyle().setColor(TextFormatting.DARK_RED);
                     }
                 } else if (event.getEntity().getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getPlayer().getHeldItemMainhand()))) {
                     module.setLocked(!module.isLocked());

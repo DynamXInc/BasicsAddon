@@ -1,31 +1,29 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.FuelTankController;
 import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.api.entities.VehicleEntityProperties;
-import fr.dynamx.api.entities.modules.IEngineModule;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
-import fr.dynamx.api.network.sync.SimulationHolder;
-import fr.dynamx.api.network.sync.v3.SynchronizationRules;
-import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariable;
+import fr.dynamx.api.network.sync.EntityVariable;
+import fr.dynamx.api.network.sync.SynchronizationRules;
+import fr.dynamx.api.network.sync.SynchronizedEntityVariable;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.EngineModule;
+import fr.dynamx.common.entities.modules.CarEngineModule;
 import fr.dynamx.common.entities.vehicles.CarEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
+@SynchronizedEntityVariable.SynchronizedPhysicsModule
 public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private final BaseVehicleEntity<?> entity;
     private final FuelTankInfos info;
     private FuelTankController controller;
-    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "fuel");
-    private final SynchronizedEntityVariable<Float> fuel= new SynchronizedEntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, null, Float.MAX_VALUE, "fuel");
+    @SynchronizedEntityVariable(name = "fuel")
+    private final EntityVariable<Float> fuel = new EntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, Float.MAX_VALUE);
 
     public FuelTankModule(BaseVehicleEntity<?> entity, FuelTankInfos info) {
         this.info = info;
@@ -55,22 +53,16 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
         return controller;
     }
 
-
-    @Override
-    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder) {
-        entity.getSynchronizer().registerVariable(NAME,fuel);
-    }
-
     @Override
     public void updateEntity() {
         if (entity instanceof CarEntity && getFuel() > 0) {
             CarEntity<?> carEntity = (CarEntity<?>) entity;
-            IEngineModule<?> engine = carEntity.getEngine();
-            if (engine instanceof EngineModule) {
+            CarEngineModule engine = carEntity.getModuleByType(CarEngineModule.class);
+            if (engine != null) {
                 //Rpm is capped between 0 and 1
-                float RPM = ((EngineModule) engine).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS);
+                float RPM = engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS);
                 setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() / 120) *
-                        ((((EngineModule) engine).isAccelerating() ? 1.1 : 0.9)))));
+                        ((engine.isAccelerating() ? 1.1 : 0.9)))));
             }
         }
     }

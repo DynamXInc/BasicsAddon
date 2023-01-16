@@ -1,40 +1,31 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
-import fr.dynamx.addons.basics.utils.TextUtils;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
-import fr.dynamx.api.network.sync.SimulationHolder;
-import fr.dynamx.api.network.sync.v3.SynchronizationRules;
-import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariable;
-import fr.dynamx.api.network.sync.v3.SynchronizedEntityVariableFactory;
-import fr.dynamx.client.renders.RenderPhysicsEntity;
+import fr.dynamx.api.network.sync.EntityVariable;
+import fr.dynamx.api.network.sync.SynchronizationRules;
+import fr.dynamx.api.network.sync.SynchronizedEntityVariable;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IDrawableModule<BaseVehicleEntity<?>> {
+@SynchronizedEntityVariable.SynchronizedPhysicsModule
+public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>> {
 
     private final List<ImmatriculationPlateInfos> info = new ArrayList<>();
     private final BaseVehicleEntity<?> entity;
-    public static final ResourceLocation NAME = new ResourceLocation(BasicsAddon.ID, "plate");
-    private final SynchronizedEntityVariable<String> plate = new SynchronizedEntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, SynchronizedEntityVariableFactory.stringSerializer, "", "plate");
 
-    public ImmatriculationPlateModule(BaseVehicleEntity<?> entity,ImmatriculationPlateInfos info) {
-        this.info.add(info);;
+    @SynchronizedEntityVariable(name = "plate")
+    private final EntityVariable<String> plate = new EntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, "");
+
+    public ImmatriculationPlateModule(BaseVehicleEntity<?> entity, ImmatriculationPlateInfos info) {
+        this.info.add(info);
         this.entity = entity;
-        // Thanks to Kerlan
-        /*String firstNumber = RandomStringUtils.random(2, 97, 122, true, false);
-        String secondNumber = RandomStringUtils.randomNumeric(3);
-        String thirdNumber = RandomStringUtils.random(2, 97, 122, true, false);*/
 
         String pattern = info.getPattern();
         StringBuilder builder = new StringBuilder();
@@ -66,14 +57,6 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
 
     public void setPlate(String plate) {
         this.plate.set(plate);
-
-    }
-
-
-
-    @Override
-    public void addSynchronizedVariables(Side side, SimulationHolder simulationHolder) {
-        entity.getSynchronizer().registerVariable(NAME, plate);
     }
 
     @Override
@@ -88,18 +71,4 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
         }
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void drawParts(RenderPhysicsEntity<?> render, float partialTicks, BaseVehicleEntity<?> entity) {
-        for (ImmatriculationPlateInfos immatriculationPlateInfos : getInfo()) {
-            TextUtils.drawText(
-                    immatriculationPlateInfos.getPosition(),
-                    immatriculationPlateInfos.getScale(),
-                    immatriculationPlateInfos.getRotation(),
-                    getPlate(),
-                    immatriculationPlateInfos.getColor(),
-                    immatriculationPlateInfos.getFont(),
-                    immatriculationPlateInfos.getLineSpacing());
-        }
-    }
 }

@@ -2,15 +2,26 @@ package fr.dynamx.addons.basics.common.infos;
 
 import com.jme3.math.Vector3f;
 import fr.dynamx.addons.basics.BasicsAddon;
-import fr.dynamx.addons.basics.common.modules.SpeedDisplayModule;
+import fr.dynamx.addons.basics.utils.TextUtils;
+import fr.dynamx.addons.basics.utils.VehicleUtils;
 import fr.dynamx.api.contentpack.object.part.BasePart;
+import fr.dynamx.api.contentpack.object.part.IDrawablePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
-import fr.dynamx.api.entities.modules.ModuleListBuilder;
+import fr.dynamx.api.contentpack.registry.RegisteredSubInfoType;
+import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
+import fr.dynamx.client.renders.RenderPhysicsEntity;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
-public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> {
+import javax.annotation.Nullable;
+
+@RegisteredSubInfoType(
+        name = "SpeedDisplay",
+        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
+        strictName = false
+)
+public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation;
 
@@ -18,7 +29,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> {
     protected String font = BasicsAddon.ID + ":e";
 
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
-    protected int[] color = new int[] {10, 10, 10};
+    protected int[] color = new int[]{10, 10, 10};
 
     public SpeedDisplayInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName);
@@ -42,16 +53,23 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> {
     }
 
     @Override
-    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
-        if (moduleListBuilder.hasModuleOfClass(SpeedDisplayModule.class)) { //Module yet added
-            moduleListBuilder.getByClass(SpeedDisplayModule.class).addInformation(this);
-        } else { //Module not yet added
-            moduleListBuilder.add(new SpeedDisplayModule(this));
+    public String getName() {
+        return "PartShape named " + getPartName() + " in " + getOwner().getName();
+    }
+
+    @Override
+    public void drawParts(@Nullable BaseVehicleEntity<?> entity, RenderPhysicsEntity<?> renderPhysicsEntity, ModularVehicleInfo modularVehicleInfo, byte b, float v) {
+        if (entity == null) {
+            return;
+        }
+        String speed = "" + VehicleUtils.getSpeed(entity);
+        for (SpeedDisplayInfos info : modularVehicleInfo.getPartsByType(SpeedDisplayInfos.class)) {
+            TextUtils.drawText(info.getPosition(), info.getScale(), info.getRotation(), speed, info.getColor(), info.getFont());
         }
     }
 
     @Override
-    public String getName() {
-        return "PartShape named " + getPartName() + " in " + getOwner().getName();
+    public String[] getRenderedParts() {
+        return new String[0];
     }
 }
