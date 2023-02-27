@@ -7,7 +7,8 @@ import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.client.handlers.hud.CarController;
-import fr.dynamx.common.entities.modules.EngineModule;
+import fr.dynamx.common.entities.modules.BasicEngineModule;
+import fr.dynamx.common.entities.modules.CarEngineModule;
 import fr.dynamx.common.entities.modules.VehicleLightsModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -25,7 +26,7 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void renderLights(VehicleEntityEvent.Render event) {
-        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS) {
+        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS && event.getEntity() != null) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
                 VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
@@ -47,7 +48,7 @@ public class ClientEventHandler {
                         lights.setLightOn(module.getInfos().turnRightLightSource, module.isTurnSignalRightOn());
                     }
 
-                    EngineModule engine = event.getEntity().getModuleByType(EngineModule.class);
+                    BasicEngineModule engine = event.getEntity().getModuleByType(CarEngineModule.class);
                     if (engine != null) {
                         if (engine.isReversing()) {
                             if (engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR) == -1) {

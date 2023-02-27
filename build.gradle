@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0.2-for-DynamX-3.3"
+version = "1.0.5-for-DynamX-4.0.0"
 group = "fr.dynamx.addons.basics" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "BasicsAddon"
 
@@ -46,8 +46,8 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "fr.dynamx:DynamX:3.3.1-rd11-opt"
-    compile "fr.aym.acsguis:ACsGuis:1.2.0-4"
+    deobfCompile "fr.dynamx:DynamX:4.0.0-beta-11"
+    compile "fr.aym.acsguis:ACsGuis:1.2.5"
 }
 
 

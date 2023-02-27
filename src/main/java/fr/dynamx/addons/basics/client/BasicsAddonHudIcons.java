@@ -8,10 +8,9 @@ import fr.aym.acsguis.cssengine.style.EnumCssStyleProperties;
 import fr.aym.acsguis.utils.GuiTextureSprite;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
-import fr.dynamx.api.entities.IModuleContainer;
 import fr.dynamx.client.handlers.hud.HudIcons;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.EngineModule;
+import fr.dynamx.common.entities.modules.CarEngineModule;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collection;
@@ -44,7 +43,9 @@ public class BasicsAddonHudIcons implements HudIcons {
                 return module.isHeadLightsOn();
             case 1:
                 //TODO CLEAN
-                return ((EngineModule) ((IModuleContainer.IEngineContainer) entity).getEngine()).getSpeedLimit() != Integer.MAX_VALUE;
+                if (entity.getModuleByType(CarEngineModule.class) != null) {
+                    return entity.getModuleByType(CarEngineModule.class).getSpeedLimit() != Integer.MAX_VALUE;
+                }
             case 3:
                 //TODO THIS ICON
                 return false;

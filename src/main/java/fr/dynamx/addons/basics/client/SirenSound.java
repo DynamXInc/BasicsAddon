@@ -2,7 +2,7 @@ package fr.dynamx.addons.basics.client;
 
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.audio.IDynamXSound;
-import fr.dynamx.api.audio.IDynamXSoundHandler;
+import fr.dynamx.client.sound.DynamXSoundHandler;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
 public class SirenSound implements IDynamXSound {
@@ -15,7 +15,7 @@ public class SirenSound implements IDynamXSound {
     }
 
     @Override
-    public void update(IDynamXSoundHandler handler) {
+    public void update(DynamXSoundHandler handler) {
         handler.setPosition(this, (float) entity.posX, (float) entity.posY, (float) entity.posZ);
 
         if (entity.isDead || !module.isSirenOn()) {
@@ -35,5 +35,10 @@ public class SirenSound implements IDynamXSound {
     @Override
     public boolean tryStop() {
         return true;
+    }
+
+    @Override
+    public float getVolume() {
+        return 1.0F;
     }
 }
