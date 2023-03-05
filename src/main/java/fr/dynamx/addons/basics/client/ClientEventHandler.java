@@ -9,7 +9,7 @@ import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.client.handlers.hud.CarController;
 import fr.dynamx.common.entities.modules.BasicEngineModule;
 import fr.dynamx.common.entities.modules.CarEngineModule;
-import fr.dynamx.common.entities.modules.VehicleLightsModule;
+import fr.dynamx.common.entities.modules.LightsModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +29,7 @@ public class ClientEventHandler {
         if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS && event.getEntity() != null) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
-                VehicleLightsModule lights = event.getEntity().getModuleByType(VehicleLightsModule.class);
+                LightsModule lights = event.getEntity().getModuleByType(LightsModule.class);
                 if (lights != null && module.getInfos() != null) {
                     lights.setLightOn(module.getInfos().sirenLightSource, module.isBeaconsOn() || module.isSirenOn());
 
@@ -77,7 +77,7 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void updateVehiclecontroller(VehicleEntityEvent.ControllerUpdate event) {
+    public static void updateVehicleController(VehicleEntityEvent.ControllerUpdate event) {
         if (event.getController() instanceof CarController) {
             FuelTankModule module = event.getEntity().getModuleByType(FuelTankModule.class);
             if (module != null && module.getFuel() == 0) {

@@ -11,6 +11,7 @@ import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.client.renders.RenderPhysicsEntity;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.PackPhysicsEntity;
 
 import javax.annotation.Nullable;
 
@@ -75,11 +76,11 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> impl
     }
 
     @Override
-    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
-        if (moduleListBuilder.hasModuleOfClass(ImmatriculationPlateModule.class)) { //Module yet added
-            moduleListBuilder.getByClass(ImmatriculationPlateModule.class).addInformation(this);
+    public void addModules(PackPhysicsEntity<?, ?> entity, ModuleListBuilder modules) {
+        if (modules.hasModuleOfClass(ImmatriculationPlateModule.class)) { //Module yet added
+            modules.getByClass(ImmatriculationPlateModule.class).addInformation(this);
         } else { //Module not yet added
-            moduleListBuilder.add(new ImmatriculationPlateModule(entity, this));
+            modules.add(new ImmatriculationPlateModule(this));
         }
     }
 

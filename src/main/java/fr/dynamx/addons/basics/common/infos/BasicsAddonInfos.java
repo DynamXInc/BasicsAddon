@@ -6,9 +6,7 @@ import fr.dynamx.api.contentpack.object.subinfo.ISubInfoTypeOwner;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.contentpack.registry.RegisteredSubInfoType;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
-import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
-import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.RegistryNameSetter;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -76,12 +74,6 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
     public ModularVehicleInfo getOwner() {
         return owner;
     }
-
-    @Override
-    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder modules) {
-        ISubInfoType.super.addModules(entity, modules);
-    }
-
 
     @Override
     public String getName() {

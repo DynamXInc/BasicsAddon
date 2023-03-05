@@ -9,6 +9,7 @@ import fr.dynamx.api.network.sync.EntityVariable;
 import fr.dynamx.api.network.sync.SynchronizationRules;
 import fr.dynamx.api.network.sync.SynchronizedEntityVariable;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.entities.modules.CarEngineModule;
 import fr.dynamx.common.entities.vehicles.CarEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
@@ -19,13 +20,13 @@ import javax.annotation.Nullable;
 
 @SynchronizedEntityVariable.SynchronizedPhysicsModule
 public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
-    private final BaseVehicleEntity<?> entity;
+    private final PackPhysicsEntity<?, ?> entity;
     private final FuelTankInfos info;
     private FuelTankController controller;
     @SynchronizedEntityVariable(name = "fuel")
     private final EntityVariable<Float> fuel = new EntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, Float.MAX_VALUE);
 
-    public FuelTankModule(BaseVehicleEntity<?> entity, FuelTankInfos info) {
+    public FuelTankModule(PackPhysicsEntity<?, ?> entity, FuelTankInfos info) {
         this.info = info;
         this.entity = entity;
         if (entity.world.isRemote) {

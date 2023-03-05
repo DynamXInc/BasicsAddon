@@ -11,6 +11,7 @@ import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.items.DynamXItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -62,11 +63,11 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     }
 
     @Override
-    public void addModules(BaseVehicleEntity<?> entity, ModuleListBuilder moduleListBuilder) {
-        if (moduleListBuilder.hasModuleOfClass(FuelTankModule.class)) { //Module yet added
-            throw new IllegalStateException("More than one fuel tank infos (" + getFullName() + ") added to " + entity.getPackInfo().getFullName() + " " + entity);
+    public void addModules(PackPhysicsEntity<?, ?> entity, ModuleListBuilder modules) {
+        if (modules.hasModuleOfClass(FuelTankModule.class)) { //Module yet added
+            throw new IllegalStateException("More than one fuel tank infos (" + getFullName() + ") added to " + entity.getPackInfo().getName() + " " + entity);
         } else { //Module not yet added
-            moduleListBuilder.add(new FuelTankModule(entity, this));
+            modules.add(new FuelTankModule(entity, this));
         }
     }
 

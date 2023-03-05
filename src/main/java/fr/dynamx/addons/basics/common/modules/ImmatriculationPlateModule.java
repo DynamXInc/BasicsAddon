@@ -6,6 +6,7 @@ import fr.dynamx.api.network.sync.EntityVariable;
 import fr.dynamx.api.network.sync.SynchronizationRules;
 import fr.dynamx.api.network.sync.SynchronizedEntityVariable;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -18,14 +19,12 @@ import java.util.Random;
 public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>> {
 
     private final List<ImmatriculationPlateInfos> info = new ArrayList<>();
-    private final BaseVehicleEntity<?> entity;
 
     @SynchronizedEntityVariable(name = "plate")
     private final EntityVariable<String> plate = new EntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, "");
 
-    public ImmatriculationPlateModule(BaseVehicleEntity<?> entity, ImmatriculationPlateInfos info) {
+    public ImmatriculationPlateModule(ImmatriculationPlateInfos info) {
         this.info.add(info);
-        this.entity = entity;
 
         String pattern = info.getPattern();
         StringBuilder builder = new StringBuilder();
