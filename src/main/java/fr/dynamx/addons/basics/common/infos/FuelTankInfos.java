@@ -65,7 +65,7 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
     @Override
     public void addModules(PackPhysicsEntity<?, ?> entity, ModuleListBuilder modules) {
         if (modules.hasModuleOfClass(FuelTankModule.class)) { //Module yet added
-            throw new IllegalStateException("More than one fuel tank infos (" + getFullName() + ") added to " + entity.getPackInfo().getName() + " " + entity);
+            throw new IllegalStateException("More than one fuel tank infos (" + getFullName() + ") added to " + entity.getPackInfo().getFullName() + " " + entity);
         } else { //Module not yet added
             modules.add(new FuelTankModule(entity, this));
         }
