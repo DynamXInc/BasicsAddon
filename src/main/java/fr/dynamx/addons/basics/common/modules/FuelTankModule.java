@@ -1,5 +1,6 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.FuelTankController;
 import fr.dynamx.addons.basics.common.infos.FuelTankInfos;
 import fr.dynamx.api.entities.VehicleEntityProperties;
@@ -18,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@SynchronizedEntityVariable.SynchronizedPhysicsModule
+@SynchronizedEntityVariable.SynchronizedPhysicsModule(modid = BasicsAddon.ID)
 public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private final PackPhysicsEntity<?, ?> entity;
     private final FuelTankInfos info;

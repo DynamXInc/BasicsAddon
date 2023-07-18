@@ -1,12 +1,11 @@
 package fr.dynamx.addons.basics.common.modules;
 
-import fr.dynamx.addons.basics.common.infos.ImmatriculationPlateInfos;
+import fr.dynamx.addons.basics.BasicsAddon;
+import fr.dynamx.addons.basics.common.infos.LicensePlateInfos;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.network.sync.EntityVariable;
 import fr.dynamx.api.network.sync.SynchronizationRules;
 import fr.dynamx.api.network.sync.SynchronizedEntityVariable;
-import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -15,15 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@SynchronizedEntityVariable.SynchronizedPhysicsModule
-public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>> {
+@SynchronizedEntityVariable.SynchronizedPhysicsModule(modid = BasicsAddon.ID)
+public class LicensePlateModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>> {
 
-    private final List<ImmatriculationPlateInfos> info = new ArrayList<>();
+    private final List<LicensePlateInfos> info = new ArrayList<>();
 
     @SynchronizedEntityVariable(name = "plate")
     private final EntityVariable<String> plate = new EntityVariable<>(SynchronizationRules.SERVER_TO_CLIENTS, "");
 
-    public ImmatriculationPlateModule(ImmatriculationPlateInfos info) {
+    public LicensePlateModule(LicensePlateInfos info) {
         this.info.add(info);
 
         String pattern = info.getPattern();
@@ -42,11 +41,11 @@ public class ImmatriculationPlateModule implements IPhysicsModule<AbstractEntity
         setPlate(builder.toString());
     }
 
-    public List<ImmatriculationPlateInfos> getInfo() {
+    public List<LicensePlateInfos> getInfo() {
         return info;
     }
 
-    public void addInformation(ImmatriculationPlateInfos info) {
+    public void addInformation(LicensePlateInfos info) {
         this.info.add(info);
     }
 

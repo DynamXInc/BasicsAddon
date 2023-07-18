@@ -1,5 +1,6 @@
 package fr.dynamx.addons.basics.common.modules;
 
+import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.InteractionKeyController;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
@@ -14,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-@SynchronizedEntityVariable.SynchronizedPhysicsModule
+@SynchronizedEntityVariable.SynchronizedPhysicsModule(modid = BasicsAddon.ID)
 public class InteractionKeyModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private final BaseVehicleEntity<?> entity;
     private InteractionKeyController controller;

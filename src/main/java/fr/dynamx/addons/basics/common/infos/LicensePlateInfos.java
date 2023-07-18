@@ -2,7 +2,7 @@ package fr.dynamx.addons.basics.common.infos;
 
 import com.jme3.math.Vector3f;
 import fr.dynamx.addons.basics.BasicsAddon;
-import fr.dynamx.addons.basics.common.modules.ImmatriculationPlateModule;
+import fr.dynamx.addons.basics.common.modules.LicensePlateModule;
 import fr.dynamx.addons.basics.utils.TextUtils;
 import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.object.part.IDrawablePart;
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
         registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
         strictName = false
 )
-public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {
+public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation = new Vector3f();
 
@@ -46,7 +46,7 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> impl
         return null;
     };
 
-    public ImmatriculationPlateInfos(ModularVehicleInfo owner, String partName) {
+    public LicensePlateInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName);
     }
 
@@ -77,10 +77,10 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> impl
 
     @Override
     public void addModules(PackPhysicsEntity<?, ?> entity, ModuleListBuilder modules) {
-        if (modules.hasModuleOfClass(ImmatriculationPlateModule.class)) { //Module yet added
-            modules.getByClass(ImmatriculationPlateModule.class).addInformation(this);
+        if (modules.hasModuleOfClass(LicensePlateModule.class)) { //Module yet added
+            modules.getByClass(LicensePlateModule.class).addInformation(this);
         } else { //Module not yet added
-            modules.add(new ImmatriculationPlateModule(this));
+            modules.add(new LicensePlateModule(this));
         }
     }
 
@@ -94,16 +94,16 @@ public class ImmatriculationPlateInfos extends BasePart<ModularVehicleInfo> impl
         if (baseVehicleEntity == null) {
             return;
         }
-        ImmatriculationPlateModule module = baseVehicleEntity.getModuleByType(ImmatriculationPlateModule.class);
-        for (ImmatriculationPlateInfos immatriculationPlateInfos : modularVehicleInfo.getPartsByType(ImmatriculationPlateInfos.class)) {
+        LicensePlateModule module = baseVehicleEntity.getModuleByType(LicensePlateModule.class);
+        for (LicensePlateInfos licensePlateInfos : modularVehicleInfo.getPartsByType(LicensePlateInfos.class)) {
             TextUtils.drawText(
-                    immatriculationPlateInfos.getPosition(),
-                    immatriculationPlateInfos.getScale(),
-                    immatriculationPlateInfos.getRotation(),
+                    licensePlateInfos.getPosition(),
+                    licensePlateInfos.getScale(),
+                    licensePlateInfos.getRotation(),
                     module.getPlate(),
-                    immatriculationPlateInfos.getColor(),
-                    immatriculationPlateInfos.getFont(),
-                    immatriculationPlateInfos.getLineSpacing());
+                    licensePlateInfos.getColor(),
+                    licensePlateInfos.getFont(),
+                    licensePlateInfos.getLineSpacing());
         }
     }
 
