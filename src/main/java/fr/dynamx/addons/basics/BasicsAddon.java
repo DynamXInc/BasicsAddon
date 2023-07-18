@@ -78,7 +78,6 @@ public class BasicsAddon {
             }
         };
         jerrycanItem.setCreativeTab(DynamXItemRegistry.objectTab);
-        jerrycanItem.getInfo().getItemTranslate().set(12, 20, 0);
         ItemObject<?> info = (ItemObject<?>) jerrycanItem.getInfo();
         BasicsItemInfo bas = new BasicsItemInfo(info);
         bas.setFuelCapacity(60);
