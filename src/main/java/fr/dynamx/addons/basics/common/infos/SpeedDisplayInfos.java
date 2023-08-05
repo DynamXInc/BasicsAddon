@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 @RegisteredSubInfoType(
         name = "SpeedDisplay",
-        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
+        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES, SubInfoTypeRegistries.HELICOPTER},
         strictName = false
 )
 public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {

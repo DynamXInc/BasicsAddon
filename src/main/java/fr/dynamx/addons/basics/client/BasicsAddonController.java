@@ -65,7 +65,6 @@ public class BasicsAddonController implements IVehicleController {
 
     @SideOnly(Side.CLIENT)
     public void updateSiren() {
-
         if (module.isSirenOn() && module.hasSirenSound()) {
             if (!ClientProxy.SOUND_HANDLER.getPlayingSounds().contains(sirenSound)) {
                 ClientProxy.SOUND_HANDLER.playStreamingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), sirenSound);

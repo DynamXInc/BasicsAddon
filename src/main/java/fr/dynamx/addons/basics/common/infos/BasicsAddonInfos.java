@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 
 @RegisteredSubInfoType(
         name = "BasicsAddon",
-        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
+        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES, SubInfoTypeRegistries.HELICOPTER},
         strictName = false
 )
 public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {

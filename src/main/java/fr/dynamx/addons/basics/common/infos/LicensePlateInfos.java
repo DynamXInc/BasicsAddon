@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 @RegisteredSubInfoType(
         name = "ImmatriculationPlate",
-        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
+        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES, SubInfoTypeRegistries.HELICOPTER},
         strictName = false
 )
 public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {
