@@ -2,7 +2,6 @@ package fr.dynamx.addons.basics.common.modules;
 
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
-import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
 import fr.dynamx.api.entities.modules.IPhysicsModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
@@ -34,7 +33,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         this.entity = entity;
         this.infos = infos;
         if (entity.world.isRemote) {
-            controller = new BasicsAddonController(entity, this, fr.dynamx.addons.basics.BasicsAddon.betterLightsLoaded ? new LightHolder() : null);
+            controller = new BasicsAddonController(entity, this);
         }
     }
 

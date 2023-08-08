@@ -35,7 +35,6 @@ import java.util.Map;
 @DynamXAddon(modid = BasicsAddon.ID, name = "DynamX Basics", version = "1.0.7")
 public class BasicsAddon {
     public static final String ID = "dynamx_basics";
-    public static boolean betterLightsLoaded;
     public static final Map<String, SoundEvent> soundMap = new HashMap<>();
 
     public static DynamXItem<?> keysItem;
@@ -46,8 +45,6 @@ public class BasicsAddon {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             setupClient();
         }
-        betterLightsLoaded = Loader.isModLoaded("better_lights");
-
         registerKey();
         registerJerrycan();
     }

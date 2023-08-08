@@ -2,7 +2,6 @@ package fr.dynamx.addons.basics.client;
 
 
 import fr.aym.acsguis.component.GuiComponent;
-import fr.dynamx.addons.basics.common.LightHolder;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.client.ClientProxy;
@@ -43,7 +42,7 @@ public class BasicsAddonController implements IVehicleController {
     private byte klaxonHullDown;
     private boolean warningsOn;
 
-    public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module, LightHolder lights) {
+    public BasicsAddonController(BaseVehicleEntity<?> entity, BasicsAddonModule module) {
         this.entity = entity;
         this.module = module;
         this.sirenSound = new SirenSound(entity, module);
@@ -96,7 +95,7 @@ public class BasicsAddonController implements IVehicleController {
         }
         if (module.hasTurnSignals()) {
             if (turnLeft.isPressed()) {
-                System.out.println(module.isTurnSignalLeftOn() +" wtf "+module.isTurnSignalRightOn());
+                System.out.println(module.isTurnSignalLeftOn() + " wtf " + module.isTurnSignalRightOn());
                 if (!warningsOn)
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
                 else
