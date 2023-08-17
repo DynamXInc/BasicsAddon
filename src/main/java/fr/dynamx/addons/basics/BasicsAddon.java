@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mod(modid = BasicsAddon.ID, version = "1.0.7", name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
+@Mod(modid = BasicsAddon.ID, version = "1.0.8", name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
 @DynamXAddon(modid = BasicsAddon.ID, name = "DynamX Basics", version = "1.0.7")
 public class BasicsAddon {
     public static final String ID = "dynamx_basics";

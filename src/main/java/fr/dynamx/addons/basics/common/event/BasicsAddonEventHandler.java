@@ -1,4 +1,4 @@
-package fr.dynamx.addons.basics.common;
+package fr.dynamx.addons.basics.common.event;
 
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.infos.BasicsAddonInfos;
@@ -11,9 +11,11 @@ import fr.dynamx.common.contentpack.parts.PartDoor;
 import fr.dynamx.common.contentpack.parts.PartSeat;
 import fr.dynamx.common.contentpack.parts.PartStorage;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,6 +40,10 @@ public class BasicsAddonEventHandler {
             if (VehicleKeyUtils.isKeyItem(event.getItemStack()) && entity.getControllingPassenger() == event.getEntity()) {
                 if (VehicleKeyUtils.hasLinkedVehicle(event.getItemStack())) {
                     if (entity.getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getItemStack()))) {
+                        if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), entity, event.getEntityPlayer(), module.isLocked() ?
+                                BasicsAddonEvent.EventLockVehicle.EnumLockAction.UNLOCK : BasicsAddonEvent.EventLockVehicle.EnumLockAction.LOCK))) {
+                            return;
+                        }
                         module.setLocked(!module.isLocked());
                     } else {
                         ITextComponent msg = new TextComponentTranslation("basadd.key.invalid");
@@ -57,6 +63,9 @@ public class BasicsAddonEventHandler {
             if (VehicleKeyUtils.isKeyItem(event.getPlayer().getHeldItemMainhand())) {
                 ITextComponent msg;
                 if (!VehicleKeyUtils.hasLinkedVehicle(event.getPlayer().getHeldItemMainhand())) {
+                    if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), BasicsAddonEvent.EventLockVehicle.EnumLockAction.ASSOCIATE))) {
+                        return;
+                    }
                     if (module.hasLinkedKey()) {
                         msg = new TextComponentTranslation("basadd.key.assoc.error");
                         msg.getStyle().setColor(TextFormatting.DARK_RED);
@@ -67,6 +76,10 @@ public class BasicsAddonEventHandler {
                         module.setHasLinkedKey(true);
                     }
                 } else if (event.getEntity().getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getPlayer().getHeldItemMainhand()))) {
+                    if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), module.isLocked() ?
+                            BasicsAddonEvent.EventLockVehicle.EnumLockAction.UNLOCK : BasicsAddonEvent.EventLockVehicle.EnumLockAction.LOCK))) {
+                        return;
+                    }
                     module.setLocked(!module.isLocked());
                     if (module.isLocked()) {
                         msg = new TextComponentTranslation("basadd.key.locked");

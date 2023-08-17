@@ -23,14 +23,15 @@ public class VehicleKeyUtils {
     }
 
     public static void setLinkedVehicle(ItemStack key, BaseVehicleEntity<?> vehicle) {
-        if (!key.hasTagCompound()) {
+        if (!key.hasTagCompound())
             key.setTagCompound(new NBTTagCompound());
-        }
         key.getTagCompound().setString("VehicleId", vehicle.getPersistentID().toString());
         key.getTagCompound().setString("VehicleName", vehicle.getPackInfo().getName());
     }
 
     public static UUID getLinkedVehicle(ItemStack key) {
+        if (!key.hasTagCompound())
+            return null;
         return UUID.fromString(key.getTagCompound().getString("VehicleId"));
     }
 

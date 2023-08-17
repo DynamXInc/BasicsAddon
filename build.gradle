@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0.7-for-DynamX-4.0.0-b21"
+version = "1.0.8-for-DynamX-4.0.0-b21"
 group = "fr.dynamx.addons.basics" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "BasicsAddon"
 
