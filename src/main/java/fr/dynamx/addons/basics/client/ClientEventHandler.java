@@ -7,9 +7,9 @@ import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.client.handlers.hud.CarController;
+import fr.dynamx.common.entities.modules.AbstractLightsModule;
 import fr.dynamx.common.entities.modules.BasicEngineModule;
 import fr.dynamx.common.entities.modules.CarEngineModule;
-import fr.dynamx.common.entities.modules.LightsModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +29,7 @@ public class ClientEventHandler {
         if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS && event.getEntity() != null) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
-                LightsModule lights = event.getEntity().getModuleByType(LightsModule.class);
+                AbstractLightsModule lights = event.getEntity().getModuleByType(AbstractLightsModule.class);
                 if (lights != null && module.getInfos() != null) {
                     lights.setLightOn(module.getInfos().sirenLightSource, module.isBeaconsOn() || module.isSirenOn());
 
@@ -40,6 +40,14 @@ public class ClientEventHandler {
                         } else {
                             lights.setLightOn(module.getInfos().headLightsSource, false);
                             lights.setLightOn(module.getInfos().backLightsSource, false);
+                        }
+                    }
+
+                    if (module.hasDRL()) {
+                        if (module.isDRLOn()) {
+                            lights.setLightOn(module.getInfos().drLightSource, true);
+                        } else {
+                            lights.setLightOn(module.getInfos().drLightSource, false);
                         }
                     }
 

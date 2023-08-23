@@ -3,12 +3,18 @@ package fr.dynamx.addons.basics.client;
 
 import fr.aym.acsguis.component.GuiComponent;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
+import fr.dynamx.api.audio.EnumSoundState;
+import fr.dynamx.api.audio.IDynamXSound;
 import fr.dynamx.api.entities.modules.IVehicleController;
 import fr.dynamx.client.ClientProxy;
+import fr.dynamx.client.handlers.ClientEventHandler;
+import fr.dynamx.client.sound.VehicleSound;
 import fr.dynamx.common.entities.BaseVehicleEntity;
+import fr.dynamx.common.entities.modules.CarEngineModule;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -32,6 +38,8 @@ public class BasicsAddonController implements IVehicleController {
     public static final KeyBinding turnRight = new KeyBinding("TurnRight", Keyboard.KEY_RIGHT, "DynamX basics");
     @SideOnly(Side.CLIENT)
     public static final KeyBinding warnings = new KeyBinding("Warnings", Keyboard.KEY_DOWN, "DynamX basics");
+
+    public static IDynamXSound indicatorsSound;
 
     private final BaseVehicleEntity<?> entity;
     private final BasicsAddonModule module;
@@ -112,6 +120,32 @@ public class BasicsAddonController implements IVehicleController {
                 module.setTurnSignalLeftOn(warningsOn);
                 module.setTurnSignalRightOn(warningsOn);
             }
+            String sound = module.getInfos().indicatorsSound;
+            if (!StringUtils.isNullOrEmpty(sound) && (module.isTurnSignalLeftOn() || module.isTurnSignalRightOn()) && indicatorsSound == null) {
+                indicatorsSound = new VehicleSound(sound, entity) {
+                    @Override
+                    public boolean isSoundActive() {
+                        return ClientEventHandler.MC.player.getRidingEntity() == entity && (module.isTurnSignalLeftOn() || module.isTurnSignalRightOn());
+                    }
+
+                    @Override
+                    public void setState(EnumSoundState state) {
+                        super.setState(state);
+                        if (state == EnumSoundState.STOPPING)
+                            ClientProxy.SOUND_HANDLER.stopSound(this);
+                    }
+
+                    @Override
+                    public boolean tryStop() {
+                        indicatorsSound = null;
+                        return true;
+                    }
+                };
+                ClientProxy.SOUND_HANDLER.playStreamingSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), indicatorsSound);
+            }
+        }
+        if (module.hasDRL()) {
+            module.setDRLOn(entity.getModuleByType(CarEngineModule.class).isEngineStarted());
         }
     }
 

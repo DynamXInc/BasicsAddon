@@ -12,6 +12,7 @@ import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import fr.dynamx.utils.optimization.Vector3fPool;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,6 +52,10 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
 
     public boolean hasHeadLights() {
         return infos != null && infos.headLightsSource != 0;
+    }
+
+    public boolean hasDRL() {
+        return infos != null && infos.drLightSource != 0;
     }
 
     @Override
@@ -121,6 +126,14 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         state.set(headLightsOn ? state.get() | 32 : state.get() & ~32);
     }
 
+    public boolean isDRLOn() {
+        return (state.get() & 256) == 256;
+    }
+
+    public void setDRLOn(boolean drlOn) {
+        state.set(drlOn ? state.get() | 256 : state.get() & ~256);
+    }
+
     public boolean hasTurnSignals() {
         return infos != null && infos.turnLeftLightSource != 0 && infos.turnRightLightSource != 0;
     }
@@ -160,6 +173,8 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             vars = (byte) (vars | 32);
         if (isLocked())
             vars = (byte) (vars | 64);
+        if (isDRLOn())
+            vars = (byte) (vars | 256);
 
         tag.setByte("BasAddon.vals", vars);
     }
@@ -174,9 +189,20 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             setTurnSignalRightOn((vars & 16) == 16);
             setBeaconsOn((vars & 32) == 32);
             setLocked((vars & 64) == 64);
+            setDRLOn((vars & 256) == 256);
         } else { //backward compatibility
             setHasLinkedKey(tag.getBoolean("BasAdd.haskey"));
             setLocked(tag.getBoolean("BasAdd.locked"));
         }
+    }
+
+    @Override
+    public void addPassenger(Entity passenger) {
+        IPhysicsModule.super.addPassenger(passenger);
+    }
+
+    @Override
+    public void removePassenger(Entity passenger) {
+        IPhysicsModule.super.removePassenger(passenger);
     }
 }

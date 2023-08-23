@@ -31,6 +31,8 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
     public float sirenDistance = 50;
     @PackFileProperty(configNames = "SirenLightSource", required = false)
     public int sirenLightSource = 0;
+    @PackFileProperty(configNames = "DRLightSource", required = false)
+    public int drLightSource = 0;
     @PackFileProperty(configNames = "HeadLightsSource", required = false)
     public int headLightsSource = 0;
     @PackFileProperty(configNames = "BackLightsSource", required = false)
@@ -44,6 +46,13 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
     @PackFileProperty(configNames = "TurnSignalRightLightSource", required = false)
     public int turnRightLightSource = 0;
 
+    @PackFileProperty(configNames = "IndicatorsSound", required = false)
+    public String indicatorsSound;
+    @PackFileProperty(configNames = "LockSoundOutdoor", required = false)
+    public String lockSoundOutdoor;
+    @PackFileProperty(configNames = "LockSoundIndoor", required = false)
+    public String lockSoundIndoor;
+
     public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfo> owner) {
         this.owner = (ModularVehicleInfo) owner;
     }
@@ -51,20 +60,22 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
     @Override
     public void appendTo(ModularVehicleInfo owner) {
         if (klaxonSound != null) {
-            // if (!klaxonSound.contains(":"))
-            //  klaxonSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + klaxonSound;
             ResourceLocation r = new ResourceLocation(klaxonSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, klaxonSound);
             BasicsAddon.soundMap.put(klaxonSound, event);
         }
         if (sirenSound != null) {
-            //if (!sirenSound.contains(":"))
-            //    sirenSound = fr.dynamx.addons.basics.BasicsAddon.ID + ":" + sirenSound;
             ResourceLocation r = new ResourceLocation(sirenSound);
             SoundEvent event = new SoundEvent(r);
             RegistryNameSetter.setRegistryName(event, sirenSound);
             BasicsAddon.soundMap.put(sirenSound, event);
+        }
+        if (lockSoundOutdoor != null) {
+            ResourceLocation r = new ResourceLocation(lockSoundOutdoor);
+            SoundEvent event = new SoundEvent(r);
+            RegistryNameSetter.setRegistryName(event, lockSoundOutdoor);
+            BasicsAddon.soundMap.put(lockSoundOutdoor, event);
         }
         owner.addSubProperty(this);
     }
