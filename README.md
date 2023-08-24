@@ -36,17 +36,18 @@ The `#Op` suffix stands for "Optional" and will remove errors when the BasicsAdd
 
 ```
 BasicsAddon#Op{
-	HornSound: horn/truck
+  HornSound: horn/truck
   SirenSound: sirens/truck
-	TurnSignalLeftLightSource: 1
-	TurnSignalRightLightSource: 2
-	BrakeLightsSource: 3
-	HeadLightsSource: 4
-	ReverseLightsSource: 5
+  TurnSignalLeftLightSource: 1
+  TurnSignalRightLightSource: 2
+  BrakeLightsSource: 3
+  HeadLightsSource: 4
+  ReverseLightsSource: 5
   DRLightsSources: 6 //Daytime running lights
-}```
+}
+```
 
-The lights must be configured accordingly with the part lights of DynamX and matching ids.
+The lights must then be configured accordingly with the part lights of DynamX.
 
 #### Speed-Display
 
