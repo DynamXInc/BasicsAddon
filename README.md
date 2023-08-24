@@ -20,7 +20,7 @@ Here are some examples:
 #### Licenseplate
 
 ```
-ImmatriculationPlate_back{
+ImmatriculationPlate_back#Op{
   Position: 0 0 0
   Scale: 0 0 0
   Rotation: 0 0 0
@@ -30,10 +30,28 @@ ImmatriculationPlate_back{
 }
 ```
 
+The `#Op` suffix stands for "Optional" and will remove errors when the BasicsAddon isn't loaded.
+
+#### Lights and sounds
+
+```
+BasicsAddon#Op{
+	HornSound: horn/truck
+  SirenSound: sirens/truck
+	TurnSignalLeftLightSource: 1
+	TurnSignalRightLightSource: 2
+	BrakeLightsSource: 3
+	HeadLightsSource: 4
+	ReverseLightsSource: 5
+  DRLightsSources: 6 //Daytime running lights
+}```
+
+The lights must be configured accordingly with the part lights of DynamX and matching ids.
+
 #### Speed-Display
 
 ```
-SpeedDisplay{
+SpeedDisplay#Op{
   Position: 0 0 0
   Scale: 1 1 1
   Rotation: 0 0 0
@@ -44,7 +62,7 @@ SpeedDisplay{
 #### Fuel-Tank
 
 ```
-FuelTank{
+FuelTank#Op{
   Position: 0 0 0
   Scale: 1 1 1
   TankSize: 80
