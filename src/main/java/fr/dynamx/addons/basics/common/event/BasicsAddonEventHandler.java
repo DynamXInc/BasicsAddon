@@ -7,11 +7,10 @@ import fr.dynamx.addons.basics.common.modules.InteractionKeyModule;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
+import fr.dynamx.common.contentpack.parts.BasePartSeat;
 import fr.dynamx.common.contentpack.parts.PartDoor;
-import fr.dynamx.common.contentpack.parts.PartSeat;
 import fr.dynamx.common.contentpack.parts.PartStorage;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -40,7 +39,7 @@ public class BasicsAddonEventHandler {
             if (VehicleKeyUtils.isKeyItem(event.getItemStack()) && entity.getControllingPassenger() == event.getEntity()) {
                 if (VehicleKeyUtils.hasLinkedVehicle(event.getItemStack())) {
                     if (entity.getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getItemStack()))) {
-                        if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), entity, event.getEntityPlayer(), module.isLocked() ?
+                        if (MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), entity, event.getEntityPlayer(), module.isLocked() ?
                                 BasicsAddonEvent.EventLockVehicle.EnumLockAction.UNLOCK : BasicsAddonEvent.EventLockVehicle.EnumLockAction.LOCK))) {
                             return;
                         }
@@ -58,12 +57,12 @@ public class BasicsAddonEventHandler {
 
     @SubscribeEvent
     public static void interactWithCar(VehicleEntityEvent.PlayerInteract event) {
-        if (event.getPart() instanceof PartSeat || event.getPart() instanceof PartStorage || event.getPart() instanceof PartDoor) {
+        if (event.getPart() instanceof BasePartSeat || event.getPart() instanceof PartStorage || event.getPart() instanceof PartDoor) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (VehicleKeyUtils.isKeyItem(event.getPlayer().getHeldItemMainhand())) {
                 ITextComponent msg;
                 if (!VehicleKeyUtils.hasLinkedVehicle(event.getPlayer().getHeldItemMainhand())) {
-                    if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), BasicsAddonEvent.EventLockVehicle.EnumLockAction.ASSOCIATE))) {
+                    if (MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), BasicsAddonEvent.EventLockVehicle.EnumLockAction.ASSOCIATE))) {
                         return;
                     }
                     if (module.hasLinkedKey()) {
@@ -76,7 +75,7 @@ public class BasicsAddonEventHandler {
                         module.setHasLinkedKey(true);
                     }
                 } else if (event.getEntity().getPersistentID().equals(VehicleKeyUtils.getLinkedVehicle(event.getPlayer().getHeldItemMainhand()))) {
-                    if(MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), module.isLocked() ?
+                    if (MinecraftForge.EVENT_BUS.post(new BasicsAddonEvent.EventLockVehicle(event.getSide(), event.getEntity(), event.getPlayer(), module.isLocked() ?
                             BasicsAddonEvent.EventLockVehicle.EnumLockAction.UNLOCK : BasicsAddonEvent.EventLockVehicle.EnumLockAction.LOCK))) {
                         return;
                     }

@@ -48,10 +48,8 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
 
     @PackFileProperty(configNames = "IndicatorsSound", required = false)
     public String indicatorsSound;
-    @PackFileProperty(configNames = "LockSoundOutdoor", required = false)
-    public String lockSoundOutdoor;
-    @PackFileProperty(configNames = "LockSoundIndoor", required = false)
-    public String lockSoundIndoor;
+    @PackFileProperty(configNames = "LockSound", required = false)
+    public String lockSound;
 
     public BasicsAddonInfos(ISubInfoTypeOwner<ModularVehicleInfo> owner) {
         this.owner = (ModularVehicleInfo) owner;
@@ -71,11 +69,11 @@ public class BasicsAddonInfos implements ISubInfoType<ModularVehicleInfo> {
             RegistryNameSetter.setRegistryName(event, sirenSound);
             BasicsAddon.soundMap.put(sirenSound, event);
         }
-        if (lockSoundOutdoor != null) {
-            ResourceLocation r = new ResourceLocation(lockSoundOutdoor);
+        if (lockSound != null) {
+            ResourceLocation r = new ResourceLocation(lockSound);
             SoundEvent event = new SoundEvent(r);
-            RegistryNameSetter.setRegistryName(event, lockSoundOutdoor);
-            BasicsAddon.soundMap.put(lockSoundOutdoor, event);
+            RegistryNameSetter.setRegistryName(event, lockSound);
+            BasicsAddon.soundMap.put(lockSound, event);
         }
         owner.addSubProperty(this);
     }

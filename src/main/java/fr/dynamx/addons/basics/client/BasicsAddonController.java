@@ -10,7 +10,7 @@ import fr.dynamx.client.ClientProxy;
 import fr.dynamx.client.handlers.ClientEventHandler;
 import fr.dynamx.client.sound.VehicleSound;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.CarEngineModule;
+import fr.dynamx.common.entities.modules.engines.CarEngineModule;
 import fr.dynamx.utils.optimization.Vector3fPool;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
