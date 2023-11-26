@@ -2,6 +2,7 @@ package fr.dynamx.addons.basics.client;
 
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.api.audio.IDynamXSound;
+import fr.dynamx.client.handlers.ClientEventHandler;
 import fr.dynamx.client.sound.DynamXSoundHandler;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
@@ -40,5 +41,15 @@ public class SirenSound implements IDynamXSound {
     @Override
     public float getVolume() {
         return 1.0F;
+    }
+
+    @Override
+    public float getDistanceToPlayer() {
+        return entity.getDistance(ClientEventHandler.MC.player);
+    }
+
+    @Override
+    public void onMuted() {
+
     }
 }

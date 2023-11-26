@@ -10,7 +10,7 @@ import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.client.handlers.hud.HudIcons;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.CarEngineModule;
+import fr.dynamx.common.entities.modules.engines.CarEngineModule;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collection;

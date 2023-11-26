@@ -7,9 +7,10 @@ import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.api.events.PhysicsEntityEvent;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.client.handlers.hud.CarController;
+import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.modules.AbstractLightsModule;
-import fr.dynamx.common.entities.modules.BasicEngineModule;
-import fr.dynamx.common.entities.modules.CarEngineModule;
+import fr.dynamx.common.entities.modules.engines.BasicEngineModule;
+import fr.dynamx.common.entities.modules.engines.CarEngineModule;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,8 +20,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public static void createHud(VehicleEntityEvent.CreateHud event) {
-        if (event.getEntity().getModuleByType(BasicsAddonModule.class) != null) {
-            CarController.setHudIcons(new BasicsAddonHudIcons(event.getEntity().getModuleByType(BasicsAddonModule.class), event.getEntity()));
+        if (event.getEntity().getModuleByType(BasicsAddonModule.class) != null && event.getEntity() instanceof BaseVehicleEntity<?>) {
+            CarController.setHudIcons(new BasicsAddonHudIcons(event.getEntity().getModuleByType(BasicsAddonModule.class), (BaseVehicleEntity<?>) event.getEntity()));
         }
     }
 

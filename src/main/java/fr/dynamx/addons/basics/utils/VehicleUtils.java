@@ -2,7 +2,7 @@ package fr.dynamx.addons.basics.utils;
 
 import fr.dynamx.api.entities.VehicleEntityProperties;
 import fr.dynamx.common.entities.BaseVehicleEntity;
-import fr.dynamx.common.entities.modules.BasicEngineModule;
+import fr.dynamx.common.entities.modules.engines.BasicEngineModule;
 
 public class VehicleUtils {
 
