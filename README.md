@@ -7,7 +7,8 @@ This addon adds new features to DynamX :
 - Klaxon and siren
 - Fuel tank
 - Immatriculation plates
-- Speed display on the vehicle
+- Speed, gear and speed limit display on the vehicle
+- Needle
 
 ### How to add modules:
 
