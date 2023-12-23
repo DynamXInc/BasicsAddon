@@ -15,8 +15,10 @@ import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.DynamXUtils;
+import fr.dynamx.utils.client.DynamXRenderUtils;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
 
 @RegisteredSubInfoType(
@@ -104,7 +106,12 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
             if (entity == null)
                 return;
             String speed = "" + DynamXUtils.getSpeed(entity);
-            TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
+            if(SpeedDisplayInfos.this.getRotation() != null) {
+                TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
+
+            }
+            else
+                System.out.println("cpt");
         }
     }
 }
