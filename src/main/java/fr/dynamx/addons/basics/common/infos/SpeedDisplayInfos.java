@@ -108,10 +108,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
             String speed = "" + DynamXUtils.getSpeed(entity);
             if(SpeedDisplayInfos.this.getRotation() != null) {
                 TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
-
             }
-            else
-                System.out.println("cpt");
         }
     }
 }
