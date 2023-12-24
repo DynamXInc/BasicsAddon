@@ -10,18 +10,20 @@ import fr.dynamx.api.contentpack.registry.DefinitionType;
 import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.contentpack.registry.RegisteredSubInfoType;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
-import fr.dynamx.client.renders.RenderPhysicsEntity;
+import fr.dynamx.client.renders.scene.EntityRenderContext;
+import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @RegisteredSubInfoType(
         name = "SpeedDisplay",
         registries = {SubInfoTypeRegistries.WHEELED_VEHICLES, SubInfoTypeRegistries.HELICOPTER},
         strictName = false
 )
-public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>> {
+public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation;
 
@@ -58,18 +60,39 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
     }
 
     @Override
-    public void drawParts(@Nullable BaseVehicleEntity<?> entity, RenderPhysicsEntity<?> renderPhysicsEntity, ModularVehicleInfo modularVehicleInfo, byte b, float v) {
-        if (entity == null) {
-            return;
+    public String[] getRenderedParts() {
+        return new String[0];
+    }
+
+    @Override
+    public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f vector3f, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> list) {
+        return new SpeedDisplayNode(this, scale, list);
+    }
+
+    class SpeedDisplayNode<T extends BaseVehicleEntity<?>, A extends ModularVehicleInfo> extends SceneGraph.Node<T, A> {
+        public SpeedDisplayNode(SpeedDisplayInfos speedDisplay, Vector3f scale, List<SceneGraph<T, A>> linkedChilds) {
+            super(speedDisplay.getPosition(), null, scale, linkedChilds);
         }
-        String speed = "" + VehicleUtils.getSpeed(entity);
-        for (SpeedDisplayInfos info : modularVehicleInfo.getPartsByType(SpeedDisplayInfos.class)) {
-            TextUtils.drawText(info.getPosition(), info.getScale(), info.getRotation(), speed, info.getColor(), info.getFont());
+
+        @Override
+        public void render(@Nullable T entity, EntityRenderContext context, A packInfo) {
+            if (entity == null) {
+                return;
+            }
+            String speed = "" + VehicleUtils.getSpeed(entity);
+            for (SpeedDisplayInfos info : packInfo.getPartsByType(SpeedDisplayInfos.class)) {
+                TextUtils.drawText(info.getPosition(), info.getScale(), info.getRotation(), speed, info.getColor(), info.getFont());
+            }
         }
     }
 
     @Override
-    public String[] getRenderedParts() {
-        return new String[0];
+    public String getNodeName() {
+        return getPartName();
+    }
+
+    @Override
+    public String getObjectName() {
+        return null;
     }
 }
