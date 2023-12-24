@@ -22,11 +22,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@RegisteredSubInfoType(
-        name = "TextInfo",
-        registries = {SubInfoTypeRegistries.WHEELED_VEHICLES},
-        strictName = false
-)
+@RegisteredSubInfoType(name = "TextInfo", registries = {SubInfoTypeRegistries.WHEELED_VEHICLES}, strictName = false)
 public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation;
@@ -102,8 +98,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if (childGraph != null)
-            throw new IllegalArgumentException("TextInfo can't have children parts");
+        if (childGraph != null) throw new IllegalArgumentException("TextInfo can't have children parts");
         return new SpeedDisplayNode<>(modelScale, null);
     }
 
@@ -114,8 +109,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
 
         @Override
         public void render(@Nullable T entity, EntityRenderContext entityRenderContext, A packInfo) {
-            if (entity == null)
-                return;
+            if (entity == null) return;
             if (DashboardTextInfos.this.getRotation() != null) {
                 if (entity.getModuleByType(CarEngineModule.class).getPhysicsHandler().getEngine().isStarted() && DashboardTextInfos.this.isCarStartedReact()) {
                     String value = "";
@@ -135,6 +129,19 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
                     TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), value, getColor(), getFont());
                 }
             }
+        }
+    }
+
+    public enum EnumDashboardTextType {
+        SPEED, GEAR, SPEEDLIMITOR;
+
+        public static EnumDashboardTextType fromString(String targetName) {
+            for (EnumDashboardTextType dashboardNeedleType : values()) {
+                if (dashboardNeedleType.name().equalsIgnoreCase(targetName)) {
+                    return dashboardNeedleType;
+                }
+            }
+            throw new IllegalArgumentException("Invalid EnumDashboardTextType value '" + targetName + "'");
         }
     }
 }

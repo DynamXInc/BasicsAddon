@@ -4,6 +4,8 @@ import fr.aym.acsguis.api.ACsGuiApi;
 import fr.dynamx.addons.basics.client.BasicsAddonController;
 import fr.dynamx.addons.basics.client.InteractionKeyController;
 import fr.dynamx.addons.basics.common.infos.BasicsItemInfo;
+import fr.dynamx.addons.basics.common.infos.DashboardNeedleInfo.EnumDashboardNeedleType;
+import fr.dynamx.addons.basics.common.infos.DashboardTextInfos.EnumDashboardTextType;
 import fr.dynamx.addons.basics.server.CommandBasicsSpawn;
 import fr.dynamx.addons.basics.utils.FuelJerrycanUtils;
 import fr.dynamx.addons.basics.utils.VehicleKeyUtils;
@@ -19,10 +21,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -49,6 +49,8 @@ public class BasicsAddon {
         }
         registerKey();
         registerJerrycan();
+        new DefinitionType<>(EnumDashboardNeedleType.class, EnumDashboardNeedleType::fromString, "type.dashboardneedletype");
+        new DefinitionType<>(EnumDashboardTextType.class, EnumDashboardTextType::fromString, "type.dashboardtexttype");
     }
 
     private static void registerKey() {

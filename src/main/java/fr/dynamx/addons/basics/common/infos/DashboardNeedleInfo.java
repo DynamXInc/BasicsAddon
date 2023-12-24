@@ -42,7 +42,7 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
     protected String nodeDependingOnName;
 
     @PackFileProperty(configNames = "NeedleType", required = false, defaultValue = "SPEED", description = "common.NeedleType")
-    protected String needleType;
+    protected EnumDashboardNeedleType needleType;
 
     @Override
     public String getNodeName() {
@@ -82,7 +82,7 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
         return dashboardMaxValue;
     }
 
-    public String getNeedleType() {
+    public EnumDashboardNeedleType getNeedleType() {
         return needleType;
     }
 
@@ -115,15 +115,28 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
                 Vector3f pos = DashboardNeedleInfo.this.getPosition();
                 GL11.glTranslatef(pos.x, pos.y, pos.z);
                 TextUtils.makeGLRotation(getRotation());
-                if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "SPEED")) {
+                if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), EnumDashboardNeedleType.SPEED)) {
                     GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * DynamXUtils.getSpeed(entity) / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
-                } else if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "RPM")) {
+                } else if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), EnumDashboardNeedleType.RPM)) {
                     int rpms = Math.round(entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS) * 10000);
                     GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * rpms / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
                 }
                 vehicleModel.renderGroup(DashboardNeedleInfo.this.getObjectName(), b, entityRenderContext.isUseVanillaRender());
                 GlStateManager.popMatrix();
             }
+        }
+    }
+
+    public enum EnumDashboardNeedleType {
+        SPEED, RPM;
+
+        public static EnumDashboardNeedleType fromString(String targetName) {
+            for (EnumDashboardNeedleType dashboardNeedleType : values()) {
+                if (dashboardNeedleType.name().equalsIgnoreCase(targetName)) {
+                    return dashboardNeedleType;
+                }
+            }
+            throw new IllegalArgumentException("Invalid DashboardNeedleType value '" + targetName + "'");
         }
     }
 
