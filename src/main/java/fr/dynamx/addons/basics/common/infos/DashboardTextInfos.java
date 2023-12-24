@@ -31,7 +31,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
     protected String font = BasicsAddon.ID + ":e";
 
     @PackFileProperty(configNames = "DetailToShow", required = false, defaultValue = "GEAR")
-    protected String detailToShow;
+    protected EnumDashboardTextType detailToShow;
     @PackFileProperty(configNames = "CarStartedReact", required = false, defaultValue = "false", type = DefinitionType.DynamXDefinitionTypes.BOOL)
     protected boolean carStartedReact;
 
@@ -66,7 +66,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
         return font;
     }
 
-    public String getDetailToShow() {
+    public EnumDashboardTextType getDetailToShow() {
         return detailToShow;
     }
 
@@ -113,18 +113,21 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
             if (DashboardTextInfos.this.getRotation() != null) {
                 if (entity.getModuleByType(CarEngineModule.class).getPhysicsHandler().getEngine().isStarted() && DashboardTextInfos.this.isCarStartedReact()) {
                     String value = "";
-                    if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "GEAR")) {
-                        float gear = entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
-                        if (gear == 0) value = "N";
-                        else if (gear == -1) value = "R" + (int) Math.abs(gear);
-                        else value = "D" + (int) gear;
-                    } else if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEEDLIMITOR")) {
-                        int tempvalue = Math.round(entity.getModuleByType(CarEngineModule.class).getSpeedLimit());
-                        if (tempvalue != 0 & tempvalue < 10000000) value = String.valueOf(tempvalue);
-                        else value = "";
-                    } else if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEED")) {
-                        value = String.valueOf(DynamXUtils.getSpeed(entity));
-
+                    switch (DashboardTextInfos.this.getDetailToShow()) {
+                        case GEAR:
+                            float gear = entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
+                            if (gear == 0) value = "N";
+                            else if (gear == -1) value = "R" + (int) Math.abs(gear);
+                            else value = "D" + (int) gear;
+                            break;
+                        case SPEEDLIMITOR:
+                            int tempvalue = Math.round(entity.getModuleByType(CarEngineModule.class).getSpeedLimit());
+                            if (tempvalue != 0 & tempvalue < 10000000) value = String.valueOf(tempvalue);
+                            else value = "";
+                            break;
+                        case SPEED:
+                            value = String.valueOf(DynamXUtils.getSpeed(entity));
+                            break;
                     }
                     TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), value, getColor(), getFont());
                 }

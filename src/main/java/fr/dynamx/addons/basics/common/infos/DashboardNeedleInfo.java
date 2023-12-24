@@ -115,11 +115,14 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
                 Vector3f pos = DashboardNeedleInfo.this.getPosition();
                 GL11.glTranslatef(pos.x, pos.y, pos.z);
                 TextUtils.makeGLRotation(getRotation());
-                if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), EnumDashboardNeedleType.SPEED)) {
-                    GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * DynamXUtils.getSpeed(entity) / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
-                } else if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), EnumDashboardNeedleType.RPM)) {
-                    int rpms = Math.round(entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS) * 10000);
-                    GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * rpms / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
+                switch (DashboardNeedleInfo.this.getNeedleType()) {
+                    case RPM:
+                        int rpms = Math.round(entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS) * 10000);
+                        GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * rpms / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
+                        break;
+                    case SPEED:
+                        GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * DynamXUtils.getSpeed(entity) / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
+                        break;
                 }
                 vehicleModel.renderGroup(DashboardNeedleInfo.this.getObjectName(), b, entityRenderContext.isUseVanillaRender());
                 GlStateManager.popMatrix();
