@@ -81,15 +81,15 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
     @Override
     public void addToSceneGraph(ModularVehicleInfo packInfo, SceneBuilder<BaseVehicleEntity<?>, ModularVehicleInfo> sceneBuilder) {
         if (nodeDependingOnName != null) {
-            sceneBuilder.addNode(this, nodeDependingOnName, getNodeName());
+            sceneBuilder.addNode(packInfo, this, nodeDependingOnName);
         } else {
-            sceneBuilder.addNode(this, getNodeName());
+            sceneBuilder.addNode(packInfo, this);
         }
     }
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if(childGraph != null)
+        if (childGraph != null)
             throw new IllegalArgumentException("SpeedDisplayInfos can't have children parts");
         return new SpeedDisplayNode<>(modelScale, null);
     }

@@ -4,7 +4,7 @@ import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
 import fr.dynamx.addons.basics.common.modules.FuelTankModule;
 import fr.dynamx.api.entities.VehicleEntityProperties;
-import fr.dynamx.api.events.PhysicsEntityEvent;
+import fr.dynamx.api.events.DynamXEntityRenderEvents;
 import fr.dynamx.api.events.VehicleEntityEvent;
 import fr.dynamx.client.handlers.hud.CarController;
 import fr.dynamx.common.entities.BaseVehicleEntity;
@@ -25,8 +25,8 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void renderLights(VehicleEntityEvent.Render event) {
-        if (event.getEventPase() == PhysicsEntityEvent.Phase.PRE && event.getType() == VehicleEntityEvent.Render.Type.LIGHTS && event.getEntity() != null) {
+    public static void renderLights(DynamXEntityRenderEvents.Render event) {
+        if (event.getRenderType() == DynamXEntityRenderEvents.Render.Type.ENTITY && event.getEntity() != null) {
             BasicsAddonModule module = event.getEntity().getModuleByType(BasicsAddonModule.class);
             if (module != null) {
                 AbstractLightsModule lights = event.getEntity().getModuleByType(AbstractLightsModule.class);

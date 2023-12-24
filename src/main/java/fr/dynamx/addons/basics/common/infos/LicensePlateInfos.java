@@ -14,7 +14,6 @@ import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.PackPhysicsEntity;
-import fr.dynamx.utils.optimization.GlQuaternionPool;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -114,15 +113,15 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
     @Override
     public void addToSceneGraph(ModularVehicleInfo packInfo, SceneBuilder<BaseVehicleEntity<?>, ModularVehicleInfo> sceneBuilder) {
         if (nodeDependingOnName != null) {
-            sceneBuilder.addNode(this, nodeDependingOnName, getNodeName());
+            sceneBuilder.addNode(packInfo, this, nodeDependingOnName);
         } else {
-            sceneBuilder.addNode(this, getNodeName());
+            sceneBuilder.addNode(packInfo, this);
         }
     }
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if(childGraph != null)
+        if (childGraph != null)
             throw new IllegalArgumentException("LicensePlateInfos can't have children parts");
         return new LicensePlateNode<>(modelScale, null);
     }
