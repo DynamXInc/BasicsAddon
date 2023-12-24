@@ -15,10 +15,8 @@ import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.DynamXUtils;
-import fr.dynamx.utils.client.DynamXRenderUtils;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 
 @RegisteredSubInfoType(
@@ -91,7 +89,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if(childGraph != null)
+        if (childGraph != null)
             throw new IllegalArgumentException("SpeedDisplayInfos can't have children parts");
         return new SpeedDisplayNode<>(modelScale, null);
     }
@@ -106,7 +104,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
             if (entity == null)
                 return;
             String speed = "" + DynamXUtils.getSpeed(entity);
-            if(SpeedDisplayInfos.this.getRotation() != null) {
+            if (SpeedDisplayInfos.this.getRotation() != null) {
                 TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
             }
         }

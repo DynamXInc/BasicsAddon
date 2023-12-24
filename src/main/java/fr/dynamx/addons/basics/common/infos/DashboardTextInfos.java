@@ -35,9 +35,9 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
     protected String font = BasicsAddon.ID + ":e";
 
     @PackFileProperty(configNames = "DetailToShow", required = false, defaultValue = "GEAR")
-    protected String DetailToShow;
+    protected String detailToShow;
     @PackFileProperty(configNames = "CarStartedReact", required = false, defaultValue = "false", type = DefinitionType.DynamXDefinitionTypes.BOOL)
-    protected boolean CarStartedReact;
+    protected boolean carStartedReact;
 
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
     protected int[] color = new int[]{10, 10, 10};
@@ -63,7 +63,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
     }
 
     public boolean isCarStartedReact() {
-        return CarStartedReact;
+        return carStartedReact;
     }
 
     public String getFont() {
@@ -71,7 +71,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
     }
 
     public String getDetailToShow() {
-        return DetailToShow;
+        return detailToShow;
     }
 
     @Override
@@ -84,10 +84,6 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
         return null;
     }
 
-    @Override
-    public String[] getRenderedParts() {
-        return new String[0];
-    }
 
     @Override
     public String getNodeName() {
@@ -106,7 +102,7 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if(childGraph != null)
+        if (childGraph != null)
             throw new IllegalArgumentException("TextInfo can't have children parts");
         return new SpeedDisplayNode<>(modelScale, null);
     }
@@ -120,30 +116,23 @@ public class DashboardTextInfos extends BasePart<ModularVehicleInfo> implements 
         public void render(@Nullable T entity, EntityRenderContext entityRenderContext, A packInfo) {
             if (entity == null)
                 return;
-            if(DashboardTextInfos.this.getRotation() != null) {
-                if(entity.getModuleByType(CarEngineModule.class).getPhysicsHandler().getEngine().isStarted() && DashboardTextInfos.this.isCarStartedReact()) {
-                    if(Objects.equals(DashboardTextInfos.this.getDetailToShow(), "GEAR")) {
-                        String value = "";
+            if (DashboardTextInfos.this.getRotation() != null) {
+                if (entity.getModuleByType(CarEngineModule.class).getPhysicsHandler().getEngine().isStarted() && DashboardTextInfos.this.isCarStartedReact()) {
+                    String value = "";
+                    if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "GEAR")) {
                         float gear = entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.ACTIVE_GEAR);
-                        if(gear == 0) {
-                            value = "N";
-                        } else if(gear == -1) {
-                            value = "R" + (int) Math.abs(gear);
-                        } else {
-                            value = "D" + (int) gear;
-                        }
-                        TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), value, getColor(), getFont());
+                        if (gear == 0) value = "N";
+                        else if (gear == -1) value = "R" + (int) Math.abs(gear);
+                        else value = "D" + (int) gear;
+                    } else if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEEDLIMITOR")) {
+                        int tempvalue = Math.round(entity.getModuleByType(CarEngineModule.class).getSpeedLimit());
+                        if (tempvalue != 0 & tempvalue < 10000000) value = String.valueOf(tempvalue);
+                        else value = "";
+                    } else if (Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEED")) {
+                        value = String.valueOf(DynamXUtils.getSpeed(entity));
+
                     }
-                    if(Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEEDLIMITOR")) {
-                        int value = Math.round(entity.getModuleByType(CarEngineModule.class).getSpeedLimit());
-                        if(value != 0 & value < 10000000) {
-                            TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), String.valueOf(value), getColor(), getFont());
-                        }
-                    }
-                    if(Objects.equals(DashboardTextInfos.this.getDetailToShow(), "SPEED")) {
-                        int value = DynamXUtils.getSpeed(entity);
-                        TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), String.valueOf(value), getColor(), getFont());
-                    }
+                    TextUtils.drawText(DashboardTextInfos.this.getPosition(), DashboardTextInfos.this.getScale(), DashboardTextInfos.this.getRotation(), value, getColor(), getFont());
                 }
             }
         }

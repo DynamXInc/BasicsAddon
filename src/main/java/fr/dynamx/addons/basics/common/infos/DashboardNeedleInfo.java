@@ -1,6 +1,7 @@
 package fr.dynamx.addons.basics.common.infos;
 
 import com.jme3.math.Vector3f;
+import fr.dynamx.addons.basics.utils.TextUtils;
 import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.object.part.IDrawablePart;
 import fr.dynamx.api.contentpack.registry.DefinitionType;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 @RegisteredSubInfoType(name = "DashboardNeedle", registries = SubInfoTypeRegistries.WHEELED_VEHICLES, strictName = false)
-public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>,  ModularVehicleInfo> {
+public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F)
     protected Vector3f rotation;
 
@@ -32,21 +33,16 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
     protected String objectName;
 
     @PackFileProperty(configNames = "NeedleMaxTurn", required = false, defaultValue = "140", description = "common.NeedleMaxTurn")
-    protected int NeedleMaxTurn;
+    protected int needleMaxTurn;
 
     @PackFileProperty(configNames = "DashboardMaxValue", required = false, defaultValue = "140", description = "common.DashboardMaxSpeed")
-    protected int DashboardMaxValue;
+    protected int dashboardMaxValue;
 
     @PackFileProperty(configNames = "DependsOnNode", required = false, description = "common.DependsOnNode")
     protected String nodeDependingOnName;
 
     @PackFileProperty(configNames = "NeedleType", required = false, defaultValue = "SPEED", description = "common.NeedleType")
     protected String needleType;
-
-    @Override
-    public String[] getRenderedParts() {
-        return new String[0];
-    }
 
     @Override
     public String getNodeName() {
@@ -69,21 +65,21 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
 
     @Override
     public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
-        if(childGraph != null)
-            throw new IllegalArgumentException("DashboardNeedleInfo can't have children parts");
+        if (childGraph != null) throw new IllegalArgumentException("DashboardNeedleInfo can't have children parts");
         return new SpeedNeedleNode<>(modelScale, null);
     }
+
     @Override
     public String getName() {
         return "PartShape named " + getPartName() + " in " + Objects.requireNonNull(getOwner()).getName();
     }
 
     public int getNeedleMaxTurn() {
-        return NeedleMaxTurn;
+        return needleMaxTurn;
     }
 
     public int getDashboardMaxValue() {
-        return DashboardMaxValue;
+        return dashboardMaxValue;
     }
 
     public String getNeedleType() {
@@ -91,7 +87,6 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
     }
 
     public Vector3f getRotation() {
-
         return rotation;
     }
 
@@ -111,54 +106,22 @@ public class DashboardNeedleInfo extends BasePart<ModularVehicleInfo> implements
         }
 
         @Override
-        public void render(@Nullable T t, EntityRenderContext entityRenderContext, A a) {
-
-
-            if (t == null) return;
+        public void render(@Nullable T entity, EntityRenderContext entityRenderContext, A packInfo) {
+            if (entity == null) return;
             DxModelRenderer vehicleModel = entityRenderContext.getModel();
             byte b = entityRenderContext.getTextureId();
-
-//            if(vehicleModel instanceof ObjModelRenderer) {
-//                ObjModelRenderer vehicleModel1 = (ObjModelRenderer) entityRenderContext.getModel();
-//                System.out.println(vehicleModel1.getObjObjects());
-//            }
-
-
-
-            if (entityRenderContext.getModel().containsObjectOrNode(DashboardNeedleInfo.this.getObjectName()) && t.getModuleByType(CarEngineModule.class) != null && DashboardNeedleInfo.this.getPosition() != null) {
+            if (entityRenderContext.getModel().containsObjectOrNode(DashboardNeedleInfo.this.getObjectName()) && entity.getModuleByType(CarEngineModule.class) != null && DashboardNeedleInfo.this.getPosition() != null) {
                 GlStateManager.pushMatrix();
-
-
                 Vector3f pos = DashboardNeedleInfo.this.getPosition();
                 GL11.glTranslatef(pos.x, pos.y, pos.z);
-
-//                DynamXRenderUtils.drawSphere(new Vector3f(0,0,0), 0.1f, Color.YELLOW);
-
-                try {
-                    assert getRotation() != null;
-                    float rotate = getRotation().x;
-                    if (rotate != 0)
-                        GlStateManager.rotate(rotate, 1, 0, 0);
-                    rotate = getRotation().y;
-                    if (rotate != 0)
-                        GlStateManager.rotate(rotate, 0, 1, 0);
-                    rotate = getRotation().z;
-                    if (rotate != 0)
-                        GlStateManager.rotate(rotate, 0, 0, 1);
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
+                TextUtils.makeGLRotation(getRotation());
+                if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "SPEED")) {
+                    GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * DynamXUtils.getSpeed(entity) / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
+                } else if (Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "RPM")) {
+                    int rpms = Math.round(entity.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS) * 10000);
+                    GlStateManager.rotate((float) DashboardNeedleInfo.this.needleMaxTurn * rpms / DashboardNeedleInfo.this.dashboardMaxValue, 0, 0, 1);
                 }
-
-                if(Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "SPEED")) {
-                    GlStateManager.rotate((float) DashboardNeedleInfo.this.NeedleMaxTurn * DynamXUtils.getSpeed(t) / DashboardNeedleInfo.this.DashboardMaxValue, 0, 0, 1);
-                } else if(Objects.equals(DashboardNeedleInfo.this.getNeedleType(), "RPM")) {
-                    int rpms = Math.round(t.getModuleByType(CarEngineModule.class).getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS) * 10000 );
-                    GlStateManager.rotate((float) DashboardNeedleInfo.this.NeedleMaxTurn * rpms / DashboardNeedleInfo.this.DashboardMaxValue, 0, 0, 1);
-                }
-
                 vehicleModel.renderGroup(DashboardNeedleInfo.this.getObjectName(), b, entityRenderContext.isUseVanillaRender());
-
                 GlStateManager.popMatrix();
             }
         }
