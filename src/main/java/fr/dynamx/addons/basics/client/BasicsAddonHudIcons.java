@@ -46,6 +46,7 @@ public class BasicsAddonHudIcons implements HudIcons {
                 if (entity.getModuleByType(CarEngineModule.class) != null) {
                     return entity.getModuleByType(CarEngineModule.class).getSpeedLimit() != Float.MAX_VALUE;
                 }
+                return false;
             case 3:
                 //TODO THIS ICON
                 return false;

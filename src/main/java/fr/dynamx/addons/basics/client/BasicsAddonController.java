@@ -103,7 +103,6 @@ public class BasicsAddonController implements IVehicleController {
         }
         if (module.hasTurnSignals()) {
             if (turnLeft.isPressed()) {
-                System.out.println(module.isTurnSignalLeftOn() + " wtf " + module.isTurnSignalRightOn());
                 if (!warningsOn)
                     module.setTurnSignalLeftOn(!module.isTurnSignalLeftOn());
                 else
@@ -156,6 +155,8 @@ public class BasicsAddonController implements IVehicleController {
 
     @Override
     public List<ResourceLocation> getHudCssStyles() {
-        return Collections.EMPTY_LIST;
+        if (module != null)
+            return Collections.singletonList(STYLE);
+        return null;
     }
 }

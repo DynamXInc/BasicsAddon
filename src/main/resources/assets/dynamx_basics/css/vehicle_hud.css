@@ -39,19 +39,10 @@ Because .speed_pane has a texture
     top: auto;
  }
 
-.hud_icon {
-    width: 10px;
-    height: 10px;
-}
 #icon_0 {
     left: 28px;
     top: 18px;
     background-image: url("dynamx_basics:textures/light.png");
-}
-#icon_1 {
-    left: 41px;
-    top: 18px;
-    background-image: url("dynamx_basics:textures/limitor.png");
 }
 #icon_2 {
     left: 52px;

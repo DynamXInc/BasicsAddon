@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class FuelTankController implements IVehicleController {
-    public static final ResourceLocation STYLE = new ResourceLocation(BasicsAddon.ID, "css/vehicle_hud.css");
-
     private final FuelTankModule module;
 
     public FuelTankController(FuelTankModule module) {
@@ -47,7 +45,7 @@ public class FuelTankController implements IVehicleController {
     @Override
     public List<ResourceLocation> getHudCssStyles() {
         if (module != null)
-            return Collections.singletonList(STYLE);
+            return Collections.singletonList(BasicsAddonController.STYLE);
         return null;
     }
 
