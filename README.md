@@ -7,7 +7,8 @@ This addon adds new features to DynamX :
 - Klaxon and siren
 - Fuel tank
 - Immatriculation plates
-- Speed display on the vehicle
+- Speed, gear and speed limit display on the vehicle
+- Needle
 
 ### How to add modules:
 
@@ -70,6 +71,55 @@ FuelTank#Op{
   FuelConsumption: 1
 }
 ```
+
+#### Better speed-display
+
+```
+TextInfo#Op{
+  Position: 0 0 0
+  Scale: 1 1 1
+  Rotation: 0 0 0
+  Color: 0 0 0
+  DetailToShow: GEAR
+  CarStartedReact: True
+}
+```
+
+The `DetailToShow` can be one of the following:
+ - GEAR
+ - SPEED
+ - SPEEDLIMITOR
+
+It will display the current gear, speed or speedlimitor value at the position.
+
+The `CarStartedReact` can be `True` or `False` and will enable or disable the display when the car is started.
+
+### DashboardNeedle
+
+``` 
+DashboardNeedle_2 {
+    Position: 0 0 0
+    Rotation: 0 0 -120
+    ObjectName: speedneedle
+    NeedleMaxTurn: 160
+    DashboardMaxValue: 6000
+    NeedleType: RPM
+}
+```
+
+| Key               	| Value                                    	|
+|-------------------	|------------------------------------------	|
+| Rotation          	| Default rotation                         	|
+| Position          	| Default position                         	|
+| ObjectName        	| Name of the object in the 3D model       	|
+| NeedleMaxTurn     	| Max rotation in degrees on the dashboard 	|
+| DashboardMaxValue 	| Max value displayed on dashboard         	|
+| NeedleType        	| It can be `RPM` or `SPEED`               	|
+
+<img src="exemple.png" width="50%">
+<br>
+
+> Here for RPM, max DashboardMaxValue is 6000 and max NeedleMaxTurn is 160.
 
 ## Links
 

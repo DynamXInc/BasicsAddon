@@ -80,6 +80,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
 
     @Override
     public void addToSceneGraph(ModularVehicleInfo packInfo, SceneBuilder<BaseVehicleEntity<?>, ModularVehicleInfo> sceneBuilder) {
+        if(getRotation() == null) return;
         if (nodeDependingOnName != null) {
             sceneBuilder.addNode(packInfo, this, nodeDependingOnName);
         } else {
@@ -105,6 +106,7 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
                 return;
             String speed = "" + DynamXUtils.getSpeed(entity);
             TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
+
         }
     }
 }
