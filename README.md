@@ -9,7 +9,7 @@ This addon adds new features to DynamX :
 - Immatriculation plates
 - Speed display on the vehicle
 
-### How to add modules:
+### How to add modules to your vehicle:
 
 To add a module to your vehicle you need to edit the vehicle file inside your DynamX pack.
 This file have a name like `vehicle_NAME`.
@@ -68,6 +68,33 @@ FuelTank#Op{
   Scale: 1 1 1
   TankSize: 80
   FuelConsumption: 1
+}
+```
+
+### How to create a key or a jerrycan item:
+
+The BasicsAddon already includes a key and a jerrycan item. However, you can create your own items.
+
+To create a key or a jerrycan item you need to add the right properties to the item file inside your DynamX pack.
+This file have a name like `item_NAME`.  Here are some examples:
+
+#### Key
+
+```
+BasicsItem#Op{
+  IsVehicleKey: true
+  IsMultiKey: false
+}
+```
+
+By default, one key is associated to one vehicle. 
+If you want to create a key that can open multiple vehicles, you need to set `IsMultiKey` to `true`.
+
+#### Jerrycan
+
+```
+BasicsItem#Op{
+  FuelCapacity: 60
 }
 ```
 
