@@ -36,9 +36,12 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.18.24'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     compileOnly fileTree(dir: 'libs', include: '*.jar')
     compileOnly "fr.aym.acsguis:ACsGuis:1.2.12"
+
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 jar {

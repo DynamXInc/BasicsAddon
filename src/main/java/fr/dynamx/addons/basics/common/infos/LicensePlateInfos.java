@@ -14,6 +14,8 @@ import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.PackPhysicsEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,18 +26,28 @@ import java.util.List;
         strictName = false
 )
 public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation = new Vector3f();
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Pattern", required = false)
     protected String pattern = "aa-111-aa";
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Font", required = false)
     protected String font = BasicsAddon.ID + ":e";
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
     protected int[] color = new int[]{10, 10, 10};
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "LineSpacing", required = false)
     protected float lineSpacing = 0.0F;
 
@@ -59,26 +71,6 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
     @Override
     public void appendTo(ModularVehicleInfo owner) {
         owner.addPart(this);
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public String getFont() {
-        return font;
-    }
-
-    public int[] getColor() {
-        return color;
-    }
-
-    public String getPattern() {
-        return pattern;
-    }
-
-    public float getLineSpacing() {
-        return lineSpacing;
     }
 
     @Override

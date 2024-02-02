@@ -6,7 +6,11 @@ import fr.dynamx.api.contentpack.registry.PackFileProperty;
 import fr.dynamx.api.contentpack.registry.RegisteredSubInfoType;
 import fr.dynamx.api.contentpack.registry.SubInfoTypeRegistries;
 import fr.dynamx.common.contentpack.type.objects.ItemObject;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @RegisteredSubInfoType(
         name = "basicsitem",
         registries = {SubInfoTypeRegistries.ITEMS}
@@ -33,31 +37,7 @@ public class BasicsItemInfo<T extends ItemObject<T>> extends SubInfoType<T> {
         return "BasicsItemInfos of " + getOwner().getFullName();
     }
 
-    public boolean isKey() {
-        return isKey;
-    }
-
-    public void setKey(boolean key) {
-        isKey = key;
-    }
-
-    public boolean isMultiKey() {
-        return isMultiKey;
-    }
-
-    public void setMultiKey(boolean multiKey) {
-        isMultiKey = multiKey;
-    }
-
     public boolean isFuelContainer() {
         return fuelCapacity > 0;
-    }
-
-    public int getFuelCapacity() {
-        return fuelCapacity;
-    }
-
-    public void setFuelCapacity(int fuelCapacity) {
-        this.fuelCapacity = fuelCapacity;
     }
 }

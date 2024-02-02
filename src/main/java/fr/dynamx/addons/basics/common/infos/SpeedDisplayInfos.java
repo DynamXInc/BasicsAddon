@@ -15,9 +15,12 @@ import fr.dynamx.client.renders.scene.SceneGraph;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.DynamXUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
 
 @RegisteredSubInfoType(
         name = "SpeedDisplay",
@@ -25,12 +28,18 @@ import java.util.List;
         strictName = false
 )
 public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
     protected Vector3f rotation;
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Font", required = false)
     protected String font = BasicsAddon.ID + ":e";
 
+    @Getter
+    @Setter
     @PackFileProperty(configNames = "Color", description = "common.color", required = false)
     protected int[] color = new int[]{10, 10, 10};
 
@@ -44,18 +53,6 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
     @Override
     public void appendTo(ModularVehicleInfo owner) {
         owner.addSubProperty(this);
-    }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
-
-    public int[] getColor() {
-        return color;
-    }
-
-    public String getFont() {
-        return font;
     }
 
     @Override

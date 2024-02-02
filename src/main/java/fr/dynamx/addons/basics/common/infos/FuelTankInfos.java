@@ -13,9 +13,13 @@ import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.items.DynamXItem;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
+@Getter
+@Setter
 @RegisteredSubInfoType(name = "FuelTank", registries = SubInfoTypeRegistries.WHEELED_VEHICLES, strictName = false)
 public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
     private static final ResourceLocation FUEL_CROSS_HAIRS_ICON = new ResourceLocation(BasicsAddon.ID, "textures/fuel.png");
@@ -29,14 +33,6 @@ public class FuelTankInfos extends InteractivePart<BaseVehicleEntity<?>, Modular
 
     public FuelTankInfos(ModularVehicleInfo owner, String partName) {
         super(owner, partName, 0.5f, 0.5f);
-    }
-
-    public float getTankSize() {
-        return tankSize;
-    }
-
-    public float getFuelConsumption() {
-        return fuelConsumption;
     }
 
     @Override
