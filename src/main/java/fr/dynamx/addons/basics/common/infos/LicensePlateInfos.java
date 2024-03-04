@@ -6,11 +6,14 @@ import fr.dynamx.addons.basics.common.modules.LicensePlateModule;
 import fr.dynamx.addons.basics.utils.TextUtils;
 import fr.dynamx.api.contentpack.object.part.BasePart;
 import fr.dynamx.api.contentpack.object.part.IDrawablePart;
+import fr.dynamx.api.contentpack.object.render.IModelPackObject;
 import fr.dynamx.api.contentpack.registry.*;
 import fr.dynamx.api.entities.modules.ModuleListBuilder;
-import fr.dynamx.client.renders.scene.EntityRenderContext;
+import fr.dynamx.client.renders.scene.BaseRenderContext;
+import fr.dynamx.client.renders.scene.IRenderContext;
 import fr.dynamx.client.renders.scene.SceneBuilder;
-import fr.dynamx.client.renders.scene.SceneGraph;
+import fr.dynamx.client.renders.scene.node.SceneNode;
+import fr.dynamx.client.renders.scene.node.SimpleNode;
 import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.PackPhysicsEntity;
@@ -25,7 +28,7 @@ import java.util.List;
         registries = {SubInfoTypeRegistries.WHEELED_VEHICLES, SubInfoTypeRegistries.HELICOPTER},
         strictName = false
 )
-public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<BaseVehicleEntity<?>, ModularVehicleInfo> {
+public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements IDrawablePart<ModularVehicleInfo> {
     @Getter
     @Setter
     @PackFileProperty(configNames = "Rotation", type = DefinitionType.DynamXDefinitionTypes.VECTOR3F, description = "common.rotation")
@@ -103,7 +106,7 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
     }
 
     @Override
-    public void addToSceneGraph(ModularVehicleInfo packInfo, SceneBuilder<BaseVehicleEntity<?>, ModularVehicleInfo> sceneBuilder) {
+    public void addToSceneGraph(ModularVehicleInfo packInfo, SceneBuilder<IRenderContext, ModularVehicleInfo> sceneBuilder) {
         if (nodeDependingOnName != null) {
             sceneBuilder.addNode(packInfo, this, nodeDependingOnName);
         } else {
@@ -112,22 +115,22 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
     }
 
     @Override
-    public SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneGraph<BaseVehicleEntity<?>, ModularVehicleInfo>> childGraph) {
+    public SceneNode<IRenderContext, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneNode<IRenderContext, ModularVehicleInfo>> childGraph) {
         if (childGraph != null)
             throw new IllegalArgumentException("LicensePlateInfos can't have children parts");
-        return new LicensePlateNode<>(modelScale, null);
+        return (SceneNode) new LicensePlateNode(modelScale, null);
     }
 
-    class LicensePlateNode<T extends BaseVehicleEntity<?>, A extends ModularVehicleInfo> extends SceneGraph.Node<T, A> {
-        public LicensePlateNode(Vector3f scale, List<SceneGraph<T, A>> linkedChilds) {
+    class LicensePlateNode extends SimpleNode<BaseRenderContext.EntityRenderContext, ModularVehicleInfo> {
+        public LicensePlateNode(Vector3f scale, List<SceneNode<BaseRenderContext.EntityRenderContext, ModularVehicleInfo>> linkedChilds) {
             super(null, null, scale, linkedChilds);
         }
 
         @Override
-        public void render(@Nullable T entity, EntityRenderContext entityRenderContext, A packInfo) {
-            if (entity == null)
+        public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info) {
+            if (entityRenderContext.getEntity() == null)
                 return;
-            LicensePlateModule module = entity.getModuleByType(LicensePlateModule.class);
+            LicensePlateModule module = entityRenderContext.getEntity().getModuleByType(LicensePlateModule.class);
             TextUtils.drawText(
                     LicensePlateInfos.this.getPosition(),
                     LicensePlateInfos.this.getScale(),
