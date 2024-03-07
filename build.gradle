@@ -7,6 +7,15 @@ buildscript {
     }
 }
 
+repositories {
+    maven {
+        url = 'https://maven.dynamx.fr/artifactory/DynamXRepo'
+    }
+    maven {
+        url = 'https://maven.dynamx.fr/artifactory/' + 'ACsGuisRepo'
+    }
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
@@ -24,22 +33,25 @@ compileJava {
 
 minecraft {
     mappings channel: 'stable', version: '39-1.12'
-}
 
-repositories {
-    maven {
-        url = 'https://maven.dynamx.fr/artifactory/DynamXRepo'
-    }
-    maven {
-        url = 'https://maven.dynamx.fr/artifactory/' + 'ACsGuisRepo'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+        }
+        server {
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'info'
+        }
     }
 }
 
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
-    compileOnly fileTree(dir: 'libs', include: '*.jar')
-    compileOnly "fr.aym.acsguis:ACsGuis:1.2.12"
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation "fr.aym.acsguis:ACsGuis:1.2.12"
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
