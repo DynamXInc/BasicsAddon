@@ -13,6 +13,8 @@ import fr.dynamx.common.entities.PackPhysicsEntity;
 import fr.dynamx.common.entities.modules.engines.CarEngineModule;
 import fr.dynamx.common.entities.vehicles.CarEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
+import lombok.Getter;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,6 +23,7 @@ import javax.annotation.Nullable;
 @SynchronizedEntityVariable.SynchronizedPhysicsModule(modid = BasicsAddon.ID)
 public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private final PackPhysicsEntity<?, ?> entity;
+    @Getter
     private final FuelTankInfos info;
     private FuelTankController controller;
     @SynchronizedEntityVariable(name = "fuel")
@@ -43,8 +46,14 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
         this.fuel.set(Math.max(Math.min(fuel, info.getTankSize()), 0));
     }
 
-    public FuelTankInfos getInfo() {
-        return info;
+    public void disableFuelConsumption() {
+        if(!entity.world.isRemote && fuel.get() != -130) {
+            fuel.set(-130f);
+        }
+    }
+
+    public boolean isFuelConsumptionDisabled() {
+        return fuel.get() == -130;
     }
 
     @Nullable
@@ -56,15 +65,25 @@ public class FuelTankModule implements IPhysicsModule<AbstractEntityPhysicsHandl
 
     @Override
     public void updateEntity() {
-        if (entity instanceof CarEntity && getFuel() > 0) {
+        if (entity instanceof CarEntity && getFuel() > 0 && entity.ticksExisted % 20 == 0) {
             CarEntity<?> carEntity = (CarEntity<?>) entity;
             CarEngineModule engine = carEntity.getModuleByType(CarEngineModule.class);
             if (engine != null) {
                 //Rpm is capped between 0 and 1
                 float RPM = engine.getEngineProperty(VehicleEntityProperties.EnumEngineProperties.REVS);
-                setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() / 120) *
-                        ((engine.isAccelerating() ? 1.1 : 0.9)))));
+                setFuel((float) (getFuel() - (RPM * (getInfo().getFuelConsumption() * 20 / 120) *
+                        ((engine.isAccelerating() ? 1 : 0.4)))));
             }
         }
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        setFuel(tag.getFloat("fuel"));
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setFloat("fuel", getFuel());
     }
 }
