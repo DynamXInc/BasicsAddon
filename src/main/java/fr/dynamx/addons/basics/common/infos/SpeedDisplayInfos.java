@@ -89,20 +89,22 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
     public SceneNode<IRenderContext, ModularVehicleInfo> createSceneGraph(Vector3f modelScale, List<SceneNode<IRenderContext, ModularVehicleInfo>> childGraph) {
         if (childGraph != null)
             throw new IllegalArgumentException("SpeedDisplayInfos can't have children parts");
-        return (SceneNode) new SpeedDisplayNode(modelScale, null);
+        return (SceneNode) new SpeedDisplayNode(modelScale);
     }
 
     class SpeedDisplayNode extends SimpleNode<BaseRenderContext.EntityRenderContext, ModularVehicleInfo> {
-        public SpeedDisplayNode(Vector3f scale, List<SceneNode<BaseRenderContext.EntityRenderContext, ModularVehicleInfo>> linkedChilds) {
-            super(null, null, scale, linkedChilds);
+        public SpeedDisplayNode(Vector3f scale) {
+            super(SpeedDisplayInfos.this.getPosition(), null, scale.mult(SpeedDisplayInfos.this.getScale()).mult(1f / 40 * 0.05f), null);
         }
 
         @Override
         public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info) {
             if (!(entityRenderContext.getEntity() instanceof BaseVehicleEntity))
                 return;
+            // Setup transformation
+            transformToRotationPoint();
             String speed = "" + DynamXUtils.getSpeed((BaseVehicleEntity<?>) entityRenderContext.getEntity());
-            TextUtils.drawText(SpeedDisplayInfos.this.getPosition(), SpeedDisplayInfos.this.getScale(), SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
+            TextUtils.drawText(transform, SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
         }
     }
 }
