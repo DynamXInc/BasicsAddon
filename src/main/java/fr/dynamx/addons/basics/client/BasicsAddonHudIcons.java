@@ -4,7 +4,7 @@ import fr.aym.acsguis.component.GuiComponent;
 import fr.aym.acsguis.component.style.AutoStyleHandler;
 import fr.aym.acsguis.component.style.ComponentStyleManager;
 import fr.aym.acsguis.cssengine.selectors.EnumSelectorContext;
-import fr.aym.acsguis.cssengine.style.EnumCssStyleProperties;
+import fr.aym.acsguis.cssengine.style.EnumCssStyleProperty;
 import fr.aym.acsguis.utils.GuiTextureSprite;
 import fr.dynamx.addons.basics.BasicsAddon;
 import fr.dynamx.addons.basics.common.modules.BasicsAddonModule;
@@ -32,7 +32,7 @@ public class BasicsAddonHudIcons implements HudIcons {
     public void tick(GuiComponent<?>[] components) {
         if (wasLocked != module.isLocked()) {
             wasLocked = module.isLocked();
-            components[2].getStyle().refreshCss(false, "bas_lock");
+            components[2].getStyle().refreshCss(false);
         }
     }
 
@@ -69,8 +69,8 @@ public class BasicsAddonHudIcons implements HudIcons {
         if (componentId == 2) {
             component.getStyle().addAutoStyleHandler(new AutoStyleHandler<ComponentStyleManager>() {
                 @Override
-                public boolean handleProperty(EnumCssStyleProperties property, EnumSelectorContext context, ComponentStyleManager target) {
-                    if (property == EnumCssStyleProperties.TEXTURE) {
+                public boolean handleProperty(EnumCssStyleProperty property, EnumSelectorContext context, ComponentStyleManager target) {
+                    if (property == EnumCssStyleProperty.TEXTURE) {
                         if (module.isLocked()) {
                             target.setTexture(new GuiTextureSprite(new ResourceLocation(BasicsAddon.ID, "textures/lock.png")));
                         } else {
@@ -82,8 +82,8 @@ public class BasicsAddonHudIcons implements HudIcons {
                 }
 
                 @Override
-                public Collection<EnumCssStyleProperties> getModifiedProperties(ComponentStyleManager target) {
-                    return Collections.singletonList(EnumCssStyleProperties.TEXTURE);
+                public Collection<EnumCssStyleProperty> getModifiedProperties(ComponentStyleManager target) {
+                    return Collections.singletonList(EnumCssStyleProperty.TEXTURE);
                 }
             });
         }

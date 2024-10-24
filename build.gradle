@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "1.0.10-for-DynamX-4.1.0b23"
+version = "1.0.10-for-DynamX-4.1.0b35"
 group = "fr.dynamx.addons.basics" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "BasicsAddon"
 
@@ -51,7 +51,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.24'
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     implementation fileTree(dir: 'libs', include: '*.jar')
-    implementation "fr.aym.acsguis:ACsGuis:1.2.12"
+    //implementation "fr.aym.acsguis:ACsGuis:1.2.12"
 
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
