@@ -1,0 +1,10 @@
+item.dynx.dynamx_basics.car_keys.name=Autoschlüssel
+basadd.key.associed=Schlüssel mit %s verbunden!
+basadd.key.assoc.error=Das Fahrzeug hat bereits einen zugeordneten Schlüssel!
+basadd.key.locked=Auto abgeschlossen!
+basadd.key.unlocked=Auto aufgeschlossen!
+basadd.key.invalid=Ungültiger Schlüssel!
+basadd.key.linked.to=Schlüssel von %s
+basadd.fuel.jerrycan=Treibstoff im Kanister: %s
+
+item.dynx.dynamx_basics.fuel_jerrycan.name=Treibstoffkanister
