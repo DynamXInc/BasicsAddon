@@ -31,10 +31,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mod(modid = BasicsAddon.ID, version = "1.0.10", name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
-@DynamXAddon(modid = BasicsAddon.ID, name = "DynamX Basics", version = "1.0.10")
+@Mod(modid = BasicsAddon.ID, version = BasicsAddon.VERSION, name = "DynamX Basics Addon", dependencies = "before: dynamxmod")
+@DynamXAddon(modid = BasicsAddon.ID, name = "DynamX Basics", version = BasicsAddon.VERSION)
 public class BasicsAddon {
     public static final String ID = "dynamx_basics";
+    public static final String VERSION = "1.0.11";
     public static final Map<String, SoundEvent> soundMap = new HashMap<>();
 
     public static DynamXItem<?> keysItem;
