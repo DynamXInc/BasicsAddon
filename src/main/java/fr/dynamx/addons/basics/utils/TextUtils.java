@@ -30,7 +30,6 @@ public class TextUtils {
         if (rotate != 0)
             transform.rotate(rotate * FastMath.PI / 180, 0, 0, 1);
         GlStateManager.multMatrix(ClientDynamXUtils.getMatrixBuffer(transform));
-        GlStateManager.disableLighting();
         CssFontHelper.pushDrawing(new ResourceLocation(font), Collections.emptyList());
         String[] lines = text.split("\\\\n");
         for (String line : lines) {
@@ -39,7 +38,6 @@ public class TextUtils {
             GlStateManager.translate(0, (spacing + 1) * 100, 0);
         }
         CssFontHelper.popDrawing();
-        GlStateManager.enableLighting();
         GlStateManager.resetColor();
         GlStateManager.popMatrix();
     }

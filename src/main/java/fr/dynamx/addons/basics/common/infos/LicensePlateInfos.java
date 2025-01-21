@@ -17,6 +17,7 @@ import fr.dynamx.common.contentpack.type.vehicle.ModularVehicleInfo;
 import fr.dynamx.common.entities.PackPhysicsEntity;
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
 
@@ -130,7 +131,13 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
             // Setup transformation
             transformToRotationPoint();
             LicensePlateModule module = entityRenderContext.getEntity().getModuleByType(LicensePlateModule.class);
+            if (!entityRenderContext.isUseVanillaRender()) {
+                GlStateManager.disableLighting();
+            }
             TextUtils.drawText(transform, LicensePlateInfos.this.getRotation(), module.getPlate(), getColor(), getFont(), getLineSpacing());
+            if (!entityRenderContext.isUseVanillaRender()) {
+                GlStateManager.enableLighting();
+            }
         }
     }
 }
