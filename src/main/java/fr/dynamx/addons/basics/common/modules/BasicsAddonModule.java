@@ -12,6 +12,7 @@ import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import fr.dynamx.utils.optimization.Vector3fPool;
+import lombok.Getter;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
@@ -24,11 +25,11 @@ import javax.annotation.Nullable;
 public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
     private BasicsAddonController controller;
     private final BaseVehicleEntity<?> entity;
+    @Getter
     private final BasicsAddonInfos infos;
 
     @SynchronizedEntityVariable(name = "state")
     private final EntityVariable<Integer> state = new EntityVariable<>(SynchronizationRules.CONTROLS_TO_SPECTATORS, 0);
-
 
     public BasicsAddonModule(BaseVehicleEntity<?> entity, BasicsAddonInfos infos) {
         this.entity = entity;
@@ -154,10 +155,6 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         state.set(turnSignalRightOn ? state.get() | 128 : state.get() & ~128);
     }
 
-    public BasicsAddonInfos getInfos() {
-        return infos;
-    }
-
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         byte vars = 0;
@@ -194,15 +191,5 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
             setHasLinkedKey(tag.getBoolean("BasAdd.haskey"));
             setLocked(tag.getBoolean("BasAdd.locked"));
         }
-    }
-
-    @Override
-    public void addPassenger(Entity passenger) {
-        IPhysicsModule.super.addPassenger(passenger);
-    }
-
-    @Override
-    public void removePassenger(Entity passenger) {
-        IPhysicsModule.super.removePassenger(passenger);
     }
 }
