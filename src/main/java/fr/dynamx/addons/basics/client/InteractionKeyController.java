@@ -39,7 +39,7 @@ public class InteractionKeyController implements IVehicleController {
     }
 
     @Override
-    public GuiComponent<?> createHud() {
+    public GuiComponent createHud() {
         return null;
     }
 

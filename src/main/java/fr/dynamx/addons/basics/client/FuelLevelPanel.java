@@ -13,9 +13,12 @@ public class FuelLevelPanel extends CircleCounterPanel {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        prevValue = value;
-        value = tankController.getModule().getFuel()/2;
+    public boolean tick() {
+        if(super.tick()) {
+            prevValue = value;
+            value = tankController.getModule().getFuel() / 2;
+            return true;
+        }
+        return false;
     }
 }

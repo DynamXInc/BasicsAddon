@@ -149,7 +149,7 @@ public class BasicsAddonController implements IVehicleController {
     }
 
     @Override
-    public GuiComponent<?> createHud() {
+    public GuiComponent createHud() {
         return null;
     }
 

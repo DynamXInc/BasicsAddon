@@ -1,9 +1,6 @@
 package fr.dynamx.addons.basics.client;
 
 import fr.aym.acsguis.component.GuiComponent;
-import fr.aym.acsguis.component.style.AutoStyleHandler;
-import fr.aym.acsguis.component.style.ComponentStyleManager;
-import fr.aym.acsguis.cssengine.selectors.EnumSelectorContext;
 import fr.aym.acsguis.cssengine.style.EnumCssStyleProperty;
 import fr.aym.acsguis.utils.GuiTextureSprite;
 import fr.dynamx.addons.basics.BasicsAddon;
@@ -12,9 +9,6 @@ import fr.dynamx.client.handlers.hud.HudIcons;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.entities.modules.engines.CarEngineModule;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.Collection;
-import java.util.Collections;
 
 public class BasicsAddonHudIcons implements HudIcons {
     private final BasicsAddonModule module;
@@ -25,14 +19,13 @@ public class BasicsAddonHudIcons implements HudIcons {
         this.module = module;
         this.entity = entity;
         wasLocked = module.isLocked();
-        //todo fuel counter FuelTankModule module1 = entity.getModuleByType(FuelTankModule.class);
     }
 
     @Override
-    public void tick(GuiComponent<?>[] components) {
+    public void tick(GuiComponent[] components) {
         if (wasLocked != module.isLocked()) {
             wasLocked = module.isLocked();
-            components[2].getStyle().refreshCss(false);
+            components[2].getStyle().refreshStyle();
         }
     }
 
@@ -65,27 +58,19 @@ public class BasicsAddonHudIcons implements HudIcons {
     }
 
     @Override
-    public void initIcon(int componentId, GuiComponent<?> component) {
+    public void initIcon(int componentId, GuiComponent component) {
         if (componentId == 2) {
-            component.getStyle().addAutoStyleHandler(new AutoStyleHandler<ComponentStyleManager>() {
-                @Override
-                public boolean handleProperty(EnumCssStyleProperty property, EnumSelectorContext context, ComponentStyleManager target) {
-                    if (property == EnumCssStyleProperty.TEXTURE) {
-                        if (module.isLocked()) {
-                            target.setTexture(new GuiTextureSprite(new ResourceLocation(BasicsAddon.ID, "textures/lock.png")));
-                        } else {
-                            target.setTexture(new GuiTextureSprite(new ResourceLocation(BasicsAddon.ID, "textures/unlock.png")));
-                        }
-                        return true;
+            component.getStyleCustomizer().withAutoStyles((property, context, target) -> {
+                if (property == EnumCssStyleProperty.TEXTURE) {
+                    if (module.isLocked()) {
+                        target.setTexture(new GuiTextureSprite(new ResourceLocation(BasicsAddon.ID, "textures/lock.png")));
+                    } else {
+                        target.setTexture(new GuiTextureSprite(new ResourceLocation(BasicsAddon.ID, "textures/unlock.png")));
                     }
-                    return false;
+                    return true;
                 }
-
-                @Override
-                public Collection<EnumCssStyleProperty> getModifiedProperties(ComponentStyleManager target) {
-                    return Collections.singletonList(EnumCssStyleProperty.TEXTURE);
-                }
-            });
+                return false;
+            }, EnumCssStyleProperty.TEXTURE);
         }
     }
 }

@@ -68,5 +68,4 @@ public class LicensePlateModule implements IPhysicsModule<AbstractEntityPhysicsH
             setPlate(tag.getString("bas_immat_plate"));
         }
     }
-
 }

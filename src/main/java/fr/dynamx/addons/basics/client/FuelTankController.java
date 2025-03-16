@@ -23,7 +23,7 @@ public class FuelTankController implements IVehicleController {
     }
 
     @Override
-    public GuiComponent<?> createHud() {
+    public GuiComponent createHud() {
         if (module != null) {
             GuiPanel panel = new GuiPanel();
             float maxFuel = module.getInfo().getTankSize();
