@@ -19,6 +19,7 @@ import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.utils.DynamXUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
@@ -98,11 +99,11 @@ public class SpeedDisplayInfos extends BasePart<ModularVehicleInfo> implements I
         }
 
         @Override
-        public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info) {
+        public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info, Matrix4f parentTransform) {
             if (!(entityRenderContext.getEntity() instanceof BaseVehicleEntity))
                 return;
             // Setup transformation
-            transformToRotationPoint();
+            transformToRotationPoint(parentTransform);
             String speed = "" + DynamXUtils.getSpeed((BaseVehicleEntity<?>) entityRenderContext.getEntity());
             TextUtils.drawText(transform, SpeedDisplayInfos.this.getRotation(), speed, getColor(), getFont());
         }

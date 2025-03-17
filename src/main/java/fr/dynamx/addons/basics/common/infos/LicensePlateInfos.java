@@ -18,6 +18,7 @@ import fr.dynamx.common.entities.PackPhysicsEntity;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.renderer.GlStateManager;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
@@ -125,11 +126,11 @@ public class LicensePlateInfos extends BasePart<ModularVehicleInfo> implements I
         }
 
         @Override
-        public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info) {
+        public void render(BaseRenderContext.EntityRenderContext entityRenderContext, ModularVehicleInfo info, Matrix4f parentTransform) {
             if (entityRenderContext.getEntity() == null)
                 return;
             // Setup transformation
-            transformToRotationPoint();
+            transformToRotationPoint(parentTransform);
             LicensePlateModule module = entityRenderContext.getEntity().getModuleByType(LicensePlateModule.class);
             if (!entityRenderContext.isUseVanillaRender()) {
                 GlStateManager.disableLighting();
