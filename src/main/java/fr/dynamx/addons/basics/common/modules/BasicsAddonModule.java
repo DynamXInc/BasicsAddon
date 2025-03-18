@@ -12,17 +12,18 @@ import fr.dynamx.client.ClientProxy;
 import fr.dynamx.common.entities.BaseVehicleEntity;
 import fr.dynamx.common.physics.entities.AbstractEntityPhysicsHandler;
 import fr.dynamx.utils.optimization.Vector3fPool;
+import io.netty.buffer.ByteBuf;
 import lombok.Getter;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
 @SynchronizedEntityVariable.SynchronizedPhysicsModule(modid = BasicsAddon.ID)
-public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener {
+public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHandler<?, ?>>, IPhysicsModule.IEntityUpdateListener, IEntityAdditionalSpawnData {
     private BasicsAddonController controller;
     private final BaseVehicleEntity<?> entity;
     @Getter
@@ -155,8 +156,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         state.set(turnSignalRightOn ? state.get() | 128 : state.get() & ~128);
     }
 
-    @Override
-    public void writeToNBT(NBTTagCompound tag) {
+    private byte serializeState() {
         byte vars = 0;
         if (isSirenOn())
             vars = (byte) (vars | 2);
@@ -173,23 +173,41 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
         if (isDRLOn())
             vars = (byte) (vars | 256);
 
-        tag.setByte("BasAddon.vals", vars);
+        return vars;
+    }
+
+    private void deserializeState(byte vars) {
+        setSirenOn((vars & 2) == 2);
+        setHeadLightsOn((vars & 4) == 4);
+        setTurnSignalLeftOn((vars & 8) == 8);
+        setTurnSignalRightOn((vars & 16) == 16);
+        setBeaconsOn((vars & 32) == 32);
+        setLocked((vars & 64) == 64);
+        setDRLOn((vars & 256) == 256);
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setByte("BasAddon.vals", serializeState());
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         if (tag.hasKey("BasAddon.vals", Constants.NBT.TAG_BYTE)) {
-            byte vars = tag.getByte("BasAddon.vals");
-            setSirenOn((vars & 2) == 2);
-            setHeadLightsOn((vars & 4) == 4);
-            setTurnSignalLeftOn((vars & 8) == 8);
-            setTurnSignalRightOn((vars & 16) == 16);
-            setBeaconsOn((vars & 32) == 32);
-            setLocked((vars & 64) == 64);
-            setDRLOn((vars & 256) == 256);
+            deserializeState(tag.getByte("BasAddon.vals"));
         } else { //backward compatibility
             setHasLinkedKey(tag.getBoolean("BasAdd.haskey"));
             setLocked(tag.getBoolean("BasAdd.locked"));
         }
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        buffer.writeByte(serializeState());
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf additionalData) {
+        deserializeState(additionalData.readByte());
     }
 }
