@@ -15,7 +15,9 @@ import fr.dynamx.common.entities.BaseVehicleEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -100,6 +102,22 @@ public class BasicsAddonEventHandler {
                 event.setCanceled(true);
             } else if (module.isLocked()) {
                 event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDismount(EntityMountEvent event) {
+        if (event.isDismounting() && !event.getWorldObj().isRemote) {
+            if (event.getEntityMounting() instanceof EntityPlayer && event.getEntityBeingMounted() instanceof BaseVehicleEntity) {
+                BaseVehicleEntity<?> vehicle = (BaseVehicleEntity<?>) event.getEntityBeingMounted();
+                if (vehicle.getControllingPassenger() == event.getEntityMounting()) {
+                    BasicsAddonModule module = vehicle.getModuleByType(BasicsAddonModule.class);
+                    if (module != null && (module.isSirenOn() || module.isBeaconsOn())) {
+                        module.setSirenOn(false);
+                        module.setBeaconsOn(true);
+                    }
+                }
             }
         }
     }

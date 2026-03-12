@@ -8,3 +8,5 @@ basadd.key.linked.to=Schlüssel von %s
 basadd.fuel.jerrycan=Treibstoff im Kanister: %s
 
 item.dynx.dynamx_basics.fuel_jerrycan.name=Treibstoffkanister
+
+basadd.sound.siren=Sirenen Lautst\u00e4rke

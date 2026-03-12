@@ -68,7 +68,7 @@ public class BasicsAddonModule implements IPhysicsModule<AbstractEntityPhysicsHa
     @Override
     public void updateEntity() {
         if (playKlaxon() && entity.world.isRemote && hasKlaxon())
-            ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, 1, 1);
+            ClientProxy.SOUND_HANDLER.playSingleSound(Vector3fPool.get(entity.posX, entity.posY, entity.posZ), infos.klaxonSound, (float) (fr.dynamx.addons.basics.client.BasicsAddonConfig.sirenVolume * 35.0), 1);
         if (controller != null)
             controller.updateSiren();
     }

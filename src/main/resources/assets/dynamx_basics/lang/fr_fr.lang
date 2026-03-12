@@ -8,3 +8,5 @@ basadd.key.linked.to=Clé de %s
 basadd.fuel.jerrycan=Essence dans le bidon : %s
 
 item.dynx.dynamx_basics.fuel_jerrycan.name=Jerrycan d'essence
+
+basadd.sound.siren=Volume des sir\u00e8nes

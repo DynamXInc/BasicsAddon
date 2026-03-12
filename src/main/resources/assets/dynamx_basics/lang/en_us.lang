@@ -8,3 +8,5 @@ basadd.key.linked.to=%s's key
 basadd.fuel.jerrycan=Jerrycan's fuel : %s
 
 item.dynx.dynamx_basics.fuel_jerrycan.name=Fuel jerrycan
+
+basadd.sound.siren=Siren Volume

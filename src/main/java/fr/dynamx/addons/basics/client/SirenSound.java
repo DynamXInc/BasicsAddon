@@ -40,7 +40,7 @@ public class SirenSound implements IDynamXSound {
 
     @Override
     public float getVolume() {
-        return 1.0F;
+        return (float) (BasicsAddonConfig.sirenVolume * 5.0);
     }
 
     @Override
