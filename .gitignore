@@ -1,23 +1,10 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
-
-# idea
-out
-*.ipr
-*.iws
+.gradle/
+build/
+run/
+out/
+libs/
+.idea/
 *.iml
-.idea
-
-# gradle
-build
-.gradle
-
-# other
-eclipse
-run
-/src/main/java/fr/betterlights.rar
+.vscode/
+.claude/
+.DS_Store

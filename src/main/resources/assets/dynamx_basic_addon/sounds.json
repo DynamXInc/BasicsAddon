@@ -1,0 +1,8 @@
+{
+  "horn": {
+    "sounds": [
+      "dynamx_basic_addon:horn"
+    ],
+    "subtitle": "subtitles.dynamx_basic_addon.horn"
+  }
+}

@@ -2,105 +2,80 @@
 
 # DynamXInc - BasicsAddon
 
-This addon adds new features to DynamX :
+Port of the BasicsAddon (Forge 1.12) to **DynamX** for Fabric, Minecraft 1.21.x.
 
-- Klaxon and siren
-- Fuel tank
+This addon adds new features to DynamX:
+
+- Vehicle keys (locking, multi-key support)
+- Fuel tank and jerrycan
+- Klaxon (horn)
 - Immatriculation plates
-- Speed display on the vehicle
 
 ### How to add modules to your vehicle:
 
-To add a module to your vehicle you need to edit the vehicle file inside your DynamX pack.
-This file have a name like `vehicle_NAME`.
-
-To use modules ingame you have to add specific code blocks.
-Here are some examples:
-
-#### Licenseplate
-
-```
-ImmatriculationPlate_back#Op{
-  Position: 0 0 0
-  Scale: 0 0 0
-  Rotation: 0 0 0
-  Pattern: @@ \n @@ %%%%
-  LineSpacing: 0
-  Color: 0 0 0
-}
-```
-
-The `#Op` suffix stands for "Optional" and will remove errors when the BasicsAddon isn't loaded.
-
-#### Lights and sounds
-
-```
-BasicsAddon#Op{
-  HornSound: horn/truck
-  SirenSound: sirens/truck
-  TurnSignalLeftLightSource: 1
-  TurnSignalRightLightSource: 2
-  BrakeLightsSource: 3
-  HeadLightsSource: 4
-  ReverseLightsSource: 5
-  DRLightsSources: 6 //Daytime running lights
-}
-```
-
-The lights must then be configured accordingly with the part lights of DynamX.
-
-#### Speed-Display
-
-```
-SpeedDisplay#Op{
-  Position: 0 0 0
-  Scale: 1 1 1
-  Rotation: 0 0 0
-  Color: 0 0 0
-}
-```
+To add a module to your vehicle you need to edit the vehicle file inside your DynamX pack
+(`vehicle.yaml`). Here are some examples:
 
 #### Fuel-Tank
 
-```
-FuelTank#Op{
-  Position: 0 0 0
-  Scale: 1 1 1
-  TankSize: 80
-  FuelConsumption: 1
-}
+```yaml
+# 1.12: TankSize / FuelConsumption inside FuelTank{}
+fuel_tank:
+  tank_size: 80        # liters
+  fuel_consumption: 1  # consumption tied to the throttle
 ```
 
-### How to create a key or a jerrycan item:
+When the tank is empty the engine cuts off (the vehicle coasts, brakes and steering keep
+working) until it is refueled.
 
-The BasicsAddon already includes a key and a jerrycan item. However, you can create your own items.
+#### Licenseplate
 
-To create a key or a jerrycan item you need to add the right properties to the item file inside your DynamX pack.
-This file have a name like `item_NAME`.  Here are some examples:
-
-#### Key
-
-```
-BasicsItem#Op{
-  IsVehicleKey: true
-  IsMultiKey: false
-}
+```yaml
+# 1.12: Pattern inside ImmatriculationPlate{}
+license_plate:
+  pattern: "@@-%%%-@@"  # @ = letter, % = digit, same semantics as 1.12
 ```
 
-By default, one key is associated to one vehicle. 
-If you want to create a key that can open multiple vehicles, you need to set `IsMultiKey` to `true`.
+The plate number is generated on spawn and persisted with the vehicle.
 
-#### Jerrycan
+### Keys and jerrycan:
+
+The BasicsAddon includes a key item and a jerrycan item.
+
+- **Vehicle key**: bind it to a vehicle, then lock/unlock it; a locked vehicle cannot be
+  entered. One key opens one vehicle by default, but a bound key can be associated with
+  other vehicles (multi-key).
+- **Jerrycan** (60 L): right-click a vehicle to refuel it (works even when locked, like
+  in 1.12), and refill the jerrycan when it is empty.
+
+### Klaxon:
+
+Press **K** (rebindable) to honk. The sound is broadcast by the server with a cooldown.
+
+### Commands:
+
+| Command | Description |
+|---|---|
+| `/dynamxbasics fuel` | Fuel level of the nearest vehicle |
+| `/dynamxbasics plate` | Plate of the nearest vehicle |
+| `/dynamxbasics spawn <pack> <vehicle>` | Spawn a locked vehicle and give its key (op) |
+
+### Building from source:
+
+Requires JDK 21+ and a locally built DynamX JAR.
+
+By default the build looks for `../DynamX/build/libs/dynamx-0.1.0.jar`
+(sibling project). Otherwise pass the path explicitly:
 
 ```
-BasicsItem#Op{
-  FuelCapacity: 60
-}
+./gradlew build -PdynamxJar=/path/to/dynamx.jar
 ```
+
+The addon JAR is produced in `build/libs/`.
 
 ## Links
 
 DynamX website: https://dynamx.fr  
-Addon download: https://dynamx.fr/packs
-DynamX wiki: https://dynamx.fr/wiki/
-Discord: https://discord.gg/y53KGzD 
+Addon download: https://dynamx.fr/packs  
+DynamX wiki: https://dynamx.fr/wiki/  
+Discord: https://discord.gg/y53KGzD
